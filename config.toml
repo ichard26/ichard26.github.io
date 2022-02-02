@@ -1,0 +1,56 @@
+title = "Richard Si"
+theme = "PaperMod"
+languageCode = 'en-ca'
+baseURL = 'https://ichard26.github.io/'
+enableRobotsTXT = true
+
+# Infer my posts' dates from filename, like Jekyll
+[frontmatter]
+date = [":filename", ":default"]
+publishDate = [":filename", ":default"]
+
+# Use the same URL structure as my Jekyll blog
+[permalinks]
+blog = "blog/:year/:month/:day/:slug/"
+
+[params]
+defaultTheme = "auto"
+description = "Richard Si (ichard26)'s personal place for F/OSS writings."
+showReadingTime = true
+showCodeCopyButtons = true
+showPostNavLinks = true
+env = "production"
+keywords = ["blog", "python", "oss", "foss"]
+
+# Shown on the home page
+socialIcons = [
+  { name = "github", url = "https://github.com/ichard26" },
+  { name = "python", url = "https://discuss.python.org/u/ichard26/summary" },
+  { name = "reddit", url = "https://www.reddit.com/user/ichard26" },
+]
+
+# Configure the home page
+[params.profileMode]
+enabled = true
+title = "Hello, I'm Richard ❀"
+subtitle = "I'm a Python F/OSS maintainer who likes flowers."
+imageUrl = "/profile-picture.jpeg"
+
+# Site-wide navigation
+[[menu.main]]
+weight = 1
+identifier = "about"
+name = "about"
+title = "About"
+url = "/about/"
+
+[[menu.main]]
+weight = 2
+identifier = "writing"
+name = "writing"
+title = "Writing"
+url = "/blog/"
+
+# Allow HTML in my content pages.
+[markup.goldmark.renderer]
+unsafe = true
