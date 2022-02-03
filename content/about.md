@@ -1,5 +1,5 @@
 ---
-title: "Hey, you've found a flower lover!"
+title: Hey, you've found a flower lover!
 layout: single
 showReadingTime: false
 modified: 2022-02-02
@@ -9,9 +9,9 @@ Hello, I'm Richard aka "ichard26" - pronouns are he/they.
 
 You might know me if you frequent the Python formatter/linter space as I co-maintain the
 incredibly popular [psf/black][black] project. I also co-maintain
-[pypa/bandersnatch][bandersnatch]. My main area of focus is usually maintainance and
-devops work so developer experience, CI, issue triage, and PR review are my main duties
--- although I'm a documentation nerd as well. I'm also staff on the
+[pypa/bandersnatch][bandersnatch]. My main area of focus is usually maintenance and devops
+work so developer experience, CI, issue triage, and PR review are my main duties --
+although I'm a documentation nerd as well. I'm also staff on the
 [Python Discord server][discord].
 
 I'm mostly a Python developer although I have ventured a little bit into JS/TS and C. My
@@ -49,9 +49,8 @@ I like to take photographs, go for walks .. or both at the same time 📷
 [name]: link
 -->
 
-This website exists as a place to put my F/OSS related ramblings, I'm not
-quite sure what exactly I'll write about it but hey y'all can watch me as I learn this
-blogging thing.
+This website exists as a place to put my F/OSS related ramblings, I'm not quite sure what
+exactly I'll write about it but hey y'all can watch me as I learn this blogging thing.
 
 Anyhow, have a wonderful day! ✿
 
