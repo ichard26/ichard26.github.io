@@ -32,9 +32,9 @@ socialIcons = [
 # Configure the home page
 [params.profileMode]
 enabled = true
-title = "Hello, I'm Richard ❀"
+title = "Hi, I'm Richard ❀"
 subtitle = "I'm a Python F/OSS maintainer who likes flowers."
-imageUrl = "/profile-picture.jpeg"
+imageUrl = "/flower-profile-picture.webp"
 
 # Site-wide navigation
 [[menu.main]]

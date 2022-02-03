@@ -1,5 +1,7 @@
 ---
 title: Hey, you've found a flower lover!
+description: Hello, I'm Richard aka "ichard26" (he/they). I'm a hobby F/OSS developer;
+  co-maintainer of psf/black and pypa/bandersnatch. Staff at Python Discord.
 layout: single
 showReadingTime: false
 modified: 2022-02-02
