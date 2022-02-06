@@ -1,21 +1,26 @@
 title = "Richard Si"
-theme = "PaperMod"
 languageCode = 'en-ca'
+defaultContentLanguage = "en-ca"
+timeZone = "Canada/Eastern"
+copyright = "© 2022-present, Richard Si"
+
+theme = "PaperMod"
+
 baseURL = 'https://ichard26.github.io/'
 enableRobotsTXT = true
+paginate = 15
 
-# Infer my posts' dates from filename, like Jekyll
 [frontmatter]
-date = [":filename", ":default"]
-publishDate = [":filename", ":default"]
+date = ["date", ":filename"]
+publishDate = ["publishDate", "date", ":filename"]
+lastmod = ["lastmod", ":fileModTime", "date", ":filename"]
 
-# Use the same URL structure as my Jekyll blog
 [permalinks]
 blog = "blog/:year/:month/:day/:slug/"
 
 [params]
-defaultTheme = "auto"
 description = "Richard Si (ichard26)'s personal place for F/OSS writings."
+defaultTheme = "auto"
 showReadingTime = true
 showCodeCopyButtons = true
 showPostNavLinks = true
@@ -28,6 +33,9 @@ socialIcons = [
   { name = "python", url = "https://discuss.python.org/u/ichard26/summary" },
   { name = "reddit", url = "https://www.reddit.com/user/ichard26" },
 ]
+
+[taxonomies]
+  tag = 'tags'
 
 # Configure the home page
 [params.profileMode]

@@ -16,11 +16,12 @@ a:hover {
   transition-duration: 70ms;
 }
 
-a:active {
-  color: red;
+:is(.post-header, .post-content, .post-footer) a:active {
+  filter: brightness(75%);
   transition-duration: 70ms;
 }
 
+/* Slightly improve <code> link styling */
 .post-content a > code {
   text-decoration: underline var(--primary);
   box-shadow: none;
@@ -30,7 +31,7 @@ a:active {
   text-decoration: underline var(--secondary);
 }
 
-/* Spacing for definition lists */
+/* Spacing for definition lists (thank you @pradyunsg) */
 .post-content dl {
   margin-top: 1.5rem;
 }
@@ -44,7 +45,7 @@ a:active {
   margin-bottom: 0;
 }
 
-/* For the /about/ page in particular the projects list */
+/* For the /about/ page in particular the projects list (thank you @pradyunsg) */
 .post-content dt ~ dt,
 .post-content dd ~ dd {
   margin-top: 1.5rem;
@@ -80,6 +81,17 @@ a:active {
   margin: calc(var(--content-gap) * 1.5) 2px;
 }
 
+/* The border is coloured weirdly anyway, just get rid of it */
 .post-content hr {
   border-width: 0px;
+}
+
+/* This might be a hack, but this allows me to improve the footer contents without
+   having to copy the whole footer.html template.
+*/
+body > footer > span:nth-child(2)::before {
+  content: "·";
+}
+body > footer > span:nth-child(2)::after {
+  content: "with many tweaks";
 }
