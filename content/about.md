@@ -4,7 +4,7 @@ description: "Short version: I'm Richard aka ichard26 (he/they). I'm a hobby Pyt
   \ developer; co-maintainer of psf/black and pypa/bandersnatch. Staff at Python Discord."
 layout: single
 showReadingTime: false
-modified: 2022-02-02
+modified: 2022-02-05
 ---
 
 Hello, I'm Richard aka "ichard26" - pronouns are he/they.

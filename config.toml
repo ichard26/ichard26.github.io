@@ -51,6 +51,13 @@ name = "writing"
 title = "Writing"
 url = "/blog/"
 
+[[menu.main]]
+weight = 3
+identifier = "privacy"
+name = "privacy"
+title = "Privacy Statement"
+url = "/privacy/"
+
 # Allow HTML in my content pages.
 [markup.goldmark.renderer]
 unsafe = true
