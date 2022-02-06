@@ -19,7 +19,7 @@ description = "Richard Si (ichard26)'s personal place for F/OSS writings."
 showReadingTime = true
 showCodeCopyButtons = true
 showPostNavLinks = true
-env = "production"
+env = "development"
 keywords = ["blog", "python", "oss", "foss"]
 
 # Shown on the home page
