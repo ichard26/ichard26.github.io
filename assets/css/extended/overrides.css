@@ -1,3 +1,35 @@
+main {
+  --main-width: 760px;
+}
+
+/* Better links and include branding colour :wink: */
+.post-header, .post-content, .post-footer {
+  --secondary: #bf0041;
+}
+/* The theme defaults to light mode, so that's why this comes after */
+.dark :where(.post-header, .post-content, .post-footer) {
+  --secondary: orange;
+}
+
+a:hover {
+  color: var(--secondary);
+  transition-duration: 70ms;
+}
+
+a:active {
+  color: red;
+  transition-duration: 70ms;
+}
+
+.post-content a > code {
+  text-decoration: underline var(--primary);
+  box-shadow: none;
+}
+
+.post-content a:hover > code {
+  text-decoration: underline var(--secondary);
+}
+
 /* Spacing for definition lists */
 .post-content dl {
   margin-top: 1.5rem;
@@ -12,7 +44,7 @@
   margin-bottom: 0;
 }
 
-/* For the /about/ page */
+/* For the /about/ page in particular the projects list */
 .post-content dt ~ dt,
 .post-content dd ~ dd {
   margin-top: 1.5rem;
@@ -31,4 +63,23 @@
 /* 404 page */
 .page-not-found {
   text-align: center;
+}
+
+/* Show link styling for section description */
+.post-description > a {
+  box-shadow: 0 1px;
+}
+
+/* Try to fix inconsistent margin between a code block and a paragraph */
+.post-content div.highlight + p {
+  margin-top: var(--content-gap);
+}
+
+/* Try to fix inconsistent margin surrounding the TOC */
+.toc {
+  margin: calc(var(--content-gap) * 1.5) 2px;
+}
+
+.post-content hr {
+  border-width: 0px;
 }

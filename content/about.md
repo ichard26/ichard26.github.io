@@ -1,7 +1,7 @@
 ---
 title: Hey, you've found a flower lover!
-description: Hello, I'm Richard aka "ichard26" (he/they). I'm a hobby F/OSS developer;
-  co-maintainer of psf/black and pypa/bandersnatch. Staff at Python Discord.
+description: "Short version: I'm Richard aka ichard26 (he/they). I'm a hobby Python\
+  \ developer; co-maintainer of psf/black and pypa/bandersnatch. Staff at Python Discord."
 layout: single
 showReadingTime: false
 modified: 2022-02-02
@@ -32,7 +32,8 @@ I like to take photographs, go for walks .. or both at the same time 📷
   static web server of choice!
 
 [diff-shades] _creator_ _2021 - present_
-: Development tool used gauge the impact of code style changes in Black across OSS code.
+: Development tool used to gauge the impact of code style changes in Black across OSS
+  code. Inspired by [mypy-primer] which was inspired by [black-primer].
 
 [next-pr-number] _creator_ _2021 - present_
 : A simple web utility to query the number the next PR would have for a public Github
@@ -52,14 +53,16 @@ I like to take photographs, go for walks .. or both at the same time 📷
 -->
 
 This website exists as a place to put my F/OSS related ramblings, I'm not quite sure what
-exactly I'll write about it but hey y'all can watch me as I learn this blogging thing.
+exactly I'll write about it, but hey y'all can watch me as I learn this blogging thing.
 
 Anyhow, have a wonderful day! ✿
 
 [bandersnatch]: https://github.com/pypa/bandersnatch
 [black]: https://github.com/psf/black
+[black-primer]: https://github.com/psf/black/blob/9bd4134f3138448eb92af7031d994b2cec7d08ad/docs/contributing/gauging_changes.md#black-primer
 [blackbench]: https://github.com/ichard26/blackbench
 [diff-shades]: https://github.com/ichard26/diff-shades
 [discord]: https://discord.gg/python
 [ghstats]: https://ichard26.github.io/ghstats/
+[mypy-primer]: https://github.com/hauntsaninja/mypy_primer
 [next-pr-number]: https://ichard26.github.io/next-pr-number/
