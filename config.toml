@@ -1,3 +1,6 @@
+# TODO: maybe one day improve JSON-LD metadata (it's pretty complicated)
+# https://code.luasoftware.com/tutorials/hugo/schema-markup-for-hugo/
+
 title = "Richard Si"
 languageCode = 'en-ca'
 defaultContentLanguage = "en-ca"
@@ -19,7 +22,7 @@ lastmod = ["lastmod", ":fileModTime", "date", ":filename"]
 blog = "blog/:year/:month/:day/:slug/"
 
 [params]
-description = "Richard Si (ichard26)'s personal place for F/OSS writings."
+description = "Richard Si (ichard26)'s personal place for writings all about FOSS and Python."
 defaultTheme = "auto"
 showReadingTime = true
 showCodeCopyButtons = true
@@ -31,7 +34,19 @@ keywords = ["blog", "python", "oss", "foss"]
 socialIcons = [
   { name = "github", url = "https://github.com/ichard26" },
   { name = "python", url = "https://discuss.python.org/u/ichard26/summary" },
+  { name = "stackoverflow", url = "https://stackoverflow.com/users/18155471/ichard26"},
   { name = "reddit", url = "https://www.reddit.com/user/ichard26" },
+]
+
+[params.schema]
+publisherType = "Person"
+sameAs = [
+  "https://github.com/ichard26",
+  "https://discuss.python.org/u/ichard26/summary",
+  "https://stackoverflow.com/users/18155471/ichard26",
+  "https://www.reddit.com/user/ichard26",
+  "https://pypi.org/user/ichard26/",
+  "https://readthedocs.org/profiles/ichard26/",
 ]
 
 [taxonomies]
@@ -41,7 +56,7 @@ socialIcons = [
 [params.profileMode]
 enabled = true
 title = "Hi, I'm Richard ❀"
-subtitle = "I'm a Python F/OSS maintainer who likes flowers."
+subtitle = "I'm a hobby Python developer & FOSS maintainer who likes flowers."
 imageUrl = "/flower-profile-picture.webp"
 
 # Site-wide navigation
