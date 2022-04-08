@@ -28,7 +28,7 @@ showReadingTime = true
 showCodeCopyButtons = true
 showPostNavLinks = true
 env = "development"
-keywords = ["blog", "python", "oss", "foss"]
+keywords = ["blog", "python", "black", "oss", "foss"]
 
 # Shown on the home page
 socialIcons = [
