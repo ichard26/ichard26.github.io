@@ -61,6 +61,18 @@ a:hover {
   color: var(--secondary);
 }
 
+/* Make navigation look nicer (thanks @pradyunsg) */
+.paginav {
+  background: var(--theme);
+  border: none;
+  display: flex;
+  align-items: center;
+}
+.paginav a {
+  line-height: normal;
+  padding: var(--gap);
+}
+
 /* 404 page */
 .page-not-found {
   text-align: center;
@@ -94,4 +106,9 @@ body > footer > span:nth-child(2)::before {
 }
 body > footer > span:nth-child(2)::after {
   content: "with many tweaks";
+}
+
+/* Footnotes can and should be smaller than regular text. */
+.footnotes p {
+  font-size: 1rem;
 }
