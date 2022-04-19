@@ -47,7 +47,7 @@ slow, but that's expected and not a big deal.
 
 If you're curious, you can find the workflow here: [ichard26/black-mypyc-wheels]
 
-> I don't recommend using my workflow to build your own workflows since it's a bit hacky
+> I don't recommend using my workflow to build your own wheels since it's a bit hacky
 > and in need of a cleanup. I'd instead recommend taking a look at the
 > [examples in cibuildwheel's docs][cibuildwheel-examples].
 
@@ -112,7 +112,7 @@ usually buzz is sparked by bugs and whatnot.
 Having mentioned bugs and crashes, so far we've received two reports,
 [one bug probably from mypyc and an unintentional restriction on Black's unofficial APIs][not-too-many-fires-so-far].
 
-Although version 22.1.0 still unintentionally broke quite a few integrations, though they
+Version 22.1.0 still unintentionally broke quite a few integrations, though they
 weren't mypyc related. Turns out lots of people depend on `black.files.find_project_root`
 returning a `pathlib.Path` and nothing else! I've seen at least five issues / PRs on
 GitHub fixing crashes related to our change making it return a tuple instead.

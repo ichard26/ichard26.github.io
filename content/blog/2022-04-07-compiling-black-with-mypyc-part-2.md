@@ -54,7 +54,7 @@ profiling data into a nice SVG graph which I could then open in my web browser.
 I tried using [Scalene] as I've heard good things about it, but it didn't work sadly. It
 wasn't that bad as I still had [py-spy], [line_profiler], and good ol' cProfile. py-spy in
 particular was invaluable since it can profile (well err sample) C extensions which
-cProfile cannot. line_profiler was used exclusively for micro-opimitizations :p
+cProfile cannot. line_profiler was used exclusively for micro-optimizations :p
 
 Anyway, I repeated this process quite a few times, making sure to try different files to
 get a general feel where time is going regardless of the input. Here are the main
@@ -143,7 +143,7 @@ index 47c8f02..6b03188 100644
 This also has the neat side-effect of allowing me to remove some asserts.
 
 Tightening up type annotations involving [`typing.Any`][typing-any] can be particularly
-worthwhile as it forces mypyc to fallback to generic C code that can handle any kind of
+worthwhile as `Any` forces mypyc to fallback to generic C code that can handle any kind of
 object. I was only able to find one spot I could make this change, but it's better than
 nothing!
 
@@ -495,8 +495,8 @@ ______________________________________________________________________
 ### Results
 
 > **Quick note**\
-> I also did some micro optimizations like reordering if checks to hit the
-> common case first or replacing `x = a + 1` with `x += 1`, but to this day I don't know
+> I also did some micro-optimizations like reordering if checks to hit the
+> common case first or replacing `x = x + 1` with `x += 1`, but to this day I don't know
 > whether they actually had an impact.
 >
 > Additionally, I haven't discussed the last

@@ -52,7 +52,7 @@ It achieves these impressive speed ups by:
 
 - Using optimized, type-specific primitives for many built-in functions and methods.
 
-- Using custom memory-efficient, unboxed representions for integers and booleans.
+- Using custom memory-efficient, unboxed representations for integers and booleans.
 
 - Classes are compiled to C extension classes. They use [vtables] for fast method calls
   and attribute access.
@@ -69,7 +69,7 @@ using mypy 0.931 on Ubuntu 20.04.03 with CPython 3.8.5.
 
 Next, let's take a look at the code[^5] we'll soon compile. It's a simple program that
 bruteforces its way to find all of the factor pairs for a given product. I mostly chose
-this example because it's very dear to my heart. It was the "serious" program I wrote
+this example because it's very dear to my heart. It was the first "serious" program I wrote
 while learning Python[^4]. I originally wrote the same logic in code.org's app lab many
 years ago.
 
@@ -122,7 +122,7 @@ is that I didn't even need to type all of the variables thanks to mypy's type in
 
 Feel free to edit the program and play around with mypyc, seeing what little scripts it
 can speed up. Pro-tip, to restore back to the interpreted version of your program, you can
-delete the `.gnu.so` file on Linux & MacOS or the `.pyd` file on Windows. In this example
+delete the `.so` file on Linux & MacOS or the `.pyd` file on Windows. In this example
 I got `coefficient_finder.cpython-38-x86_64-linux-gnu.so`.
 
 ______________________________________________________________________
@@ -160,11 +160,11 @@ production, i.e. PyPI, ... for almost two years.
 
 > You might be wondering why performance even matters, well clearly it mattered a lot
 > since [GH-366] was opened in June 2018! The TL;DR is that for environments where Black
-> is **ran on save automatically, the more responsiveness it is the better** as less time
+> is **run on save automatically, the more responsive it is the better** as less time
 > is spent in a laggy editor window.
 >
 > Start up time is important too given imports are costly, but this issue was explicitly
-> about formatting throughout (it turns out mypyc can reduce import time too!).
+> about formatting throughput (it turns out mypyc can reduce import time too!).
 
 Given I first publicly announced my work finishing up the project on July 4th 2021, I
 sadly don't remember why I decided to pick it up. All I remember was fighting mypyc
@@ -552,7 +552,7 @@ my personal roadmap for psf/black is already packed :p
 [^5]: I am well aware I don't need to import `List` or `Tuple` from `typing` anymore. I'm
     just keeping my code examples compatible with older versions of Python.
 
-[^4]: well not quite exactly this, it was a crapper solution with a time complexity of O(n²)
+[^4]: well not quite exactly this, it was a crappier solution with a time complexity of O(n²)
     instead of O(n), oh and of course my code style was less than ideal and I didn't use
     type annotations, but let's not go there :)
 
