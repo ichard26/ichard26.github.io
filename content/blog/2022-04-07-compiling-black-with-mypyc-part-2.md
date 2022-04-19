@@ -18,13 +18,13 @@ This is part of the "*Compiling Black with mypyc*" series.
 
 ## Optimizing for mypyc
 
-With core Black being compilable and not crashing in all kinds of fun ways, it was time to
-try optimizing Black for mypyc. While mypyc is designed to handle all sorts of statically
-typed code, changing up the code even a little bit can allow mypyc to perform additional
-optimizations ultimately helping performance a bunch.
+Having compiled Black successfully without it blowing up, it was time to try to optimize
+Black for mypyc. While mypyc is designed to handle all sorts of statically typed code,
+**changing up the code even a little bit can allow mypyc to perform additional
+optimizations**, ultimately helping performance a bunch.
 
 And while I did go into this hoping I could spot some potential architectural or data
-structure optimizations, I wasn't able to so all of the optimizations will be mypyc
+structure optimizations, I wasn't able to so the optimizations shared will be mypyc
 specific.
 
 ### Getting started
@@ -46,18 +46,19 @@ $ gprof2dot profile.pstats | dot -Tsvg -o profile.svg
 With the help of [gprof2dot] (well, actually the [yelp-gprof2dot] fork), I converted the
 profiling data into a nice SVG graph which I could then open in my web browser.
 
-> Tip: please open this (massive) SVG in a new tab because viewing it here will probably
-> be painful :)
+> Tip: please open this massive SVG in a new tab because viewing it here will probably be
+> painful :)
 
 ![gprof2dot graph showing where time was spent in a call tree](/media/cProfileGraph-black-1.svg)
 
-I also tried using [Scalene] as I heard it's a very powerful profiler, but it didn't work
-properly sadly. Though I still had [py-spy], [line_profiler], and good ol' cProfile.
-py-spy in particular was invaluable since it can profile (well err sample) C extensions
-which cProfile cannot. line_profiler was used exclusively for micro opimitizations haha.
+I tried using [Scalene] as I've heard good things about it, but it didn't work sadly. It
+wasn't that bad as I still had [py-spy], [line_profiler], and good ol' cProfile. py-spy in
+particular was invaluable since it can profile (well err sample) C extensions which
+cProfile cannot. line_profiler was used exclusively for micro-opimitizations :p
 
-Anyway, I repeated this process quite a few times making sure to try different files to
-get a general feel where time is going regardless of the input. Here's the main takeaways:
+Anyway, I repeated this process quite a few times, making sure to try different files to
+get a general feel where time is going regardless of the input. Here are the main
+takeaways:
 
 - Initial parsing with blib2to3 takes up 30-50% of formatting runtime!
 
@@ -73,7 +74,7 @@ how concentrated the hotspots really are!
 
 ![gprof2dot graph showing where time was spent parsing](/media/cProfileGraph-black-blib2to3-1.svg)
 
-These hotspots make this part of the codebase way easier to optimize hence why I optimized
+These hotspots make this part of the codebase way easier to optimize, so I optimized
 blib2to3 first.
 
 It's been so long since I first looked into this, so I don't remember what optimizations I
@@ -85,10 +86,10 @@ mypyc works. Ultimately, many different optimizations were done over three round
 #### Tightening up existing type annotations
 
 The stricter your type annotations are in your codebase, the more invariants mypyc will be
-able to infer. It'll then use this information and write code specific to the context's
-type that is faster. This code won't work if it gets an object of a different type, but
-that's why we use and enforce type annotations, so we (and mypyc) can safely assume it's
-going to be the right type.
+able to infer. It'll then use this information and write type-specific code that is
+faster. This code won't work if it gets an object of a different type, but that's why we
+use and enforce type annotations, so we (and mypyc) can safely assume it's going to be the
+right type.
 
 This involves reading through the code and control flow, checking whether certain states
 are impossible. Blib2to3 is mostly a legacy codebase, so we when added type annotations to
@@ -139,11 +140,12 @@ index 47c8f02..6b03188 100644
          if newnode is not None:
 ```
 
-This also has the neat side-effect of allowing me to remove some no longer necessary code.
+This also has the neat side-effect of allowing me to remove some asserts.
 
-Tightening up type annotations involving `Any` can be particularly worthwhile as it forces
-mypyc to fallback to generic C code that can handle any kind of object. I was only able to
-find one spot I could make this change, but it's better than nothing!
+Tightening up type annotations involving [`typing.Any`][typing-any] can be particularly
+worthwhile as it forces mypyc to fallback to generic C code that can handle any kind of
+object. I was only able to find one spot I could make this change, but it's better than
+nothing!
 
 ```diff
 @@ -54,14 +56,14 @@ class Driver(object):
@@ -164,10 +166,10 @@ find one spot I could make this change, but it's better than nothing!
 
 Avoiding calculating the same value over and over again is one of the most common
 optimizations out there, and it's for good reason, it's usually very easy to fix. BUT,
-with mypyc we can take this further as variables typed as `Final` can (often) be injected
-at lookup sites at compile time, skipping the dictionary lookups at run time!
+with mypyc we can take this further using [`typing.Final`][typing-final]. Final variables
+can often be injected at lookup sites at compile time, skipping the lookups at runtime!
 
-Lemme show an example, let's take this code and see what adding a single `Final` does.
+Let me show an example, let's take this code and see what adding a single `Final` does.
 
 ```python3
 from typing import Final
@@ -225,8 +227,7 @@ CPyL4: ;
 }
 ```
 
-If we mark the `SCALE` variable as Final (i.e. a constant), mypyc will notice that and
-inline the value at the lookup site.
+If we mark the `SCALE` variable as Final, mypyc will notice that and inline the value.
 
 ```python3 {hl_lines=[3]}
 from typing import Final
@@ -320,8 +321,8 @@ journey. It's simple but effective!
 
 This one is really making a deal with mypyc. You give it static code and it gives you fast
 code in return ... by resolving called functions and names at compile time. I already
-covered using Final which is basically a specific form of early binding, but it works for
-function calls too!
+covered using Final which is one form of early binding, but it works for function calls
+too!
 
 Time for another example:
 
@@ -337,10 +338,10 @@ def process_items(func: Callable[[object], object], items: List[object]) -> List
 process_items(convert, ["1", "2", "3"])
 ```
 
-Here the function used to convert the items isn't known until call time forcing mypyc to
-fall back to the standard Python calling convention (albeit it does use the faster
-vectorcall convention). If I instead hardcode `convert` in `process_items`, mypyc will be
-able to call the C function directly which is much faster.
+The function used to convert the items isn't known until call time, forcing mypyc to fall
+back to the standard Python calling convention (albeit it does use the faster vectorcall
+convention). If I instead hardcode `convert` in `process_items`, mypyc will be able to
+call the C function directly which is much faster.
 
 ```python3 {hl_lines=[7]}
 from typing import Callable, List
@@ -370,8 +371,8 @@ process_items(convert, ["1", "2", "3"])
      }
 ```
 
-Obviously a lot of the time this isn't possible as if your function calls are dynamic it's
-probably because the code depends on it ...
+Obviously a lot of the time this isn't possible because if your function calls are
+dynamic, it's probably because the code depends on it ...
 
 By sheer luck, I was able to replace two dynamic function calls with static calls in
 `blib2to3.pgen2.parse.Parser`, the very hot parser code!
@@ -444,12 +445,14 @@ didn't exist at the time:
 1. A tool to compare two builds of Black behaviourally
 
 The first one is pretty self-explanatory, I needed a good benchmark suite to make sure
-this project would actually improve performance and also quantify the gains to compare
-optimizations.
+this project would actually improve performance, and to also quantify the gains. The
+latter was important when weighing optimizations.
 
-The second one is a less clear, effectively I wanted [mypy-primer] but for Black:
+The second one is a less clear, effectively I wanted [mypy-primer], but for Black:
 
 ![mypy-primer comment on python/mypy PR 12064 describing the impact of the change](/media/mypy-primer-comment.png)
+
+> [mypy-primer comment on mypy PR #12064][mypy-primer-comment].
 
 So I got to work creating [blackbench] and
 [(the original) diff-shades][original-diff-shades]. Honestly, in hindsight blackbench
@@ -462,12 +465,12 @@ summary is that it came with benchmarks for the following tasks:
 
 across quite a few inputs. The story is similar for the original diff-shades, it worked
 and made it possible to verify mypyc didn't change formatting, but its code was horrible
-(and not to mention unmaintainable). It was bad enough that I actually rewrote the tool
-later on.
+(and not to mention unmaintainable). It was bad enough that
+[I rewrote the tool later on][new-diff-shades].
 
 > The TL;DR version of what diff-shades does is that it clones a bunch of projects, runs
-> Black on 'em while recording the results. Then you'd use its other commands to analyze
-> and compare recordings.
+> Black on 'em while recording the results. Then you use its other commands to analyze and
+> compare recordings.
 
 ### Detour: does GCC help?
 
@@ -496,20 +499,21 @@ ______________________________________________________________________
 > common case first or replacing `x = a + 1` with `x += 1`, but to this day I don't know
 > whether they actually had an impact.
 >
-> Additionally, I did do one more [optimization round for src/black][opt-round3], but
-> there's nothing in that which I haven't covered yet.
+> Additionally, I haven't discussed the last
+> [optimization round I did for src/black][opt-round3], but there's nothing in that which
+> I haven't covered yet.
 
 Anyhow these optimizations bumped the parsing speedup over interpreted from ~1.73x to
 \~1.9x. You can see the [changes made here][opt-round1] [and also here][opt-round2].
 
-See the tables at the bottom in particular for the columns with `compiled-mypyc-preopt`
-and `compiled-mypyc` [in this report I compiled][perf-report]. It took a long time to
+For more detail, see the tables at the bottom for the `compiled-mypyc-preopt` and
+`compiled-mypyc` columns [in this report I compiled][perf-report]. It took a long time to
 compile this report by the way, setting up a properly configured benchmark setup and
 gathering multiple data samples is *very* time consuming!
 
 In the end, I managed to increase compiled performance by an additional 10-15% which is
 pretty nice! I was aiming for 25%, but in hindsight I might have been hoping for too much
-haha. Also yes, they were virtually useless when interpreted.
+🙂. Also yes, they were virtually useless when interpreted.
 
 **We're nearly there, only [Pt. 3 - Deployment](../compiling-black-with-mypyc-part-3/)
 remains.** It's shorter, believe me.
@@ -519,6 +523,8 @@ remains.** It's shorter, believe me.
 [gprof2dot]: https://github.com/jrfonseca/gprof2dot
 [line_profiler]: https://pypi.org/project/line-profiler/
 [mypy-primer]: https://github.com/hauntsaninja/mypy_primer
+[mypy-primer-comment]: https://github.com/python/mypy/pull/12064
+[new-diff-shades]: https://github.com/ichard26/diff-shades
 [opt-round1]: https://github.com/psf/black/pull/2431/commits/f6a3e788bb8714e41fe0a4cc1ee2058b0a7cb3ac
 [opt-round2]: https://github.com/psf/black/pull/2431/commits/911d0d8601318fcc04069f2af91a066e499f0db0
 [opt-round3]: https://github.com/psf/black/pull/2431/commits/c7de2eafb5d07033429ab3a18ce02ed093b645c5
@@ -526,4 +532,6 @@ remains.** It's shorter, believe me.
 [perf-report]: https://gist.github.com/ichard26/b996ccf410422b44fcd80fb158e05b0d
 [py-spy]: https://github.com/benfred/py-spy
 [scalene]: https://pypi.org/project/scalene/
+[typing-any]: https://docs.python.org/3/library/typing.html#typing.Any
+[typing-final]: https://docs.python.org/3/library/typing.html#typing.Final
 [yelp-gprof2dot]: https://pypi.org/project/yelp-gprof2dot/

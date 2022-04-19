@@ -19,31 +19,31 @@ This is part of the "*Compiling Black with mypyc*" series.
 ## Building compiled wheels with GitHub Actions
 
 With the mypyc branch functional and pretty fast, it was time to automate building the
-wheels. Not only does this make the release process easier, but it also means I can easily
-build wheels for platforms I don't have access to (eg. MacOS).
+wheels. Not only does this make the release process easier, but **it also means I can
+easily build wheels for platforms I don't have access to**, like MacOS.
 
-To make the CI configuration process easier I finally took a look at [cibuildwheel]. I
+To make the CI configuration process easier, I finally took a look at [cibuildwheel]. I
 won't go into my exact process since it was basically trial and error + my many dumb
-mistakes 😅 [^10] but here's some noteworthy takeaways:
+mistakes 😅 [^10] but here are some noteworthy takeaways:
 
-- If you're using `setuptools-scm`, you will probably want to do a full clone on CI so the
-  tag history is still available by build time
+- If you're using `setuptools-scm`, you might have to do a full clone on CI so the tag
+  history is still available by build time
 
-- Read cibuildwheel's documentation before writing any configuration! Seriously, if I did
-  I wouldn't have to make [this commit][read-the-bloody-docs] adding `{project}` to the
-  test command
+- **Read cibuildwheel's documentation before writing any configuration!** Seriously, if I
+  did I wouldn't have to make [this commit][read-the-bloody-docs] adding `{project}` to
+  the test command
 
 - Set `CIBW_BUILD_VERBOSITY` to at least `1` because it will make debugging build errors
   (and trust me you will get some!) so much nicer
 
-- if wheel sizes are an issue then passing `debug_level=0` to mypyc.build.mypycify might
-  help by stripping all debug information. Not great if you hit a bunch of segfaults or
-  similar though, so it's a tradeoff
+- If wheel sizes are an issue then passing `debug_level=0` to `mypyc.build.mypycify`
+  should help by stripping all debug information. Not great if you hit a bunch of
+  segfaults or similar though, so it's a tradeoff
 
-So yeah 20-ish commits later I had a basic but functional setup which could compile wheels
-for x86-64 Windows, MacOS, and Linux from CPython 3.6 to CPython 3.10. Universial2 and ARM
-variants were also supported for the shiny M1 platform. The workflow is a bit slow, but
-that's expected and not a big deal.
+So yeah, 20-ish commits later I had a basic but functional setup which could compile
+wheels for x86-64 Windows, MacOS, and Linux from CPython 3.6 to CPython 3.10. Universial2
+and ARM variants were also supported for the shiny M1 platform. The workflow is a bit
+slow, but that's expected and not a big deal.
 
 If you're curious, you can find the workflow here: [ichard26/black-mypyc-wheels]
 
@@ -57,15 +57,15 @@ hindsight, I did not promote it enough so yeah this one is on me :)
 
 ## Stable release prep and shipping the wheels
 
-Black for the longest time ever wasn't stable ([GH-517]), the team initially aimed to mark
-Black stable in late 2018, but obviously that didn't happen for reasons. I won't go into
-it too much since it'd be a whole another story, but to suffice to say when we made our
-newest "commitment" (at this point we explicitly worded our intentions to *not* be
-promises) we were very motivated to get it done and hopefully right.
+Black for the longest time ever wasn't stable (see [GH-517]), the team initially aimed to
+stabilize Black in late 2018, but obviously that didn't happen for reasons. I won't go
+into it too much since it'd be a whole another story, but to suffice to say when we made
+our newest "commitment" (at this point we explicitly worded our intentions to *not* be
+promises) **we were very motivated to get it done and hopefully right.**
 
 We drafted a [stablity policy][stability-policy],
-[dropped Python two support][cya-python-two],
-[introduced the `--preview` flag][hi-preview], and [so much more][changelog] [^11].
+[dropped Python 2 support][cya-python-two], [introduced the `--preview` flag][hi-preview],
+and [so much more][changelog] [^11].
 
 In this time I rewrote diff-shades into [what it is today][diff-shades], a reliable enough
 tool used to [provide direct][diff-shades-comment-1]
@@ -73,9 +73,11 @@ tool used to [provide direct][diff-shades-comment-1]
 workflow as part of the test step, but that turned out be very painful and I backed out of
 it since I had a stable release to manage and publish!
 
-Basically building Black with mypyc usually requires disabling pip's build isolation to
-work properly as mypyc is not a standard build dependency of Black. This messes up the
-installation of diff-shades which is a flit packaged tool. So I hacked up a script to edit
+*The TL;DR of it is as follows:*
+
+Building Black with mypyc usually requires disabling pip's build isolation to work
+properly as mypyc is not a standard build dependency of Black. This messes up the
+installation of diff-shades which is packaged using flit. So I hacked up a script to edit
 the `[build-system].requires` field in `pyproject.toml` to include mypyc pre-build, but
 the isolation somehow broke the linker search path or something.
 
@@ -89,32 +91,31 @@ clang -Wno-unused-result -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -g0 -fPIC 
     error: command '/usr/bin/clang' failed with exit code 1
 ```
 
-I'm honestly still not quite sure what's wrong.
+I honestly still have no idea what's wrong.
 
 Anyway since I was like an hour or more into build errors, I just decided to call it done
 and fall back to the basic testing that was already working.[^12] I triggered the last
 workflow run of the day, downloaded the artifacts, tested one of them locally to make sure
-nothing was on fire, and pushed 'em to PyPI and that's how release 22.1.0 was born on
-PyPI.
+nothing was on fire, and pushed 'em to PyPI and that's how release 22.1.0 was born 🎉.
 
-The core team chat was quite lively for the next while to say the least, after all we just
-finished a major milestone! Also yeah we *may* have done a lot of publicizing for this
-release which is why this was everywhere for a while :wink:
+The core team chat was quite lively for the next hour to say the least, after all we just
+finished a major milestone! Also yeah, we *may* have done a lot of publicizing for this
+release which is why it was everywhere for a while :wink:
 
 ### Post release calm
 
-To be honest I haven't seen anyone really comment on the fact Black is now compiled with
-mypyc yet short this one [mini blog post][that-one-post-about-black-mypyc] ... which is
+To be honest I haven't really seen anyone comment on the fact Black is now compiled with
+mypyc yet short of this one [mini blog post][that-one-post-about-black-mypyc] ... which is
 both disappointing since I spent so much time on this effort, but also calming since
 usually buzz is sparked by bugs and whatnot.
 
 Having mentioned bugs and crashes, so far we've received two reports,
 [one bug probably from mypyc and an unintentional restriction on Black's unofficial APIs][not-too-many-fires-so-far].
 
-Although version 22.1.0 still unintentionally broke quite a few integrations though they
+Although version 22.1.0 still unintentionally broke quite a few integrations, though they
 weren't mypyc related. Turns out lots of people depend on `black.files.find_project_root`
-returning a Path! I've seen at least five issues / PRs on GitHub fixing crashes related to
-our change making it return a tuple instead.
+returning a `pathlib.Path` and nothing else! I've seen at least five issues / PRs on
+GitHub fixing crashes related to our change making it return a tuple instead.
 
 For this reason we, the core team, want to [define a stable API (GH-779)][gh-779] soon. I
 can't promise anything as Black's development is volunteer-based, but if you were curious
@@ -127,11 +128,11 @@ most by 15%). You can [read the whole report here][perf-report]. Please note the
 were gathered quite a long time ago and **they are probably a bit outdated**, especially
 with the recent blib2to3 changes made to support 3.10 syntax.
 
-From my experience, I believe mypyc will make for an interesting but viable solution to
+From my experience, I believe mypyc will make for an interesting, but viable solution to
 speeding up Python code going forward. It's far from perfect and still has a bunch of
 bugs, but today it is already making an impact. Should you use it in production if you
-don't want to feel like being a beta tester? Probably not, but it's sure still possible
-and I'm happy with the results.
+don't want to feel like being a beta tester? Certainly not, but it's sure still possible
+and I'm happy with the results!
 
 I hope to see the mypyc project gain more contributors and succeed. Along with Cython,
 PyPy, and the recent faster-cpython project, **perhaps Python will have a solid speed
@@ -144,8 +145,8 @@ Congrats on reaching the end of this multi-part blog post!
 
 ## Acknowledgements
 
-I'd like to thank [@msullivan] for his original work on integrating mypyc into Black
-spawning this summer project and eventually this blog post :)
+I'd like to thank [@msullivan] for his original work on integrating mypyc into Black,
+spawning this summer project and eventually this blog series :)
 
 $try-getting-this-reviewed-by-mypyc-contributor
 
@@ -154,16 +155,16 @@ $try-getting-this-reviewed-by-co-maintainers
 [^10]: If you are in need of some quality entertainment, look at this commit history:
     <https://github.com/ichard26/black-mypyc-wheels/commits/main>
 
-[^11]: I would link to the 22.1.0 heading but currently the HTML IDs are uhhh ... terrible
-    and unfixed. I've tried fixing this with a custom sphinx extension and failed, I have
-    other ideas left to try, but yeah :(
+[^11]: I would link to the 22.1.0 heading, but currently the HTML IDs are uhhh ... terrible
+    and don't persist. I've tried fixing this with a custom sphinx extension but it
+    failed. I have other ideas left to try, but yeah :(
 
 [^12]: I was frustrated and had a headache thanks to the stress 🙃
 
-[^1]: Originally when I first landed the relevant PR it was an overall 2x improvement but
-    once Jelle added a stability hotfix the *effective* speedup for files that were
-    changed is 50%. If you're formatting a bunch of already well formatted files, the
-    speedup is still 2x
+[^1]: Originally when I first landed the relevant PR it was an overall 2x improvement, but
+    once Jelle added a stability hotfix the *effective* speedup for files that are changed
+    is 50%. If you're formatting a bunch of already well formatted files, the speedup is
+    still 2x
 
 [@msullivan]: https://github.com/msullivan
 [changelog]: https://black.readthedocs.io/en/stable/change_log.html
