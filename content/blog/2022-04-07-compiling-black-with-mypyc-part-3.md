@@ -1,7 +1,7 @@
 ---
 title: Compiling Black with mypyc, Pt. 3 - Deployment
 slug: compiling-black-with-mypyc-part-3
-description: &desc mypyc can compile Black and it provides respectable performance
+description: &desc mypyc can compile Black and provide respectable performance
   gains, let's deploy it in production!
 summary: *desc
 tags: [black, mypyc]
@@ -57,10 +57,10 @@ hindsight, I did not promote it enough so yeah this one is on me :)
 
 ## Stable release prep and shipping the wheels
 
-Black for the longest time ever wasn't stable (see [GH-517]), the team initially aimed to
-stabilize Black in late 2018, but obviously that didn't happen for reasons. I won't go
-into it too much since it'd be a whole another story, but to suffice to say when we made
-our newest "commitment" (at this point we explicitly worded our intentions to *not* be
+Black for the longest time ever wasn't stable (see [GH-517]). The team initially aimed to
+stabilize Black in late 2018, but that didn't happen for reasons. I won't go
+into it too much since it'd be a whole other story, but suffice to say when we made
+our newest "commitment" (at that point we explicitly worded our intentions to *not* be
 promises) **we were very motivated to get it done and hopefully right.**
 
 We drafted a [stablity policy][stability-policy],
@@ -98,7 +98,7 @@ and fall back to the basic testing that was already working.[^12] I triggered th
 workflow run of the day, downloaded the artifacts, tested one of them locally to make sure
 nothing was on fire, and pushed 'em to PyPI and that's how release 22.1.0 was born 🎉.
 
-The core team chat was quite lively for the next hour to say the least, after all we just
+The core team chat was quite lively for the next hour, to say the least; after all, we just
 finished a major milestone! Also yeah, we *may* have done a lot of publicizing for this
 release which is why it was everywhere for a while :wink:
 

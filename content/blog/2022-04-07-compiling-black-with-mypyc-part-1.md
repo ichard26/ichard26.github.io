@@ -1,7 +1,7 @@
 ---
 title: Compiling Black with mypyc, Pt. 1 - Initial Steps
 slug: compiling-black-with-mypyc-part-1
-description: &desc I spent a COVID summer (and then some) integrating mypyc to Black
+description: &desc I spent a COVID summer (and then some) integrating mypyc into Black
   to double performance. How was it?
 summary: *desc
 tags: [black, mypyc]
@@ -15,7 +15,7 @@ version of Black, it was also the first release to ship with [mypyc] compiled wh
 doubling performance[^1] 🎉.
 
 The journey getting here took over two years, the creation of two new dev tools, and lots
-and lots of headscratching. Let's go down memory line shall we?
+and lots of headscratching. Let's go down memory lane, shall we?
 
 ______________________________________________________________________
 
@@ -54,7 +54,7 @@ It achieves these impressive speed ups by:
 
 - Using custom memory-efficient, unboxed representations for integers and booleans.
 
-- Classes are compiled to C extension classes. They use [vtables] for fast method calls
+- Compiling regular classes to C extension classes. C extension classes use [vtables] for fast method calls
   and attribute access.
 
 ... and other optimizations I've left out for the sake of brevity.
@@ -77,7 +77,7 @@ years ago.
 import time
 from typing import List, Tuple
 
-def compute(product: int) -> List[Tuple[int, int]]
+def compute(product: int) -> List[Tuple[int, int]]:
     answers = []
     for factor in range(1, product + 1):
         if not product % factor:
@@ -153,17 +153,17 @@ There's more details available in the official
 
 ## black + mypyc: Initial steps
 
-I wasn't the first person to integrate mypyc into Black, way back in September 2019,
-[@msullivan] [opened a PR getting Black ready][original-pr] for compilation. Unfortunately
-as typical in open source projects, no one took the half-completed work and pushed it to
+I wasn't the first person to integrate mypyc into Black; way back in September 2019,
+[@msullivan] [opened a PR getting Black ready][original-pr] for compilation. Unfortunately,
+as is typical in open source projects, no one took the half-completed work and pushed it to
 production, i.e. PyPI, ... for almost two years.
 
 > You might be wondering why performance even matters, well clearly it mattered a lot
 > since [GH-366] was opened in June 2018! The TL;DR is that for environments where Black
-> is **run on save automatically, the more responsive it is the better** as less time
+> is **ran on save automatically, the more responsive it is the better** as less time
 > is spent in a laggy editor window.
 >
-> Start up time is important too given imports are costly, but this issue was explicitly
+> Startup time is important too given imports are costly, but this issue was explicitly
 > about formatting throughput (it turns out mypyc can reduce import time too!).
 
 Given I first publicly announced my work finishing up the project on July 4th 2021, I
@@ -539,8 +539,8 @@ my personal roadmap for psf/black is already packed :p
 
 **Anyway, it's time for [Pt. 2 - Optimization](../compiling-black-with-mypyc-part-2/).**
 
-[^1]: Originally when I first landed the relevant PR it was an overall 2x improvement, but
-    once Jelle added a stability hotfix the *effective* speedup for files that are changed
+[^1]: When I first landed the relevant PR it was an overall 2x improvement, but
+    once Jelle added a stability hotfix the *effective* speedup for files that were changed
     is 50%. If you're formatting a bunch of already well formatted files, the speedup is
     still 2x
 
@@ -552,7 +552,7 @@ my personal roadmap for psf/black is already packed :p
 [^5]: I am well aware I don't need to import `List` or `Tuple` from `typing` anymore. I'm
     just keeping my code examples compatible with older versions of Python.
 
-[^4]: well not quite exactly this, it was a crappier solution with a time complexity of O(n²)
+[^4]: Well not quite exactly this, it was a crappier solution with a time complexity of O(n²)
     instead of O(n), oh and of course my code style was less than ideal and I didn't use
     type annotations, but let's not go there :)
 

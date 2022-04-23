@@ -92,7 +92,7 @@ use and enforce type annotations, so we (and mypyc) can safely assume it's going
 right type.
 
 This involves reading through the code and control flow, checking whether certain states
-are impossible. Blib2to3 is mostly a legacy codebase, so we when added type annotations to
+are impossible. Blib2to3 is mostly a legacy codebase, so when we added type annotations to
 it, it was done to unblock other work. The goal was to make blib2to3 type check, and not
 write the best typed code ever. So, naturally there were a few permissive (parameter) type
 annotations I could make stricter:
@@ -448,14 +448,14 @@ The first one is pretty self-explanatory, I needed a good benchmark suite to mak
 this project would actually improve performance, and to also quantify the gains. The
 latter was important when weighing optimizations.
 
-The second one is a less clear, effectively I wanted [mypy-primer], but for Black:
+The second one is a less clear, I effectively wanted [mypy-primer], but for Black:
 
 ![mypy-primer comment on python/mypy PR 12064 describing the impact of the change](/media/mypy-primer-comment.png)
 
 > [mypy-primer comment on mypy PR #12064][mypy-primer-comment].
 
 So I got to work creating [blackbench] and
-[(the original) diff-shades][original-diff-shades]. Honestly, in hindsight blackbench
+[(the original) diff-shades][original-diff-shades]. In hindsight, blackbench
 sucks and needs a rewrite so I don't want to go into too much detail about it, but the
 summary is that it came with benchmarks for the following tasks:
 
@@ -503,7 +503,7 @@ ______________________________________________________________________
 > [optimization round I did for src/black][opt-round3], but there's nothing in that which
 > I haven't covered yet.
 
-Anyhow these optimizations bumped the parsing speedup over interpreted from ~1.73x to
+Anyhow, these optimizations bumped the parsing speedup over interpreted from ~1.73x to
 \~1.9x. You can see the [changes made here][opt-round1] [and also here][opt-round2].
 
 For more detail, see the tables at the bottom for the `compiled-mypyc-preopt` and
