@@ -5,7 +5,7 @@ description: TL;DR, I'm doing my best to not track you and respect your privacy 
   and CCPA. Data processors are GitHub Pages and Microanalytics.io.
 layout: single
 showReadingTime: false
-modified: 2022-02-06
+modified: 2022-05-13
 ---
 
 ## Scope
@@ -17,7 +17,6 @@ privacy statement unless noted otherwise.
 served under a different GitHub repository without any data subprocessers (except for
 GitHub, Inc. the host):
 
-- <https://ichard26.github.io/next-pr-number/>
 - <https://ichard26.github.io/ghstats/>
 
 For the time being, I will not embed content from social media platform like Twitter or
@@ -63,6 +62,11 @@ stored is purely used for functionality including:
 
 1. **Your last vertical position** -> so if you reload the same page it will autojump to
    your former location
+
+## History
+
+- **May 13, 2022**: Next PR Number (<https://ichard26.github.io/next-pr-number/>) now uses
+  [microanalytics.io] in accordance in this privacy statement
 
 [microanalytics.io]: https://microanalytics.io/
 [pages]: https://pages.github.com/
