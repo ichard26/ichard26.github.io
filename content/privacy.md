@@ -54,16 +54,21 @@ browser.** To enable DNT for the major browsers please see the following resourc
 
 ## Cookies & localStorage
 
-While no first-party or third-party cookies are used, your browser may report the presence
-of one "cookie". This "cookie" is really an entry in your browser's localStorage. The data
-stored is purely used for functionality including:
+While no first-party cookies are used, your browser may report the presence of one
+"cookie". This "cookie" is really an entry in your browser's localStorage. The data stored
+is purely used for functionality including:
 
 1. **Your light/dark theme preference** -> so it can persist across reloads
 
 1. **Your last vertical position** -> so if you reload the same page it will autojump to
    your former location
 
+microanalytics.io and github.com do set their own cookies which is out of my control.
+
 ## History
+
+- **May 13, 2022**: turns out that GitHub (or at least their API) and microanalytics set
+  their own cookies, so sadly third-party cookies do exist :(
 
 - **May 13, 2022**: Next PR Number (<https://ichard26.github.io/next-pr-number/>) now uses
   [microanalytics.io] in accordance in this privacy statement
