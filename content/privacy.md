@@ -69,14 +69,10 @@ stored is purely used for functionality including:
 
 > https://ichard26.github.io/next-pr-number/
 
-- **Uses third-party cookies**: the GitHub REST API sets third-party cookies upon a
+- **Uses third-party cookies**: The GitHub REST API sets third-party cookies upon a
   request sadly
-- **Logs what repositories are queried**: via microanalytics.io events (unless Do Not
-  Track is enabled)
 
 ## History
-
-- **May 28, 2022**: Next PR Number now tracks what repositories are queried.
 
 - **May 14, 2022**: actually, microanalytics.io, or specifically
   <https://microanalytics.io/js/script.js>, doesn't set cookies if loaded into an external
