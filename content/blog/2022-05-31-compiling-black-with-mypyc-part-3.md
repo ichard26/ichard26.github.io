@@ -133,8 +133,8 @@ From my experience, I believe mypyc will make for an interesting, but viable sol
 speeding up Python code going forward. It's far from perfect and still has a bunch of
 bugs, but today it is already making an impact. I don't recommend using mypyc unless you
 are willing to feel a bit like a beta tester *and* have an exhaustive test suite, but
-**hey I managed to do all of this without knowing much about programming in C**, which
-says a lot.
+**hey I managed to do all of this without knowing much about programming in C**[^14],
+which says a lot.
 
 Going forward these open issues remain:
 
@@ -192,6 +192,8 @@ Any errors are my own, not theirs.
     once Jelle added a stability hotfix the *effective* speedup for files that are changed
     is 50%. If you're formatting a bunch of already well formatted files, the speedup is
     still 2x
+
+[^14]: Learning C (and Rust) is now one of my future goals thanks to this project
 
 [@ambv]: https://github.com/ambv
 [@dawnofmidnight]: https://github.com/dawnofmidnight
