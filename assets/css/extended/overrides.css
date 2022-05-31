@@ -108,6 +108,11 @@ body > footer > span:nth-child(2)::after {
   content: "with many tweaks";
 }
 
+/* This should at least match if not be bigger than regular text. */
+.post-content h4 {
+  font-size: 20px;
+}
+
 /* Footnotes can and should be smaller than regular text. */
 .footnotes p {
   font-size: 1rem;
