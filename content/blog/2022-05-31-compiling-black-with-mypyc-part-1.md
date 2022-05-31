@@ -5,7 +5,6 @@ description: &desc I spent a COVID summer (and then some) integrating mypyc into
   to double performance. How was it?
 summary: *desc
 tags: [black, mypyc]
-draft: true
 showToc: true
 date: 2022-05-31 16:25:00-04:00
 ---

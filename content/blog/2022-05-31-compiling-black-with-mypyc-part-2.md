@@ -5,7 +5,6 @@ description: &desc Compiling Black without errors or warnings was the easy bit, 
   I had to optimize it for mypyc.
 summary: *desc
 tags: [black, mypyc]
-draft: true
 showToc: true
 date: 2022-05-31 16:26:00-04:00
 ---

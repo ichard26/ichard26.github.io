@@ -5,7 +5,6 @@ description: &desc mypyc can compile Black and provide respectable performance g
   let's deploy it in production!
 summary: *desc
 tags: [black, mypyc]
-draft: true
 showToc: true
 date: 2022-05-31 16:27:00-04:00
 ---
