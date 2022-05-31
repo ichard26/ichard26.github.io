@@ -7,7 +7,7 @@ summary: *desc
 tags: [black, mypyc]
 draft: true
 showToc: true
-date: 2022-04-07 12:01:00-04:00
+date: 2022-05-31 16:26:00-04:00
 ---
 
 This is part of the "*Compiling Black with mypyc*" series.

@@ -7,7 +7,7 @@ summary: *desc
 tags: [black, mypyc]
 draft: true
 showToc: true
-date: 2022-04-07 12:00:00-04:00
+date: 2022-05-31 16:25:00-04:00
 ---
 
 [Release 22.1.0 of Black][release-22.1.0] was special, not only was it the first stable
