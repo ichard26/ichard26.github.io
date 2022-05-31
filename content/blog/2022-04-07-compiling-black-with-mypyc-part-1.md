@@ -30,12 +30,14 @@ This is a long story so it's broken up into three parts. Collectively this is th
 > up in the "to read later" section of your bookmarks. I just hope you enjoy whatever you
 > do read!
 
+... and yes it took me almost 6 months after deploying mypyc to write this.
+
 ## Introduction to mypyc
 
 Before I dig into the story of how I integrated mypyc into Black, I want to explain what
-mypyc is and the most basic example using it. **mypyc is a transcompiler converting typed
+mypyc is and show an example using it. **mypyc is a [transcompiler] converting typed
 Python code into fast C extensions.** Being built on top of the [mypy] type checker, it
-leverages standard type annotations[^2].
+leverages standard type annotations[^2] (unlike Cython).
 
 It has been used to compile mypy (and itself since mypyc comes with mypy) since 2019,
 giving it a 4x performance boost over interpreted Python. According to the mypyc project:
@@ -54,8 +56,8 @@ It achieves these impressive speed ups by:
 
 - Using custom memory-efficient, unboxed representations for integers and booleans.
 
-- Compiling regular classes to C extension classes. C extension classes use [vtables] for fast method calls
-  and attribute access.
+- Compiling regular classes to C extension classes. C extension classes use [vtables] for
+  fast method calls and attribute access.
 
 ... and other optimizations I've left out for the sake of brevity.
 
@@ -69,9 +71,9 @@ using mypy 0.931 on Ubuntu 20.04.03 with CPython 3.8.5.
 
 Next, let's take a look at the code[^5] we'll soon compile. It's a simple program that
 bruteforces its way to find all of the factor pairs for a given product. I mostly chose
-this example because it's very dear to my heart. It was the first "serious" program I wrote
-while learning Python[^4]. I originally wrote the same logic in code.org's app lab many
-years ago.
+this example because it's very dear to my heart. It was the first "serious" program I
+wrote while learning Python[^4]. I originally wrote the same logic in code.org's app lab
+many years ago.
 
 ```python3
 import time
@@ -91,7 +93,7 @@ elapsed = time.perf_counter() - t0
 print(f"compute() took {elapsed * 1000:.1f} milliseconds")
 ```
 
-Once saved, run it while noting the time it takes:
+Once saved, run it noting the time it takes:
 
 ```console
 $ python coefficient_finder.py
@@ -114,23 +116,24 @@ compute() took 331.6 milliseconds
 ```
 
 And would you look at that, mypyc gave us a near 6x improvement over CPython! What's neat
-is that I didn't even need to type all of the variables thanks to mypy's type inference.
+is that **I didn't even need to type all of the variables thanks to mypy's type
+inference**.
 
 > And actually, since the `mypyc` script is a simple wrapper that generates a setuptools
 > project and builds it in-place, you can peek into the `build` directory and look at the
-> generated C code (should be `__native.c`).
+> generated C code (should be in `__native.c`).
 
 Feel free to edit the program and play around with mypyc, seeing what little scripts it
 can speed up. Pro-tip, to restore back to the interpreted version of your program, you can
-delete the `.so` file on Linux & MacOS or the `.pyd` file on Windows. In this example
-I got `coefficient_finder.cpython-38-x86_64-linux-gnu.so`.
+delete the `.so` file on Linux & MacOS or the `.pyd` file on Windows. In this example I
+got `coefficient_finder.cpython-38-x86_64-linux-gnu.so`.
 
 ______________________________________________________________________
 
 ### It's not a silver bullet
 
-There's several downsides to using mypyc though. While the project aims for excellent
-compatibility with standard Python behaviour, there's some major deviations worth noting:
+There's several downsides to using mypyc. While the project aims for excellent
+compatibility with CPython, there are some major deviations worth noting:
 
 - Types are enforced at runtime and violations **will** cause a TypeError (this makes
   using `typing.Any` quite dangerous).
@@ -148,23 +151,23 @@ compatibility with standard Python behaviour, there's some major deviations wort
 - Profilers (e.g. CProfile), debuggers (e.g. pdb), and tracing hooks (e.g. coverage) won't
   work as the C code doesn't trigger the relevant hooks.
 
-There's more details available in the official
+There are more details available in the official
 [mypyc documentation here][mypyc-deviations-one] and [also here][mypyc-deviations-two].
 
 ## black + mypyc: Initial steps
 
 I wasn't the first person to integrate mypyc into Black; way back in September 2019,
-[@msullivan] [opened a PR getting Black ready][original-pr] for compilation. Unfortunately,
-as is typical in open source projects, no one took the half-completed work and pushed it to
-production, i.e. PyPI, ... for almost two years.
+[@msullivan] [opened a PR getting Black ready][original-pr] for compilation.
+Unfortunately, as is typical in open source projects, no one took the half-completed work
+and pushed it to completion ... for almost two years.
 
 > You might be wondering why performance even matters, well clearly it mattered a lot
 > since [GH-366] was opened in June 2018! The TL;DR is that for environments where Black
-> is **ran on save automatically, the more responsive it is the better** as less time
-> is spent in a laggy editor window.
+> is **ran on save automatically, the more responsive it is the better** as less time is
+> spent in a laggy editor window.
 >
-> Startup time is important too given imports are costly, but this issue was explicitly
-> about formatting throughput (it turns out mypyc can reduce import time too!).
+> Start up time is important too given imports are costly (it turns out mypyc can reduce
+> import time too!), but this issue was explicitly about formatting throughput.
 
 Given I first publicly announced my work finishing up the project on July 4th 2021, I
 sadly don't remember why I decided to pick it up. All I remember was fighting mypyc
@@ -172,11 +175,10 @@ compile-time type errors and fighting an outdated gcc... well OK I do remember I
 looking to learn more about type systems and C development in general, but that's it, I
 promise!
 
-Anyway, even upgrading from gcc-9 to gcc-10 wasn't enough. Currently mypyc has a bug
-([mypyc#885]) where its boxing / unboxing code triggers
-`array subscript 1 is above array bounds` on
-[`blib2to3.pgen2.parse.Parser.setup`][gcc-bug-code]. I managed to simplify the
-reproduction case to the following:
+First off, as of writing mypyc has a bug ([mypyc#885]) where its boxing & unboxing code
+triggers `array subscript 1 is above array bounds` on
+[`blib2to3.pgen2.parse.Parser.setup`][gcc-bug-code]. I simplified the reproduction case to
+the following:
 
 ```python3
 from typing import Optional, Tuple
@@ -189,14 +191,15 @@ def setup() -> None:
     newnode: RawNode = (7, None, None)
 ```
 
-... yeah I know this doesn't make mypyc seem particularly robust. While I would argue it's
-not entirely stupid to use it in prod (because I did so), you would be right in pointing
-out it's alpha quality and needs careful testing. And to be fair, poor past me didn't know
-just how many issues I'd soon face. All I can hope is that this work will help mypyc
-improve ❀
+... yeah, I know this makes mypyc look fragile. While it's not entirely stupid to use it
+in production (because I did so), you'd be right in pointing out it's alpha quality and
+needs careful testing. And to be fair, poor past me didn't know just how many issues I'd
+soon face. All I can hope is that this work will help mypyc improve ❀
 
-Trying to compile `black` and `blib2to3` (our custom fork of lib2to3[^6]) initially seemed
-like a small task with just these type errors:
+Anyway I switched to clang and this issue disappeared ...
+
+Trying to compile `black` and `blib2to3`[^6] initially seemed like a small task with just
+these type errors:
 
 ```console
 $ python setup.py --use-mypyc bdist_wheel
@@ -254,7 +257,7 @@ Traceback (most recent call last):
 src/black/trans.py:187: KeyError: "'CustomSplitMapMixin' has no attribute '_Key'"
 ```
 
-This issue was just due to missing `ClassVar` declarations for attributes that were
+This issue was just due to missing `ClassVar` declarations for attributes that are
 functionally class-only attributes. The fix was pretty easy :)
 
 ```diff
@@ -274,8 +277,8 @@ functionally class-only attributes. The fix was pretty easy :)
 +    )
 ```
 
-Do you see that `@trait` addition? well ... mypyc does in fact support a limited form of
-multiple inheritance called **traits**. They're basically mixins. As noted in the
+Do you see that `@trait` addition? well ... mypyc does in fact **support a limited form of
+multiple inheritance called *traits***. They're basically mixins. As noted in the
 [mypyc documentation][traits-docs], they shouldn't be instantiated or subclass non-traits.
 
 And as usual, fixing this crash revealed \*even\* \*more\* \*issues\*, albeit mypyc
@@ -332,6 +335,10 @@ index 8e2123d..6998c1e 100644
 breaks mypyc).
 
 ```diff
+diff --git a/src/black/linegen.py b/src/black/linegen.py
+index 76b553a..1691cc5 100644
+--- a/src/black/linegen.py
++++ b/src/black/linegen.py
 @@ -40,7 +38,8 @@ class CannotSplit(CannotTransform):
      """A readable split that fits the allotted line length is impossible."""
 
@@ -360,6 +367,10 @@ breaks mypyc).
 ```
 
 ```diff
+diff --git a/src/black/trans.py b/src/black/trans.py
+index 023dcd3..d918ef1 100644
+--- a/src/black/trans.py
++++ b/src/black/trans.py
 @@ -62,7 +71,6 @@ def TErr(err_msg: str) -> Err[CannotTransform]:
      return Err(cant_transform)
 
@@ -389,6 +400,10 @@ breaks mypyc).
 One change stood out as the most hacky[^7] code I've probably ever written so far:
 
 ```diff
+diff --git a/src/black/linegen.py b/src/black/linegen.py
+index 76b553a..1691cc5 100644
+--- a/src/black/linegen.py
++++ b/src/black/linegen.py
 @@ -335,7 +336,9 @@ def transform_line(
          transformers = [left_hand_split]
      else:
@@ -468,7 +483,7 @@ globals dict, predictably blowing up.
     cpy_r_r148 = CPyDict_GetItem(cpy_r_r146, cpy_r_r147);
 ```
 
-If this scares you, don't fret, it's not too hard to read. First, the globals dict is
+If this scares you, don't fret, it's not impossible to read. First, the globals dict is
 assigned to `cpy_r_r146`, then the name (or key) we're looking up is read and stored in
 `cpy_r_r147`. Finally, `cpy_r_r146` and `cpy_r_r147` are passed to the `CPyDict_GetItem`
 function.
@@ -494,9 +509,9 @@ class StringParser:
 ```
 
 The root issue ([mypyc#862]) is that mypyc doesn't understand class level scoping ... or
-that negative integers are constants (using a positive integer fixed the crash). Working
-around this issue allowed me to embed the date I fixed this and many other issues. I think
-it's a pretty cute historical codebase quirk ❀
+that negative integers are constants (using a positive integer fixed the crash). I
+embedded the date I workarounded this issue, I think it's a pretty cute historical
+codebase quirk ❀
 
 ````diff
 @@ -1811,20 +1826,20 @@ class StringParser:
@@ -529,20 +544,19 @@ quite a few of them above, but there were more 😥 You can read the rest in thi
 [integration report][integration-report] I filed in the mypyc issue tracker.
 
 And I know, y'all are wondering why Black didn't use Cython, well I'm not sure as I wasn't
-around in 2019 when [@ambv first suggested its use][ambv-mypyc-suggestion]. Eitherway I
-didn't look into Cython because at the time as it seemed like I only had the final scraps
-left and didn't have too much work to do ... which was both right and wrong depending on
-how you look at it.
+around in 2019 when [@ambv first suggested using mypyc][ambv-mypyc-suggestion]. Eitherway
+I didn't look into Cython because at the time as it seemed like I only had the final
+scraps left and didn't have too much work to do ... which was both right and wrong
+depending on how you look at it.
 
-Could Black be even faster if we had used Cython? Probably, but that's for another day as
-my personal roadmap for psf/black is already packed :p
+Could Black be even faster if we had used Cython? Probably, but that would have required
+learning C which would have taken quite a while.
 
 **Anyway, it's time for [Pt. 2 - Optimization](../compiling-black-with-mypyc-part-2/).**
 
-[^1]: When I first landed the relevant PR it was an overall 2x improvement, but
-    once Jelle added a stability hotfix the *effective* speedup for files that were changed
-    is 50%. If you're formatting a bunch of already well formatted files, the speedup is
-    still 2x
+[^1]: When I first landed the relevant PR it was an overall 2x improvement, but once Jelle
+    added a stability hotfix the *effective* speedup for files that were changed is 50%.
+    If you're formatting a bunch of already well formatted files, the speedup is still 2x
 
 [^2]: There's too many typing related PEPs to copy and paste, but there's an up to date list
     here: <https://docs.python.org/3/library/typing.html#relevant-peps>
@@ -552,15 +566,13 @@ my personal roadmap for psf/black is already packed :p
 [^5]: I am well aware I don't need to import `List` or `Tuple` from `typing` anymore. I'm
     just keeping my code examples compatible with older versions of Python.
 
-[^4]: Well not quite exactly this, it was a crappier solution with a time complexity of O(n²)
-    instead of O(n), oh and of course my code style was less than ideal and I didn't use
-    type annotations, but let's not go there :)
+[^4]: Well not quite exactly this, it was a crappier solution with a time complexity of
+    O(n²) instead of O(n), oh and of course my code style was less than ideal and I didn't
+    use type annotations, but let's not go there :)
 
-[^6]: At the time @ambv wrote Black, lib2to3 was the best AST + CST mix out there. AST
-    parsers like the built-in one are great for understanding syntax and structure, but
-    are useless when editing how much whitespace a NAME token gets for example. CSTs on
-    the other hand are great for visual changes Black does, but don't provide enough
-    context to allow Black to make the right decisions, hence lib2to3 and the fork.
+[^6]: It's a fork of lib2to3, see
+    <https://github.com/psf/black/blob/1e557184b0a9f43bfbff862669966bc5328517e9/src/blib2to3/README>
+    for why.
 
 [^7]: What's funny is that the PR which added this `__name__` check had a review noting the
     hackiness of reading the attribute in the first place. It was dismissed as it would
@@ -588,4 +600,5 @@ my personal roadmap for psf/black is already packed :p
 [original-pr]: https://github.com/psf/black/pull/1009
 [release-22.1.0]: https://github.com/psf/black/releases/tag/22.1.0
 [traits-docs]: https://mypyc.readthedocs.io/en/latest/using_type_annotations.html#trait-types
+[transcompiler]: https://en.wikipedia.org/wiki/Source-to-source_compiler
 [vtables]: https://en.wikipedia.org/wiki/Virtual_method_table

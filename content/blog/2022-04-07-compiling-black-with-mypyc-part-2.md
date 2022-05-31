@@ -66,7 +66,7 @@ takeaways:
   made, otherwise it's zero 🙂)
 
 - The actual formatting logic's runtime is mostly spent in the CST visitor usually taking
-  up 3/4. The rest went to the transformers which handle line breaks, string literals, and
+  up 75%. The rest went to the transformers which handle line breaks, string literals, and
   some special cases.
 
 I was quite surprised how much time blib2to3 related functions were eating up. Just look
@@ -85,17 +85,16 @@ mypyc works. Ultimately, many different optimizations were done over three round
 
 #### Tightening up existing type annotations
 
-The stricter your type annotations are in your codebase, the more invariants mypyc will be
-able to infer. It'll then use this information and write type-specific code that is
-faster. This code won't work if it gets an object of a different type, but that's why we
-use and enforce type annotations, so we (and mypyc) can safely assume it's going to be the
-right type.
+The stricter the type annotations are in your codebase, the more invariants mypyc will be
+able to infer. It'll then use this information to write type-specific code that is faster.
+This code won't work if it gets an object of a different type, but that's why we use and
+enforce type annotations, so mypyc can safely assume it's going to be the right type. **In
+essence, the stricter the type annotations, the faster code mypyc can generate.**
 
-This involves reading through the code and control flow, checking whether certain states
-are impossible. Blib2to3 is mostly a legacy codebase, so when we added type annotations to
-it, it was done to unblock other work. The goal was to make blib2to3 type check, and not
-write the best typed code ever. So, naturally there were a few permissive (parameter) type
-annotations I could make stricter:
+This meant reading through the code's control flow, checking whether certain states are
+impossible. Blib2to3 is a legacy codebase, so type annotations were added to unblock other
+work. The goal was to make blib2to3 type check, and not write perfectly typed code. So
+naturally, there were a few permissive (parameter) type annotations I could make stricter:
 
 ```diff
 diff --git a/src/blib2to3/pgen2/parse.py b/src/blib2to3/pgen2/parse.py
@@ -140,12 +139,14 @@ index 47c8f02..6b03188 100644
          if newnode is not None:
 ```
 
-This also has the neat side-effect of allowing me to remove some asserts.
+Since mypyc injects runtime type checks, simplifying `Optional[Text]` to `Text` reduces
+function call overhead. `value` only needs to pass (in equivalent C code)
+`isinstance(value, str)`. This also has the neat side-effect of allowing me to remove some
+asserts.
 
 Tightening up type annotations involving [`typing.Any`][typing-any] can be particularly
-worthwhile as `Any` forces mypyc to fallback to generic C code that can handle any kind of
-object. I was only able to find one spot I could make this change, but it's better than
-nothing!
+worthwhile as it forces the use of generic C code that can handle any kind of object. I
+could only make this change once, but it's better than nothing.
 
 ```diff
 @@ -54,14 +56,14 @@ class Driver(object):
@@ -165,15 +166,13 @@ nothing!
 #### Marking everything Final
 
 Avoiding calculating the same value over and over again is one of the most common
-optimizations out there, and it's for good reason, it's usually very easy to fix. BUT,
-with mypyc we can take this further using [`typing.Final`][typing-final]. Final variables
+optimizations out there, and it's for good reason, it's usually easy to fix. BUT, with
+mypyc we can take this further by using [`typing.Final`][typing-final]. Final variables
 can often be injected at lookup sites at compile time, skipping the lookups at runtime!
 
 Let me show an example, let's take this code and see what adding a single `Final` does.
 
 ```python3
-from typing import Final
-
 SCALE = 5
 
 def calculate_y(x):
@@ -227,7 +226,7 @@ CPyL4: ;
 }
 ```
 
-If we mark the `SCALE` variable as Final, mypyc will notice that and inline the value.
+If we mark the `SCALE` variable as Final, **mypyc will notice that and inline the value**.
 
 ```python3 {hl_lines=[3]}
 from typing import Final
@@ -265,8 +264,8 @@ If the value can't be inlined, say because it involves a function call then mypy
 just replace the globals dictionary lookup and instead use a C static (which is still
 faster).
 
-Applying this optimization to Black yields changes like the following (`black.comments`
-and `black.parsing` respectively):
+Applying this optimization to Black yields changes like the following to `black.comments`
+and `black.parsing`[^1] respectively:
 
 ```diff
 @@ -12,11 +18,10 @@ from black.nodes import STANDALONE_COMMENT, WHITESPACE
@@ -314,45 +313,43 @@ and `black.parsing` respectively):
          try:
 ```
 
-In total, this was definitely the most common optimization I applied throughout this whole
-journey. It's simple but effective!
+In total, this was the most common optimization I applied throughout this whole project.
+It's simple but effective!
 
 #### Taking advantage of early binding
 
-This one is really making a deal with mypyc. You give it static code and it gives you fast
-code in return ... by resolving called functions and names at compile time. I already
-covered using Final which is one form of early binding, but it works for function calls
-too!
+`Final` is so fast because of early binding. What's great is you can take advantage of
+early binding with function calls too, assuming your code is static enough.
 
 Time for another example:
 
 ```python3
 from typing import Callable, List
 
-def convert(item: object) -> str:
+def tag(item: object) -> str:
     return "<tag>" + repr(item)
 
 def process_items(func: Callable[[object], object], items: List[object]) -> List[object]:
     return [func(i) for i in items]
 
-process_items(convert, ["1", "2", "3"])
+process_items(tag, ["1", "2", "3"])
 ```
 
-The function used to convert the items isn't known until call time, forcing mypyc to fall
-back to the standard Python calling convention (albeit it does use the faster vectorcall
-convention). If I instead hardcode `convert` in `process_items`, mypyc will be able to
-call the C function directly which is much faster.
+The function used to process the items isn't known until call time, forcing mypyc to fall
+back to the standard Python calling convention (albeit it does use the faster
+[vectorcall convention] available for C functions). If I instead hardcode `tag` in
+`process_items`, mypyc can **call the C function directly** which involves way less work.
 
 ```python3 {hl_lines=[7]}
-from typing import Callable, List
+from typing import List
 
-def convert(item: object) -> str:
+def tag(item: object) -> str:
     return "<tag>" + repr(item)
 
-def process_items(func: Callable[[object], object], items: List[object]) -> List[object]:
-    return [convert(i) for i in items]
+def process_items(List[object]) -> List[object]:
+    return [tag(i) for i in items]
 
-process_items(convert, ["1", "2", "3"])
+process_items(["1", "2", "3"])
 ```
 
 ```diff {hl_lines=[6, 8]}
@@ -371,8 +368,8 @@ process_items(convert, ["1", "2", "3"])
      }
 ```
 
-Obviously a lot of the time this isn't possible because if your function calls are
-dynamic, it's probably because the code depends on it ...
+Most of the time this isn't possible because if your function calls are dynamic, it's
+probably because the code depends on it ... but keep it in mind.
 
 By sheer luck, I was able to replace two dynamic function calls with static calls in
 `blib2to3.pgen2.parse.Parser`, the very hot parser code!
@@ -445,19 +442,19 @@ didn't exist at the time:
 1. A tool to compare two builds of Black behaviourally
 
 The first one is pretty self-explanatory, I needed a good benchmark suite to make sure
-this project would actually improve performance, and to also quantify the gains. The
-latter was important when weighing optimizations.
+this project would actually improve performance, and to also quantify the gains (important
+when weighing optimizations).
 
-The second one is a less clear, I effectively wanted [mypy-primer], but for Black:
+The second one is less clear, I effectively wanted [mypy-primer], but for Black:
 
 ![mypy-primer comment on python/mypy PR 12064 describing the impact of the change](/media/mypy-primer-comment.png)
 
 > [mypy-primer comment on mypy PR #12064][mypy-primer-comment].
 
 So I got to work creating [blackbench] and
-[(the original) diff-shades][original-diff-shades]. In hindsight, blackbench
-sucks and needs a rewrite so I don't want to go into too much detail about it, but the
-summary is that it came with benchmarks for the following tasks:
+[(the original) diff-shades][original-diff-shades]. In hindsight, blackbench sucks and
+needs a rewrite so I don't want to go into too much detail about it, but the summary is
+that it came with benchmarks for the following tasks:
 
 - Formatting **with** safety checks
 - Formatting **without** safety checks
@@ -474,9 +471,9 @@ and made it possible to verify mypyc didn't change formatting, but its code was 
 
 ### Detour: does GCC help?
 
-At this point I had found a workaround to the GCC error and was curious to whether using
-GCC would produce faster binaries. The answer turned out to be
-[*very much no*][gcc-is-worse].
+At this point I had found a workaround to the GCC
+`array subscript 1 is above array bounds` error and was curious to whether using GCC would
+produce faster binaries. The answer turned out to be [*very much no*][gcc-is-worse].
 
 > Anyway, other than getting distracted by diff-shades, I looked into the gcc issue to
 > find a potential workaround. I found one, but it was useless 🙂 Collecting numbers for
@@ -518,6 +515,10 @@ pretty nice! I was aiming for 25%, but in hindsight I might have been hoping for
 **We're nearly there, only [Pt. 3 - Deployment](../compiling-black-with-mypyc-part-3/)
 remains.** It's shorter, believe me.
 
+[^1]: In the end, I had to
+    [revert this optimization so Black wouldn't crash under PyPy][pypy-revert], can't
+    remember what the error was though
+
 [blackbench]: https://github.com/ichard26/blackbench
 [gcc-is-worse]: https://github.com/ichard26/black-mypyc-wheels/issues/2#issuecomment-896357830
 [gprof2dot]: https://github.com/jrfonseca/gprof2dot
@@ -531,7 +532,9 @@ remains.** It's shorter, believe me.
 [original-diff-shades]: https://github.com/ichard26/black-mypyc-wheels/blob/c448ae49df7570dc2745eccd947625897f6541ce/diff_shades.py
 [perf-report]: https://gist.github.com/ichard26/b996ccf410422b44fcd80fb158e05b0d
 [py-spy]: https://github.com/benfred/py-spy
+[pypy-revert]: https://github.com/psf/black/pull/2431/commits/f5f1099dd9043e7bd62c3fd6d39dee1fd8ba458d
 [scalene]: https://pypi.org/project/scalene/
 [typing-any]: https://docs.python.org/3/library/typing.html#typing.Any
 [typing-final]: https://docs.python.org/3/library/typing.html#typing.Final
+[vectorcall convention]: https://peps.python.org/pep-0590/
 [yelp-gprof2dot]: https://pypi.org/project/yelp-gprof2dot/
