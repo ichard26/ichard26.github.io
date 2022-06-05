@@ -1,6 +1,6 @@
 User-agent: *
-Disallow: /blog/2022/05/31/compiling-black-with-mypyc-part-1
-Disallow: /blog/2022/05/31/compiling-black-with-mypyc-part-2
-Disallow: /blog/2022/05/31/compiling-black-with-mypyc-part-3
-Disallow: /404.html
+Disallow: https://ichard26.github.io/blog/2022/05/31/compiling-black-with-mypyc-part-1
+Disallow: https://ichard26.github.io/blog/2022/05/31/compiling-black-with-mypyc-part-2
+Disallow: https://ichard26.github.io/blog/2022/05/31/compiling-black-with-mypyc-part-3
+Disallow: https://ichard26.github.io/404.html
 Sitemap: https://ichard26.github.io/sitemap.xml
