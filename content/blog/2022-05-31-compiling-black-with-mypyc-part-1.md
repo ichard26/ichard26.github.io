@@ -7,6 +7,7 @@ summary: *desc
 tags: [black, mypyc]
 showToc: true
 date: 2022-05-31 16:25:00-04:00
+modified: 2022-06-04 21:51:00-04:00
 ---
 
 [Release 22.1.0 of Black][release-22.1.0] was special, not only was it the first stable
@@ -590,7 +591,7 @@ learning C which would have taken quite a while.
 [gh-366]: https://github.com/psf/black/issues/366
 [initial-results]: https://github.com/psf/black/issues/366#issuecomment-855306152
 [integration-report]: https://github.com/mypyc/mypyc/issues/886
-[mypy]: https://mypy.readthedocs.io/en/stable/introduction.html
+[mypy]: https://mypy.readthedocs.io/en/stable/
 [mypyc]: https://mypyc.readthedocs.io/en/stable/introduction.html
 [mypyc#862]: https://github.com/mypyc/mypyc/issues/862
 [mypyc#885]: https://github.com/mypyc/mypyc/issues/885

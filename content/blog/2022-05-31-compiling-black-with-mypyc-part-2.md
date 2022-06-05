@@ -13,7 +13,7 @@ This is part of the "*Compiling Black with mypyc*" series.
 
 - [Pt. 1 - Initial Steps](../compiling-black-with-mypyc-part-1/)
 - [Pt. 2 - Optimization](.) (you're reading this one)
-- [Pt. 3 - Deployment](../compiling-black-with-mypyc-part-3)
+- [Pt. 3 - Deployment](../compiling-black-with-mypyc-part-3/)
 
 ## Optimizing for mypyc
 
