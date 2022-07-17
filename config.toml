@@ -19,7 +19,7 @@ publishDate = ["publishDate", "date", ":filename"]
 lastmod = ["lastmod"]
 
 [permalinks]
-blog = "blog/:year/:month/:day/:slug/"
+blog = "blog/:year/:month/:slug/"
 
 [params]
 description = "Richard Si (ichard26)'s personal place for writings all about FOSS and Python."

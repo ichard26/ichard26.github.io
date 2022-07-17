@@ -7,6 +7,8 @@ summary: *desc
 tags: [black, mypyc]
 showToc: true
 date: 2022-05-31 16:26:00-04:00
+aliases:
+  - 31/compiling-black-with-mypyc-part-2/
 ---
 
 This is part of the "*Compiling Black with mypyc*" series.

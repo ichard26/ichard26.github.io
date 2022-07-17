@@ -8,6 +8,8 @@ tags: [black, mypyc]
 showToc: true
 date: 2022-05-31 16:25:00-04:00
 modified: 2022-06-04 21:51:00-04:00
+aliases:
+  - 31/compiling-black-with-mypyc-part-1/
 ---
 
 [Release 22.1.0 of Black][release-22.1.0] was special, not only was it the first stable
