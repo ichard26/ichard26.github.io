@@ -83,7 +83,7 @@ a:hover {
   box-shadow: 0 1px;
 }
 
-/* Try to fix inconsistent margin between a code block and a paragraph */
+/* Try to fix inconsistent margin between code blocks and paragraphs */
 .post-content div.highlight + p {
   margin-top: var(--content-gap);
 }
