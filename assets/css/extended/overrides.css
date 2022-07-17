@@ -113,7 +113,12 @@ body > footer > span:nth-child(2)::after {
   font-size: 20px;
 }
 
+/* Post descriptions should visually differ from the post text. */
+.post-single > * > .post-description {
+  font-size: 16px;
+}
+
 /* Footnotes can and should be smaller than regular text. */
 .footnotes p {
-  font-size: 1rem;
+  font-size: 16px;
 }
