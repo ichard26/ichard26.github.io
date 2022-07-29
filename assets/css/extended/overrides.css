@@ -108,6 +108,11 @@ body > footer > span:nth-child(2)::after {
   content: "with many tweaks";
 }
 
+/* Shrink regular text by a bit since it feels too big. */
+.post-content p, .post-content li {
+  font-size: 17px;
+}
+
 /* This should at least match if not be bigger than regular text. */
 .post-content h4 {
   font-size: 20px;
