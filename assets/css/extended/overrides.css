@@ -123,6 +123,11 @@ body > footer > span:nth-child(2)::after {
   font-size: 16px;
 }
 
+/* Images should be centered horizontally instead of being left-aligned. */
+.post-content img {
+  margin: 1rem auto;
+}
+
 /* Footnotes can and should be smaller than regular text. */
 .footnotes p {
   font-size: 16px;
