@@ -69,6 +69,8 @@ method that suits you the best :)
 For Discord, you'll find me in the [Python Discord][discord-python], [PyPA][discord-pypa],
 and [Pallets][discord-pallets] servers. Just in case we need to share a server to DM.
 
+I also have a [Twitter account][twitter] if that's more your thing.
+
 [bandersnatch]: https://github.com/pypa/bandersnatch
 [black]: https://github.com/psf/black
 [black-primer]: https://github.com/psf/black/blob/9bd4134f3138448eb92af7031d994b2cec7d08ad/docs/contributing/gauging_changes.md#black-primer
@@ -81,3 +83,4 @@ and [Pallets][discord-pallets] servers. Just in case we need to share a server t
 [ghstats]: https://ichard26.github.io/ghstats/
 [mypy-primer]: https://github.com/hauntsaninja/mypy_primer
 [next-pr-number]: https://ichard26.github.io/next-pr-number/
+[twitter]: https://twitter.com/sichard26

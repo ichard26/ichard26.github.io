@@ -33,6 +33,7 @@ keywords = ["blog", "python", "black", "oss", "foss"]
 # Shown on the home page
 socialIcons = [
   { name = "github", url = "https://github.com/ichard26" },
+  { name = "twitter", url = "https://twitter.com/sichard26" },
   { name = "python", url = "https://discuss.python.org/u/ichard26/summary" },
   { name = "stackoverflow", url = "https://stackoverflow.com/users/18155471/ichard26"},
   # { name = "reddit", url = "https://www.reddit.com/user/ichard26" },
@@ -42,6 +43,7 @@ socialIcons = [
 publisherType = "Person"
 sameAs = [
   "https://github.com/ichard26",
+  "https://twitter.com/sichard26",
   "https://discuss.python.org/u/ichard26/summary",
   "https://stackoverflow.com/users/18155471/ichard26",
   "https://www.reddit.com/user/ichard26",
