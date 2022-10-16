@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html{{ with site.LanguageCode | default site.Language.Lang }} lang="{{ . }}"{{ end }}>
+  <head>
+    <title>{{ .Permalink }}</title>
+    <link rel="canonical" href="{{ .Permalink }}">
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content="0; url={{ .Permalink }}">
+  </head>
+  <body>
+    <main>
+      <h1>This page was moved to a new URL, sorry!</h1>
+      <p>
+        <a href="{{ .Permalink }}">Please click here to be redirected to &lt;{{ htmlEscape .Permalink }}&gt;</a>.
+      </p>
+      <p>
+        <a href="{{ site.BaseURL }}">Otherwise, you can click here to go to my homepage instead</a>.
+      </p>
+    </main>
+  </body>
+</html>
