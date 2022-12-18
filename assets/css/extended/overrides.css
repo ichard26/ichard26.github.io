@@ -113,6 +113,11 @@ body > footer > span:nth-child(2)::after {
   font-size: 17px;
 }
 
+/* Make h3 bigger since h4 is being enlarged below. */
+.post-content h3 {
+  font-size: 26px;
+}
+
 /* This should at least match if not be bigger than regular text. */
 .post-content h4 {
   font-size: 20px;
@@ -131,4 +136,10 @@ body > footer > span:nth-child(2)::after {
 /* Footnotes can and should be smaller than regular text. */
 .footnotes p {
   font-size: 16px;
+}
+
+/* $ prompt for command code blocks. */
+.command code::before {
+  content: "$ ";
+  color: grey;
 }
