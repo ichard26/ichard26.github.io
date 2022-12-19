@@ -1,4 +1,5 @@
 ---
+slug: black-23.1a1
 title: Black 23.1a1 - please help us test the 2023 stable style!
 description: &desc We just released Black 23.1a1 with the first draft of the 2023
   stable style, please try it out and let us know your feedback and concerns.
@@ -17,7 +18,10 @@ In other words, **Black 23.1.0 will format your code differently out of the box*
 > to update the stable style in the new year. This minimises disruption while keeping the
 > door for improvements open.
 
-However, **we need your help in deciding what goes into the 2023 stable style**. If you
+23.1a1 contains a draft of the 2023 stable style that we, the maintainers, initially
+decided on.
+
+However, **we need your help in finalizing what goes into the 2023 stable style**. If you
 can, please try 23.1a1 out on your codebase(s). You can install it by running this
 command:
 
@@ -28,8 +32,8 @@ python -m pip install black==23.1a1
 If you have any feedback, concerns, or run into any issues, please drop us a comment
 [in this issue][#3407] (black#3407).
 
-What follows is brief rundown of all of the preview changes that will be promoted as of
-writing.
+What follows is brief rundown of all of the changes in the preview style that were
+promoted to stable in 23.1a1.
 
 ## Promoted changes
 
@@ -52,8 +56,8 @@ even if you told it not to, leading to this:
      return a + b
 ```
 
-[This has been fixed in the preview style since 22.8.0][#3168] (and this example will be
-left unchanged).
+[This has been fixed in the preview style since 22.8.0][#3168] (leaving this example
+unchanged).
 
 #### `--skip-magic-trailing-comma` now removes useless trailing commas in subscripts
 
@@ -100,10 +104,10 @@ expected.
 
 <!-- 18 -->
 
-There's actually two problems in the "before" output:
+There are actually two problems in the "before" output:
 
 - The `zero(one,).two(three,).four(five,)` chain should be fully exploded
-- The magic trailing comma in `refresh_token()`'s dictionary is being ignored
+- The magic trailing comma in the dictionary in `refresh_token()` is being ignored
 
 **Source:**
 
@@ -347,11 +351,11 @@ for (k, v) in d.items():
 **After** ([22.3.0+][#2945]):
 
 ```python3
-for (k, v) in d.items():
+for k, v in d.items():
     print(k, v)
 ```
 
-Although nested parentheses are still left untouched.
+Unfortunately, nested parentheses are still left untouched.
 [I have an open PR to fix that][#3243], but it isn't ready yet.
 
 ### Remove blank lines after code block open
@@ -464,7 +468,7 @@ shape = (1,)
 
 <!-- 15 -->
 
-The old ("before") behaviour here would cause flake8 raise `E302`.
+The old ("before") behaviour here caused flake8 to raise `E302`.
 
 **Source:**
 
@@ -516,9 +520,9 @@ def get_search_results(self, request, queryset, search_term):
 ### Empty and whitespace-only files are now normalized
 
 Currently under the stable style, empty and whitespace-only files are not modified. In
-some discussions ([issues and pull requests][#2382]), the consesus was to reformat
-whitespace-only files to empty or single-character files, preserving the original line
-endings (LR/CRLR) when possible.
+some discussions ([issues][#2382] and [pull requests][#2484]), the consesus was to
+reformat whitespace-only files to empty or single-character files, preserving the original
+line endings (LR/CRLR) when possible.
 
 In the end, we settled on these rules:
 
@@ -555,7 +559,7 @@ curious.*
 stable preview. There's a lot of reasons why, but
 [Jelle summarized it well in this comment][jelle-esp-comment]:
 
-> At this point there's still half a dozen stability bugs with experimental string
+> \[...\] At this point there's still half a dozen stability bugs with experimental string
 > processing, so that alone is enough to block it from going into the 2023 stable style.
 > However, I think we should consider dropping (most of) the feature entirely, instead of
 > leaving it behind a flag forever, since there are so many stability bugs and often it
@@ -571,8 +575,8 @@ And these three depend on ESP being promoted:
 
 If you want a change that's not covered by something in the preview style already (and
 can't be achieved by simply tweaking a pre-existing style change), check the issue tracker
-for a pre-existing issue. If you don't find one, [file an issue here][file-style-issue] or
-[drop a comment here][#3407].
+for a issue that covers what you want. If you don't find one,
+[file an issue here][file-style-issue] or [drop a comment here][#3407].
 
 Although, if you're hoping to squeeze in a new major style change into the 2023 **stable**
 style, that probably won't be possible being so late in the year. It can always be
@@ -583,6 +587,7 @@ promoted to stable for 2024.
 
 [#2188]: https://github.com/psf/black/issues/2188
 [#2382]: https://github.com/psf/black/issues/2382
+[#2484]: https://github.com/psf/black/pull/2484
 [#2919]: https://github.com/psf/black/pull/2919
 [#2926]: https://github.com/psf/black/pull/2926
 [#2939]: https://github.com/psf/black/pull/2939
