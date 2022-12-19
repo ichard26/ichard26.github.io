@@ -192,7 +192,7 @@ onto their own line.
      pass
 ```
 
-Although, Black won't move quotes of single line docstrings (as such with `example_2()`)
+However, Black won't move quotes of single line docstrings (such as with `example_2()`)
 since that would look ugly.
 
 This was [added to the preview style in 22.8.0][#3044] and
@@ -202,6 +202,10 @@ This was [added to the preview style in 22.8.0][#3044] and
 
 Here's a set of changes that together improve Black's handling of parentheses in various
 situations.
+
+Out of these five,
+["Remove redundant (outermost) parentheses in for statements"](#remove-redundant-outermost-parentheses-in-for-statements)
+will probably be the most impactful.
 
 <!-- 6, 7, 8, 11, 12 -->
 
@@ -362,6 +366,8 @@ Unfortunately, nested parentheses are still left untouched.
 
 <!-- 9 -->
 
+Here's another change that is likely to impact your codebase.
+
 **Note**: This new feature will be applied to **all code blocks**: `def`, `class`, `if`,
 `for` , `while`, `with`, `case` and `match`.
 
@@ -443,8 +449,8 @@ class Point:
 Black exempts single-element tuple literals from the usual handling of magic trailing
 commas: `(1,)` will not have a newline added (as would happen for lists, sets, etc.).
 
-However, if you wanted to write `tuple[int,]` (to make it more visually distinctive to
-`list[int]`) Black would explode it which doesn't look great.
+However, if you wrote `tuple[int,]` (to make it more visually distinctive to `list[int]`),
+Black would explode it, which doesn't look great.
 
 **Source:**
 
