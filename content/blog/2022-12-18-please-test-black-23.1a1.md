@@ -4,6 +4,7 @@ title: Black 23.1a1 - please help us test the 2023 stable style!
 description: &desc We just released Black 23.1a1 with the first draft of the 2023
   stable style, please try it out and let us know your feedback and concerns.
 summary: *desc
+modified: 2022-12-19 21:40:00-05:00
 tags: [black, release]
 showToc: true
 ---
@@ -29,8 +30,11 @@ command:
 python -m pip install black==23.1a1
 ```
 
-If you have any feedback, concerns, or run into any issues, please drop us a comment
-[in this issue][#3407] (black#3407).
+**If you have any feedback, concerns, or run into any issues, please drop us a comment
+[in this issue][#3407]** (<https://github.com/psf/black/issues/3407>[^2]).
+
+> **Note**: Please read the start of the issue description before commenting. It will make
+> the lives of everyone easier.
 
 What follows is brief rundown of all of the changes in the preview style that were
 promoted to stable in 23.1a1.
@@ -577,6 +581,15 @@ And these three depend on ESP being promoted:
 - [Wrap implicitly concatenated strings used as function args in parentheses (#3307)][#3307]
 - [Fix a string merging/split issue caused by standalone comments (#3227)][#3227]
 
+Additionally, two other changes are currently not slated for promotion and will remain in
+the preview style until 2024, mostly since they were landed too late in the year to allow
+for enough testing. These are:
+
+- [For assignment statements, prefer splitting the right hand side if the left hand side fits on a single line (#3368)][#3368][^2]
+  \~ *available in 22.12.0+*
+- [Improve long values in dict literals (#3440)][#3440] ~ *available on main and in 23.1a1
+  only*
+
 ## "I want a *new* change to the stable style"
 
 If you want a change that's not covered by something in the preview style already (and
@@ -587,6 +600,9 @@ for a issue that covers what you want. If you don't find one,
 Although, if you're hoping to squeeze in a new major style change into the 2023 **stable**
 style, that probably won't be possible being so late in the year. It can always be
 promoted to stable for 2024.
+
+[^2]: The preceding text is a link, but for some reason, it's not rendering as one on my
+    machine...
 
 [^1]: There's some interesting history to why we added this flag, but I don't have time to
     get into it right now.
@@ -611,9 +627,11 @@ promoted to stable for 2024.
 [#3302]: https://github.com/psf/black/pull/3302
 [#3307]: https://github.com/psf/black/pull/3307
 [#3348]: https://github.com/psf/black/pull/3348
+[#3368]: https://github.com/psf/black/pull/3368
 [#3370]: https://github.com/psf/black/pull/3370
 [#3407]: https://github.com/psf/black/issues/3407
 [#3430]: https://github.com/psf/black/pull/3430
+[#3440]: https://github.com/psf/black/pull/3440
 [esp-pr]: https://github.com/psf/black/pull/1132
 [file-style-issue]: https://github.com/psf/black/issues/new?assignees=&labels=T%3A+design&template=style_issue.md&title=
 [gh-release]: https://github.com/psf/black/releases/tag/23.1a1
