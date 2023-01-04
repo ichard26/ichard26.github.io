@@ -11,6 +11,14 @@ main {
   --secondary: orange;
 }
 
+/* box-shadow behaves weirdly in some situations, so let's use the more appropriate
+ * text-underline-offset property to achieve the same look. */
+.post-content a, .post-content a > code {
+  box-shadow: none;
+  text-decoration: underline;
+  text-underline-offset: 20%;
+}
+
 a:hover {
   color: var(--secondary);
   transition-duration: 70ms;
@@ -21,28 +29,13 @@ a:hover {
   transition-duration: 70ms;
 }
 
-/* Slightly improve <code> link styling */
-.post-content a > code {
-  text-decoration: underline var(--primary);
-  box-shadow: none;
-}
-
-.post-content a:hover > code {
-  text-decoration: underline var(--secondary);
-}
-
 /* Spacing for definition lists (thank you @pradyunsg) */
-.post-content dl {
-  margin-top: 1.5rem;
-}
-
 .post-content > dl {
-  margin-bottom: 1.5rem;
+  margin: 1.5rem 0;
 }
 
-.post-content dd p {
-  margin-top: 0.5rem;
-  margin-bottom: 0;
+.post-content dd {
+  font-weight: 300;
 }
 
 /* For the /about/ page in particular the projects list (thank you @pradyunsg) */
@@ -124,7 +117,7 @@ body > footer > span:nth-child(2)::after {
 }
 
 /* Post descriptions should visually differ from the post text. */
-.post-single > * > .post-description {
+.post-single .post-description {
   font-size: 16px;
 }
 

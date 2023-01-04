@@ -4,7 +4,7 @@ title: Black 23.1a1 - please help us test the 2023 stable style!
 description: &desc We just released Black 23.1a1 with the first draft of the 2023
   stable style, please try it out and let us know your feedback and concerns.
 summary: *desc
-modified: 2022-12-19 21:40:00-05:00
+modified: 2023-01-03 22:30:00-05:00
 tags: [black, release]
 showToc: true
 ---
@@ -31,7 +31,7 @@ python -m pip install black==23.1a1
 ```
 
 **If you have any feedback, concerns, or run into any issues, please drop us a comment
-[in this issue][#3407]** (<https://github.com/psf/black/issues/3407>[^2]).
+[in this issue][#3407]** (<https://github.com/psf/black/issues/3407>).
 
 > **Note**: Please read the start of the issue description before commenting. It will make
 > the lives of everyone easier.
@@ -585,7 +585,7 @@ Additionally, two other changes are currently not slated for promotion and will 
 the preview style until 2024, mostly since they were landed too late in the year to allow
 for enough testing. These are:
 
-- [For assignment statements, prefer splitting the right hand side if the left hand side fits on a single line (#3368)][#3368][^2]
+- [For assignment statements, prefer splitting the right hand side if the left hand side fits on a single line (#3368)][#3368]
   \~ *available in 22.12.0+*
 - [Improve long values in dict literals (#3440)][#3440] ~ *available on main and in 23.1a1
   only*
@@ -600,9 +600,6 @@ for a issue that covers what you want. If you don't find one,
 Although, if you're hoping to squeeze in a new major style change into the 2023 **stable**
 style, that probably won't be possible being so late in the year. It can always be
 promoted to stable for 2024.
-
-[^2]: The preceding text is a link, but for some reason, it's not rendering as one on my
-    machine...
 
 [^1]: There's some interesting history to why we added this flag, but I don't have time to
     get into it right now.
