@@ -1,5 +1,5 @@
 ---
-title: Hey, you've found a flower lover!
+title: About me
 description: "Short version: I'm Richard aka ichard26 (he/they). I'm a hobby Python\
   \ developer who co-maintains Black and pypa/bandersnatch. Staff at Python Discord."
 layout: single
@@ -22,7 +22,7 @@ This website exists as a place to put my programming and OSS ramblings. I'm not 
 what exactly I'll write about it, but hey y'all can watch me as I learn this blogging
 thing.
 
-Anyhow, have a wonderful day! ✿
+Oh... and one more thing. You should know that I like flowers. ✿
 
 ## Open Source Software (OSS)
 
@@ -56,7 +56,7 @@ projects. The projects I'm proud to have contributed to are:
 [name]: link
 -->
 
-## Want to talk to me?
+## Contact information
 
 I used to not have a public email address, but now I do! Please send random flower facts
 and other inquries to `sichard26 (at) gmail.com`[^2].

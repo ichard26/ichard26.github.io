@@ -7,6 +7,7 @@ summary: *desc
 tags: [black, mypyc]
 showToc: true
 date: 2022-05-31 16:27:00-04:00
+modified: 2023-01-03 23:09:00-05:00
 aliases:
   - 31/compiling-black-with-mypyc-part-3/
 ---
@@ -204,7 +205,7 @@ Any errors are my own, not theirs.
 [changelog]: https://black.readthedocs.io/en/stable/change_log.html
 [cibuildwheel]: https://cibuildwheel.readthedocs.io/en/stable/
 [cibuildwheel-examples]: https://cibuildwheel.readthedocs.io/en/stable/working-examples/
-[contact]: https://ichard26.github.io/about/#want-to-talk-to-me
+[contact]: https://ichard26.github.io/about/#contact-information
 [cya-python-two]: https://github.com/psf/black/pull/2740
 [diff-shades]: https://github.com/ichard26/diff-shades
 [diff-shades-comment-1]: https://github.com/psf/black/pull/2814#issuecomment-1023219426
