@@ -86,11 +86,6 @@ a:hover {
   margin: calc(var(--content-gap) * 1.5) 2px;
 }
 
-/* The border is coloured weirdly anyway, just get rid of it */
-.post-content hr {
-  border-width: 0px;
-}
-
 /* This might be a hack, but this allows me to improve the footer contents without
    having to copy the whole footer.html template.
 */
