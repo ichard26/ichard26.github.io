@@ -4,7 +4,7 @@ description: "Short version: I'm Richard aka ichard26 (he/they). I'm a hobby Pyt
   \ developer who co-maintains Black and pypa/bandersnatch. Staff at Python Discord."
 layout: single
 showReadingTime: false
-modified: 2023-01-03
+modified: 2023-01-11
 ---
 
 Hello! I'm Richard. I go by `ichard26` on the internet[^1]. My pronouns are he/they.
@@ -12,7 +12,7 @@ Hello! I'm Richard. I go by `ichard26` on the internet[^1]. My pronouns are he/t
 You may know me if you frequent the Python code quality space as I co-maintain your
 friendly code formatter, [Black]! I also co-maintain [bandersnatch]. As maintainer, I like
 to focus on maintenance, documentation, and PR review. On top of that, I'm also staff on
-the [Python Discord server][discord-python] and *trying* to contribute to [mypyc]...
+the [Python Discord server][discord-python].
 
 I'm a hobby Python developer, but I dabble in C and front-end web development from time to
 time. Project-wise, tooling and language dev projects are my favourite. When I'm not doing
@@ -30,13 +30,12 @@ While I do work on a personal project occasionally, I primarily contribute to op
 projects. The projects I'm proud to have contributed to are:
 
 [black] _co-maintainer_ _2020 - present_
-: Black is most popular Python autoformatter. It's known for its *uncomprising code
-  style*. I've been a co-maintainer, handling all aspects of development and maintenance
-  since 2021.
+: Black is the most popular Python autoformatter; known for its *uncomprising code style*.
+  I've been a co-maintainer since 2021 and a triager since 2020.
 
 [bandersnatch] _co-maintainer_ _2021 - present_
 : A simple mirror tool generating a PEP 503 compliant index ready to be served on your
-  static web server of choice!
+  static web server of choice.
 
 [diff-shades] _creator_ _2021 - present_
 : A development tool used to gauge the impact of code style changes in Black across OSS
@@ -48,6 +47,11 @@ projects. The projects I'm proud to have contributed to are:
 
 [ghstats] _creator_ _2022 - present_
 : My personal playground for psf/black statistics.
+
+[mypyc] _contributor_ _2022 - present_
+: A transcompiler of Python modules to C extensions built on top of mypy. It uses standard
+  Python type hints and mypy's type checking and type inference features to generate fast
+  code.
 
 <!--
 [name] *role* *[YYYY - (present or YYYY)]*
