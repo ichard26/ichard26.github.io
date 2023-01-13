@@ -48,7 +48,7 @@ projects. The projects I'm proud to have contributed to are:
 [ghstats] _creator_ _2022 - present_
 : My personal playground for psf/black statistics.
 
-[mypyc] _contributor_ _2022 - present_
+[mypyc] _triager & contributor_ _2023 - present_
 : A transcompiler of Python modules to C extensions built on top of mypy. It uses standard
   Python type hints and mypy's type checking and type inference features to generate fast
   code.

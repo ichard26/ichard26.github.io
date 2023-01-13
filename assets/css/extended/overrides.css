@@ -53,6 +53,9 @@ a:hover {
 
   color: var(--secondary);
 }
+.post-content dt em:nth-child(2) {
+  font-weight: 500;
+}
 
 /* Make navigation look nicer (thanks @pradyunsg) */
 .paginav {
@@ -77,8 +80,8 @@ a:hover {
 }
 
 /* Try to fix inconsistent margin between code blocks and paragraphs */
-.post-content div.highlight + p {
-  margin-top: var(--content-gap);
+.post-content .highlight + :where(ol, p, figure, ul) {
+    margin-top: var(--content-gap)
 }
 
 /* Try to fix inconsistent margin surrounding the TOC */
