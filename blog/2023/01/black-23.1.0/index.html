@@ -1,0 +1,380 @@
+<!doctype html><html lang=en-ca dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>What's new in Black 23.1.0 | Richard Si</title>
+<meta name=keywords content="black,release">
+<meta name=description content="Black 23.1.0 introduces an updated stable style, improved inference of the default target version(s), and other QOL improvements.">
+<meta name=author content>
+<link rel=canonical href=https://ichard26.github.io/blog/2023/01/black-23.1.0/>
+<link crossorigin=anonymous href=/assets/css/stylesheet.d576396e40dce9e0c930f5cc59b30f9cc34b08700d5ab52389ed86c28b4bb180.css integrity="sha256-1XY5bkDc6eDJMPXMWbMPnMNLCHANWrUjie2GwotLsYA=" rel="preload stylesheet" as=style>
+<script defer crossorigin=anonymous src=/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG+9vmJ0cTS+ovo0FeA=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=https://ichard26.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=https://ichard26.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=https://ichard26.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=https://ichard26.github.io/apple-touch-icon.png>
+<link rel=mask-icon href=https://ichard26.github.io/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript>
+<script data-host=https://microanalytics.io data-dnt=true src=https://microanalytics.io/js/script.js id=ZwSg9rf6GA async defer></script>
+<meta name=google-site-verification content="4PNzC3Db8jI_wn9D8lPdAh4B0skrLZHNbQBgVF1XtAo"><meta property="og:title" content="What's new in Black 23.1.0">
+<meta property="og:description" content="Black 23.1.0 introduces an updated stable style, improved inference of the default target version(s), and other QOL improvements.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://ichard26.github.io/blog/2023/01/black-23.1.0/"><meta property="article:section" content="blog">
+<meta property="article:published_time" content="2023-01-31T00:00:00-05:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="What's new in Black 23.1.0">
+<meta name=twitter:description content="Black 23.1.0 introduces an updated stable style, improved inference of the default target version(s), and other QOL improvements.">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Blogs","item":"https://ichard26.github.io/blog/"},{"@type":"ListItem","position":2,"name":"What's new in Black 23.1.0","item":"https://ichard26.github.io/blog/2023/01/black-23.1.0/"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"What's new in Black 23.1.0","name":"What\u0027s new in Black 23.1.0","description":"Black 23.1.0 introduces an updated stable style, improved inference of the default target version(s), and other QOL improvements.","keywords":["black","release"],"articleBody":"Today we released Black 23.1.0 🎉.\nWhile Black does not follow SemVar, it is indeed a major release as it ships with the 2023 stable style. Many changes made to the preview style over the past year have been finally promoted to the stable style.\nYou can install it by running this command:\npython -m pip install black==23.1.0 Below I’ll cover the important changes worth mentioning. If you’d like the full changelog for 23.1.0, please refer to the link above.\nCode style The 2023 stable style We didn’t make any major changes to the 2023 stable style draft since 23.1a1.\nSo for the major parts of the new stable style, please refer to the 23.1a1 post. Everything under the “promoted changes” header were promoted officially in 23.1.0. The TL;DR is:\n Improved empty line handling Removal of redundant parentheses in several contexts Output that highlights implicitly concatenated strings better  We did also fix quite a few bugs and crashes, including these ones reporting by users testing out 23.1a1:\n Preview style: Crash on walrus in with statement (#3472) Extra newlines added before function with fmt skip on decorator (#3454) Preview style incorrectly removes parens from walrus in annotation (#3419)  For the rest, please refer to the changelog.\nThe 2023 preview style Conditional expressions are parenthesized if needed now  Issue: #2248 ~ PR: #2278\n If a conditional expression is too long, it will be wrapped in parentheses instead of whatever nonsense Black did before.\nI’ll just let this diff speak for itself :)\n--- pyanalyze/typeshed.py\t2021-05-30 03:06:13.755715 +0000 +++ pyanalyze/typeshed.py\t2021-05-30 03:06:32.534930 +0000 @@ -448,13 +448,13 @@  arg = arg.replace(kind=SigParameter.POSITIONAL_OR_KEYWORD) cleaned_arguments.append(arg) return Signature.make( cleaned_arguments, callable=obj, - return_annotation=GenericValue(Awaitable, [return_value]) - if is_async_fn - else return_value, + return_annotation=( + GenericValue(Awaitable, [return_value]) if is_async_fn else return_value + ),  ) def _parse_param_list( self, args: Iterable[ast3.arg], There are certain cases where it might be overkill, like this one, but overall, I consider it a major improvement.\nnormalized = [ - (source, source) - if source == \"-\" - else (normalize_path_maybe_ignore(Path(source), root), source) + ( + (source, source) + if source == \"-\" + else (normalize_path_maybe_ignore(Path(source), root), source) + )  for source in src ] Wrap multiple context managers in parentheses if targeting Python 3.9+  Issues: #3486 + #664 ~ PR: #3489\n Since Python 3.91, you can break long with statements using parentheses. Thanks to work done by @yilei, Black will now use this style as long as the lowest targeted version is 3.9.\nSource:\nwith make_context_manager1() as cm1, make_context_manager2() as cm2, make_context_manager3() as cm3, make_context_manager4() as cm4: pass Before: unchanged!!\nAfter:\nwith ( make_context_manager1() as cm1, make_context_manager2() as cm2, make_context_manager3() as cm3, make_context_manager4() as cm4, ): pass Black still doesn’t have a good story for formatting such with statements when Python #664. (The summary is that no one has stepped up to implement the proposed style.)\nPackaging mypyc wheels are available for all platforms (once again) Long story short, recent versions of packaging and hatchling interacted with ways that led to errors when trying to build macOS mypyc wheels. The essence is that the wrong platform tag was being chosen which made the wheels uninstallable in certain situations (including on the same machine that built wheels .Anyway that’s all fixed now and 23.1.0 ships with macOS wheels, bringing us back to the full set of compiled wheels.\nThis affected the 22.10.0, 22.12.0, and 23.1a1 releases.\nmypycified Black can be now built on armv7 We upgraded mypy/c from 0.971 which 0.991 which allows mypycified Black to be built on armv7.\nConveniently, this also fixes some segfaults caused by mypyc:\n Segfault with black 22.1.0 (#2845) black running on address sanitized Python interpreter crashes (#2867)  same underlying issue as the one above    Output No longer incorrectly claim that symbolic links exist when formatting from outside a project  Issue: #3384 ~ PR: #3385\n When trying to format a project from the outside, the verbose output shows says that there are symbolic links that points outside of the project, but displays the wrong project path. This behavior was triggered when Black is executed from outside the project’s root.\nConsider the following tree:\n. └── home/ └── project/ ├── .git └── dir/ └── main.py When trying to format a folder from home, this is the output:\n$ black ./project --check --verbose Identified `/path/to/home/project` as project root containing a .git directory. Sources to be formatted: \".\" project/.git ignored: is a symbolic link that points outside /path/to/home/project/project project/.git ignored: matches the --exclude regular expression project/dir ignored: is a symbolic link that points outside /path/to/home/project/project project/dir/file.py ignored: is a symbolic link that points outside /path/to/home/project/project would reformat project/dir/file.py Oh no! 💥 💔 💥 1 file would be reformatted. Notice that the message $FILEPATH ignored: is a symbolic link that points outside $PROJECTPATH displays a wrong $PROJECTPATH (should be /path/to/home/project/ instead of /path/to/home/project/project).\nAnyway, Black will no longer emit these superfluous and incorrect messages. All thanks goes to @aaossa.\nVerbose output now shows the full loaded configuration  Issue: #3386 ~ PR: #3392\n It’s easier to just copy and paste part of the issue to explain this feature:\n Sometimes when dealing with multiple environment settings, IDEs, and pyproject.toml files etc. etc. is beneficial for a project team to have a confirmation about the actual applied black-settings (“line length”) in the CI CD pipeline.\nblack -v will show a line like this: Using configuration from project root.. However, it doesn’t tell us what the settings are […]\n … so we changed Black to show the loaded configuration if -v / --verbose is passed.\n$ black src/black/parsing.py --verbose Identified `/home/ichard26/programming/oss/black` as project root containing a .git directory. Sources to be formatted: \"src/black/parsing.py\" Using configuration from project root. line_length: 88 target_version: ['py37', 'py38'] include: \\.pyi?$ extend_exclude: /( # The following are specific to Black, you probably don't want those. | blib2to3 | tests/data | profiling )/ preview: True src/black/parsing.py already well formatted, good job. All done! ✨ 🍰 ✨ 1 file left unchanged. Some cleaning up can definitely be done to the verbose output, but at least it’s there now.\nConfiguration Better default for –target-version if PEP 621 python-requires is available  Issue: #3124 ~ PR: #3219\n Black will now infer a default set of target versions using the project.requires-python field in pyproject.toml if possible.\nFor example, these are the inferred default for --target-version for three different requires-python values:\n 3.8.5 becomes [\"py38\"] 3.6, becomes [\"py37\", \"py38\", \"py39\", \"py310\"]  becomes [\"py33\", \"py34\", \"py35\", \"py36\"]  Python 3.3 is the minimal supported version for Black    If you’re curious what Black infers for your project, make sure to comment out any --target-version configuration you have set and run Black with --verbose. Thanks to the change mentioned previously, there should be a line showing the (inferred) target-version config value.\nIf --target-version is explicitly configured on the command line or in pyproject.toml, it will trump the inferred configuration. And if Black encounters any error inferring a better default, it will simply fallback to per-file autodetection (like it did before).\nTo make this work, Black now requires packaging (version 22 and up). It’s a tiny dependency and often installed with other development tools so it shouldn’t be a big deal.\nIn my opinion, the general hope is that the vast majority of projects will eventually use Black’s inference capabilities instead of setting --target-version separately. It’s less work (no need to update it!) and should be less error prone.\nAt the bare minimum, new projects shouldn’t have to configure --target-version anymore as long as they define their project metadata in the standardized way.\nThis was contributed by the lovely @stinodego.\nA few final words We tried to do some community outreach in an attempt to iron out issues before cutting 23.1.0 and make sure the 2023 stable style wouldn’t be a failure. We got some helpful feedback, but I realize we could’ve done more.\nIf you have any feedback for this release or suggestions for next time, please let us know! Feel free to open an issue, email me, message us on Discord, whatever.\nAnyway, thanks for reading this. On behalf of the maintainer team, I hope you enjoy the new release!\n  Well officially speaking, this is only supported starting in Python 3.10 and higher, but GvR and co. might have snuck it into 3.9 :P ↩︎\n   ","wordCount":"1381","inLanguage":"en-ca","datePublished":"2023-01-31T00:00:00-05:00","dateModified":"0001-01-01T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://ichard26.github.io/blog/2023/01/black-23.1.0/"},"publisher":{"@type":"Person","name":"Richard Si","logo":{"@type":"ImageObject","url":"https://ichard26.github.io/favicon.ico"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=https://ichard26.github.io/ accesskey=h title="Richard Si (Alt + H)">Richard Si</a>
+<div class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</div>
+</div>
+<ul id=menu>
+<li>
+<a href=https://ichard26.github.io/about/ title=About>
+<span>about</span>
+</a>
+</li>
+<li>
+<a href=https://ichard26.github.io/blog/ title=Writing>
+<span>writing</span>
+</a>
+</li>
+<li>
+<a href=https://ichard26.github.io/privacy/ title="Privacy Statement">
+<span>privacy</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<h1 class=post-title>
+What's new in Black 23.1.0
+</h1>
+<div class=post-description>
+Black 23.1.0 introduces an updated stable style, improved inference of the default target version(s), and other QOL improvements.
+</div>
+<div class=post-meta><span title="Posted on 2023-01-31 00:00:00 -0500 EST">Posted on January 31, 2023</span>&nbsp;·&nbsp;7 minutes
+</div>
+</header> <div class=toc>
+<details>
+<summary accesskey=c title="(Alt + C)">
+<span class=details>Table of Contents</span>
+</summary>
+<div class=inner><ul>
+<li>
+<a href=#code-style aria-label="Code style">Code style</a><ul>
+<li>
+<a href=#the-2023-stable-style aria-label="The 2023 stable style">The 2023 stable style</a></li>
+<li>
+<a href=#the-2023-preview-style aria-label="The 2023 preview style">The 2023 preview style</a><ul>
+<li>
+<a href=#conditional-expressions-are-parenthesized-if-needed-now aria-label="Conditional expressions are parenthesized if needed now">Conditional expressions are parenthesized if needed now</a></li>
+<li>
+<a href=#wrap-multiple-context-managers-in-parentheses-if-targeting-python-39 aria-label="Wrap multiple context managers in parentheses if targeting Python 3.9+">Wrap multiple context managers in parentheses if targeting Python 3.9+</a></li></ul>
+</li></ul>
+</li>
+<li>
+<a href=#packaging aria-label=Packaging>Packaging</a><ul>
+<li>
+<a href=#mypyc-wheels-are-available-for-all-platforms-once-again aria-label="mypyc wheels are available for all platforms (once again)">mypyc wheels are available for all platforms (once again)</a></li>
+<li>
+<a href=#mypycified-black-can-be-now-built-on-armv7 aria-label="mypycified Black can be now built on armv7">mypycified Black can be now built on armv7</a></li></ul>
+</li>
+<li>
+<a href=#output aria-label=Output>Output</a><ul>
+<li>
+<a href=#no-longer-incorrectly-claim-that-symbolic-links-exist-when-formatting-from-outside-a-project aria-label="No longer incorrectly claim that symbolic links exist when formatting from outside a project">No longer incorrectly claim that symbolic links exist when formatting from outside a project</a></li>
+<li>
+<a href=#verbose-output-now-shows-the-full-loaded-configuration aria-label="Verbose output now shows the full loaded configuration">Verbose output now shows the full loaded configuration</a></li></ul>
+</li>
+<li>
+<a href=#configuration aria-label=Configuration>Configuration</a><ul>
+<li>
+<a href=#better-default-for---target-version-if-pep-621-python-requires-is-available aria-label="Better default for &amp;ndash;target-version if PEP 621 python-requires is available">Better default for &ndash;target-version if PEP 621 python-requires is available</a></li></ul>
+</li>
+<li>
+<a href=#a-few-final-words aria-label="A few final words">A few final words</a>
+</li>
+</ul>
+</div>
+</details>
+</div>
+<div class=post-content><p>Today we released <a href=https://github.com/psf/black/releases/tag/23.1.0 target=_blank>Black 23.1.0</a> 🎉.</p>
+<p>While Black does not follow SemVar, it is indeed a major release as it ships with the
+<strong>2023 stable style</strong>. Many changes made to the <strong>preview</strong> style over the past year have
+been <em>finally</em> promoted to the <strong>stable</strong> style.</p>
+<p>You can install it by running this command:</p>
+<div class="highlight command"><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>python -m pip install black<span style=color:#f92672>==</span>23.1.0
+</code></pre></div><p>Below I&rsquo;ll cover the important changes worth mentioning. If you’d like the full changelog
+for 23.1.0, please refer to the link above.</p>
+<h2 id=code-style>Code style<a hidden class=anchor aria-hidden=true href=#code-style>#</a></h2>
+<h3 id=the-2023-stable-style>The 2023 stable style<a hidden class=anchor aria-hidden=true href=#the-2023-stable-style>#</a></h3>
+<p>We didn&rsquo;t make any major changes to the 2023 stable style draft since 23.1a1.</p>
+<p>So for the major parts of the new stable style,
+<a href=../../2022/10/black-22.10.0/><strong>please refer to the 23.1a1 post</strong></a>. Everything under the
+&ldquo;promoted changes&rdquo; header were promoted <em>officially</em> in 23.1.0. The TL;DR is:</p>
+<ul>
+<li>Improved empty line handling</li>
+<li>Removal of redundant parentheses in several contexts</li>
+<li>Output that highlights implicitly concatenated strings better</li>
+</ul>
+<p>We did also fix quite a few bugs and crashes, including these ones reporting by users
+testing out 23.1a1:</p>
+<ul>
+<li><a href=https://github.com/psf/black/issues/3472 target=_blank>Preview style: Crash on walrus in with statement (#3472)</a></li>
+<li><a href=https://github.com/psf/black/issues/3454 target=_blank>Extra newlines added before function with fmt skip on decorator (#3454)</a></li>
+<li><a href=https://github.com/psf/black/issues/3419 target=_blank>Preview style incorrectly removes parens from walrus in annotation (#3419)</a></li>
+</ul>
+<p>For the rest, please refer to the <a href=https://github.com/psf/black/releases/tag/23.1.0 target=_blank>changelog</a>.</p>
+<h3 id=the-2023-preview-style>The 2023 preview style<a hidden class=anchor aria-hidden=true href=#the-2023-preview-style>#</a></h3>
+<h4 id=conditional-expressions-are-parenthesized-if-needed-now>Conditional expressions are parenthesized if needed now<a hidden class=anchor aria-hidden=true href=#conditional-expressions-are-parenthesized-if-needed-now>#</a></h4>
+<blockquote>
+<p><strong>Issue</strong>: <a href=https://github.com/psf/black/issues/2248 target=_blank>#2248</a> ~ <strong>PR</strong>: <a href=https://github.com/psf/black/issues/2278 target=_blank>#2278</a></p>
+</blockquote>
+<p>If a conditional expression is too long, it will be wrapped in parentheses instead of
+whatever nonsense Black did before.</p>
+<p>I&rsquo;ll just let this diff speak for itself :)</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-diff data-lang=diff><span style=color:#f92672>--- pyanalyze/typeshed.py	2021-05-30 03:06:13.755715 +0000
+</span><span style=color:#f92672></span><span style=color:#a6e22e>+++ pyanalyze/typeshed.py	2021-05-30 03:06:32.534930 +0000
+</span><span style=color:#a6e22e></span><span style=color:#75715e>@@ -448,13 +448,13 @@
+</span><span style=color:#75715e></span>                 arg = arg.replace(kind=SigParameter.POSITIONAL_OR_KEYWORD)
+             cleaned_arguments.append(arg)
+         return Signature.make(
+             cleaned_arguments,
+             callable=obj,
+<span style=color:#f92672>-            return_annotation=GenericValue(Awaitable, [return_value])
+</span><span style=color:#f92672>-            if is_async_fn
+</span><span style=color:#f92672>-            else return_value,
+</span><span style=color:#f92672></span><span style=color:#a6e22e>+            return_annotation=(
+</span><span style=color:#a6e22e>+                GenericValue(Awaitable, [return_value]) if is_async_fn else return_value
+</span><span style=color:#a6e22e>+            ),
+</span><span style=color:#a6e22e></span>         )
+
+     def _parse_param_list(
+         self,
+         args: Iterable[ast3.arg],
+</code></pre></div><p>There are certain cases where it might be overkill, like this one, but overall, I consider
+it a major improvement.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-diff data-lang=diff>             normalized = [
+<span style=color:#f92672>-                (source, source)
+</span><span style=color:#f92672>-                if source == &#34;-&#34;
+</span><span style=color:#f92672>-                else (normalize_path_maybe_ignore(Path(source), root), source)
+</span><span style=color:#f92672></span><span style=color:#a6e22e>+                (
+</span><span style=color:#a6e22e>+                    (source, source)
+</span><span style=color:#a6e22e>+                    if source == &#34;-&#34;
+</span><span style=color:#a6e22e>+                    else (normalize_path_maybe_ignore(Path(source), root), source)
+</span><span style=color:#a6e22e>+                )
+</span><span style=color:#a6e22e></span>                 for source in src
+             ]
+</code></pre></div><h4 id=wrap-multiple-context-managers-in-parentheses-if-targeting-python-39>Wrap multiple context managers in parentheses if targeting Python 3.9+<a hidden class=anchor aria-hidden=true href=#wrap-multiple-context-managers-in-parentheses-if-targeting-python-39>#</a></h4>
+<blockquote>
+<p><strong>Issues</strong>: <a href=https://github.com/psf/black/issues/3486 target=_blank>#3486</a> + <a href=https://github.com/psf/black/issues/664 target=_blank>#664</a> ~ <strong>PR</strong>: <a href=https://github.com/psf/black/pull/3489 target=_blank>#3489</a></p>
+</blockquote>
+<p>Since Python 3.9<sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup>, you can break long with statements using parentheses. Thanks to work
+done by <a href=https://github.com/yilei target=_blank>@yilei</a>, Black will now use this style as long as the lowest targeted version is
+3.9.</p>
+<p><strong>Source:</strong></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python3 data-lang=python3><span style=color:#66d9ef>with</span> make_context_manager1() <span style=color:#66d9ef>as</span> cm1, make_context_manager2() <span style=color:#66d9ef>as</span> cm2, make_context_manager3() <span style=color:#66d9ef>as</span> cm3, make_context_manager4() <span style=color:#66d9ef>as</span> cm4:
+    <span style=color:#66d9ef>pass</span>
+</code></pre></div><p><strong>Before:</strong> unchanged!!</p>
+<p><strong>After:</strong></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python3 data-lang=python3><span style=color:#66d9ef>with</span> (
+    make_context_manager1() <span style=color:#66d9ef>as</span> cm1,
+    make_context_manager2() <span style=color:#66d9ef>as</span> cm2,
+    make_context_manager3() <span style=color:#66d9ef>as</span> cm3,
+    make_context_manager4() <span style=color:#66d9ef>as</span> cm4,
+):
+    <span style=color:#66d9ef>pass</span>
+</code></pre></div><p>Black still doesn&rsquo;t have a good story for formatting such with statements when Python &lt;3.9
+support is requested. All of the gory details can be found in issue <a href=https://github.com/psf/black/issues/664 target=_blank>#664</a>. (<em>The summary
+is that no one has stepped up to implement the proposed style.</em>)</p>
+<h2 id=packaging>Packaging<a hidden class=anchor aria-hidden=true href=#packaging>#</a></h2>
+<h3 id=mypyc-wheels-are-available-for-all-platforms-once-again>mypyc wheels are available for all platforms (once again)<a hidden class=anchor aria-hidden=true href=#mypyc-wheels-are-available-for-all-platforms-once-again>#</a></h3>
+<p>Long story short, recent versions of packaging and hatchling interacted with ways that led
+to errors when trying to build macOS mypyc wheels. The essence is that the
+<a href=https://github.com/psf/black/issues/3312 target=_blank>wrong platform tag was being chosen which made the wheels uninstallable in certain situations</a>
+(including on the same machine that built wheels >.&lt;).</p>
+<p>Anyway that&rsquo;s all fixed now and 23.1.0 ships with macOS wheels, bringing us back to the
+full set of compiled wheels.</p>
+<p><em>This affected the 22.10.0, 22.12.0, and 23.1a1 releases.</em></p>
+<h3 id=mypycified-black-can-be-now-built-on-armv7>mypycified Black can be now built on armv7<a hidden class=anchor aria-hidden=true href=#mypycified-black-can-be-now-built-on-armv7>#</a></h3>
+<p>We upgraded mypy/c from <code>0.971</code> which <code>0.991</code> which allows mypycified Black to be built on
+armv7.</p>
+<p>Conveniently, this also fixes some segfaults caused by mypyc:</p>
+<ul>
+<li><a href=https://github.com/psf/black/issues/2845 target=_blank>Segfault with black 22.1.0 (#2845)</a></li>
+<li><a href=https://github.com/psf/black/issues/2867 target=_blank>black running on address sanitized Python interpreter crashes (#2867)</a>
+<ul>
+<li><em>same underlying issue as the one above</em></li>
+</ul>
+</li>
+</ul>
+<h2 id=output>Output<a hidden class=anchor aria-hidden=true href=#output>#</a></h2>
+<h3 id=no-longer-incorrectly-claim-that-symbolic-links-exist-when-formatting-from-outside-a-project>No longer incorrectly claim that symbolic links exist when formatting from outside a project<a hidden class=anchor aria-hidden=true href=#no-longer-incorrectly-claim-that-symbolic-links-exist-when-formatting-from-outside-a-project>#</a></h3>
+<blockquote>
+<p><strong>Issue</strong>: <a href=https://github.com/psf/black/issues/3384 target=_blank>#3384</a> ~ <strong>PR</strong>: <a href=https://github.com/psf/black/pull/3385 target=_blank>#3385</a></p>
+</blockquote>
+<p>When trying to format a project from the outside, the verbose output shows says that there
+are symbolic links that points outside of the project, but displays the wrong project
+path. This behavior was triggered when Black is executed from outside the project&rsquo;s root.</p>
+<p>Consider the following tree:</p>
+<pre tabindex=0><code>.
+└── home/
+    └── project/
+        ├── .git
+        └── dir/
+            └── main.py
+</code></pre><p>When trying to format a folder from home, this is the output:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console>$ black ./project --check --verbose
+Identified `/path/to/home/project` as project root containing a .git directory.
+Sources to be formatted: &#34;.&#34;
+project/.git ignored: is a symbolic link that points outside /path/to/home/project/project
+project/.git ignored: matches the --exclude regular expression
+project/dir ignored: is a symbolic link that points outside /path/to/home/project/project
+project/dir/file.py ignored: is a symbolic link that points outside /path/to/home/project/project
+would reformat project/dir/file.py
+<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>Oh no! 💥 💔 💥
+1 file would be reformatted.
+</code></pre></div><p>Notice that the message
+<code>$FILEPATH ignored: is a symbolic link that points outside $PROJECTPATH</code> displays a wrong
+$PROJECTPATH (should be <code>/path/to/home/project/</code> instead of
+<code>/path/to/home/project/project</code>).</p>
+<p>Anyway, Black will no longer emit these superfluous and incorrect messages. All thanks
+goes to <a href=https://github.com/aaossa target=_blank>@aaossa</a>.</p>
+<h3 id=verbose-output-now-shows-the-full-loaded-configuration>Verbose output now shows the full loaded configuration<a hidden class=anchor aria-hidden=true href=#verbose-output-now-shows-the-full-loaded-configuration>#</a></h3>
+<blockquote>
+<p><strong>Issue</strong>: <a href=https://github.com/psf/black/issues/3386 target=_blank>#3386</a> ~ <strong>PR</strong>: <a href=https://github.com/psf/black/pull/3392 target=_blank>#3392</a></p>
+</blockquote>
+<p>It&rsquo;s easier to just copy and paste part of the issue to explain this feature:</p>
+<blockquote>
+<p>Sometimes when dealing with multiple environment settings, IDEs, and pyproject.toml
+files etc. etc. is beneficial for a project team to have a confirmation about the actual
+applied black-settings (&ldquo;line length&rdquo;) in the CI CD pipeline.</p>
+<p><code>black -v</code> will show a line like this: <code>Using configuration from project root.</code>.
+However, it doesn&rsquo;t tell us what the settings are [&mldr;]</p>
+</blockquote>
+<p>&mldr; so we changed Black to show the loaded configuration if <code>-v</code> / <code>--verbose</code> is passed.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console>$ black src/black/parsing.py --verbose
+Identified `/home/ichard26/programming/oss/black` as project root containing a .git directory.
+Sources to be formatted: &#34;src/black/parsing.py&#34;
+Using configuration from project root.
+line_length: 88
+target_version: [&#39;py37&#39;, &#39;py38&#39;]
+include: \.pyi?$
+extend_exclude: /(
+  # The following are specific to Black, you probably don&#39;t want those.
+  | blib2to3
+  | tests/data
+  | profiling
+)/
+<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>preview: True
+src/black/parsing.py already well formatted, good job.
+<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>All done! ✨ 🍰 ✨
+1 file left unchanged.
+</code></pre></div><p>Some cleaning up can definitely be done to the verbose output, but at least it&rsquo;s there
+now.</p>
+<h2 id=configuration>Configuration<a hidden class=anchor aria-hidden=true href=#configuration>#</a></h2>
+<h3 id=better-default-for---target-version-if-pep-621-python-requires-is-available>Better default for &ndash;target-version if PEP 621 python-requires is available<a hidden class=anchor aria-hidden=true href=#better-default-for---target-version-if-pep-621-python-requires-is-available>#</a></h3>
+<blockquote>
+<p><strong>Issue</strong>: <a href=https://github.com/psf/black/issues/3124 target=_blank>#3124</a> ~ <strong>PR</strong>: <a href=https://github.com/psf/black/pull/3219 target=_blank>#3219</a></p>
+</blockquote>
+<p>Black will now infer a default set of target versions using the <code>project.requires-python</code>
+field in <code>pyproject.toml</code> if possible.</p>
+<p>For example, these are the inferred default for <code>--target-version</code> for three different
+<code>requires-python</code> values:</p>
+<ul>
+<li><code>3.8.5</code> becomes <code>["py38"]</code></li>
+<li><code>>3.6,&lt;3.11</code> becomes <code>["py37", "py38", "py39", "py310"]</code></li>
+<li><code>&lt;3.7</code> becomes <code>["py33", "py34", "py35", "py36"]</code>
+<ul>
+<li><em>Python 3.3 is the minimal supported version for Black</em></li>
+</ul>
+</li>
+</ul>
+<p>If you&rsquo;re curious what Black infers for your project, make sure to comment out any
+<code>--target-version</code> configuration you have set and run Black with <code>--verbose</code>. Thanks to
+the change mentioned previously, there should be a line showing the (inferred)
+target-version config value.</p>
+<p>If <code>--target-version</code> is explicitly configured on the command line or in <code>pyproject.toml</code>,
+it will trump the inferred configuration. And if Black encounters any error inferring a
+better default, it will simply fallback to per-file autodetection (like it did before).</p>
+<p>To make this work, <strong>Black now requires <a href=https://pypi.org/project/packaging/ target=_blank>packaging</a></strong> (version 22 and up). It&rsquo;s a tiny
+dependency and often installed with other development tools so it shouldn&rsquo;t be a big deal.</p>
+<p>In my opinion, the general hope is that the vast majority of projects will <em>eventually</em>
+use <strong>Black&rsquo;s inference capabilities instead of setting <code>--target-version</code> separately</strong>.
+It&rsquo;s less work (no need to update it!) and should be less error prone.</p>
+<p>At the bare minimum, <strong>new projects shouldn&rsquo;t have to configure <code>--target-version</code>
+anymore</strong> as long as they define their project metadata
+<a href=https://peps.python.org/pep-0621/ target=_blank>in the standardized way</a>.</p>
+<p>This was contributed by the lovely <a href=https://github.com/stinodego target=_blank>@stinodego</a>.</p>
+<h2 id=a-few-final-words>A few final words<a hidden class=anchor aria-hidden=true href=#a-few-final-words>#</a></h2>
+<p>We tried to do <a href=https://github.com/psf/black/issues/3407 target=_blank>some community outreach</a> in an attempt to iron out issues <em>before</em>
+cutting 23.1.0 and make sure the 2023 stable style wouldn&rsquo;t be a failure. We got some
+helpful feedback, but I realize we could&rsquo;ve done more.</p>
+<p>If you have any feedback for this release or suggestions for next time, <strong>please let us
+know!</strong> Feel free to open an issue, <a href=/about/#contact-information>email me</a>, <a href=https://discord.gg/RtVdv86PrH target=_blank>message us on Discord</a>, whatever.</p>
+<p>Anyway, thanks for reading this. On behalf of the maintainer team, I hope you enjoy the
+new release!</p>
+<section class=footnotes role=doc-endnotes>
+<hr>
+<ol>
+<li id=fn:1 role=doc-endnote>
+<p>Well officially speaking, this is only supported starting in Python 3.10 and higher,
+but GvR and co. might have snuck it into 3.9 :P&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=https://ichard26.github.io/tags/black/>black</a></li>
+<li><a href=https://ichard26.github.io/tags/release/>release</a></li>
+</ul>
+<nav class=paginav>
+<a class=next href=https://ichard26.github.io/blog/2022/12/black-23.1a1/>
+<span class=title>Older »</span>
+<br>
+<span>Black 23.1a1 - please help us test the 2023 stable style!</span>
+</a>
+</nav>
+</footer>
+</article>
+</main>
+<footer class=footer>
+<span>© 2022-present, Richard Si</span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+<script>document.querySelectorAll('pre > code').forEach(b=>{const c=b.parentNode.parentNode,a=document.createElement('button');a.classList.add('copy-code'),a.innerHTML='copy';function d(){a.innerHTML='copied!',setTimeout(()=>{a.innerHTML='copy'},2e3)}a.addEventListener('click',e=>{if('clipboard'in navigator){navigator.clipboard.writeText(b.textContent),d();return}const a=document.createRange();a.selectNodeContents(b);const c=window.getSelection();c.removeAllRanges(),c.addRange(a);try{document.execCommand('copy'),d()}catch(a){}c.removeRange(a)}),c.classList.contains("highlight")?c.appendChild(a):c.parentNode.firstChild==c||(b.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?b.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(a):b.parentNode.appendChild(a))})</script>
+</body>
+</html>
