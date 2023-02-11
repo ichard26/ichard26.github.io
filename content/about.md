@@ -4,7 +4,7 @@ description: "Short version: I'm Richard aka ichard26 (he/they). I'm a hobby Pyt
   \ developer who co-maintains Black and pypa/bandersnatch. Staff at Python Discord."
 layout: single
 showReadingTime: false
-modified: 2023-01-11
+modified: 2023-02-11
 ---
 
 Hello! I'm Richard. I go by `ichard26` on the internet[^1]. My pronouns are he/they.
@@ -46,7 +46,7 @@ projects. The projects I'm proud to have contributed to are:
   repository.
 
 [ghstats] _creator_ _2022 - present_
-: My personal playground for psf/black statistics.
+: My personal playground for visualizing data from the GitHub API.
 
 [mypyc] _triager & contributor_ _2023 - present_
 : A transcompiler of Python modules to C extensions built on top of mypy. It uses standard
