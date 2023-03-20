@@ -1,18 +1,21 @@
 ---
 title: About me
 description: "Short version: I'm Richard aka ichard26 (he/they). I'm a hobby Python\
-  \ developer who co-maintains Black and pypa/bandersnatch. Staff at Python Discord."
+  \ developer and OSS contributor. I contribute to mypyc and used to co-maintain Black\
+  \ and Bandersnatch. Staff at Python Discord."
 layout: single
 showReadingTime: false
-modified: 2023-02-11
+modified: 2023-03-19
 ---
 
 Hello! I'm Richard. I go by `ichard26` on the internet[^1]. My pronouns are he/they.
 
-You may know me if you frequent the Python code quality space as I co-maintain your
-friendly code formatter, [Black]! I also co-maintain [bandersnatch]. As maintainer, I like
+You may know me if you frequent the Python code quality space as I used to co-maintain
+your friendly code formatter, [Black]! I also (kinda) co-maintained [bandersnatch].
+
+<!-- As maintainer, I like
 to focus on maintenance, documentation, and PR review. On top of that, I'm also staff on
-the [Python Discord server][discord-python].
+the [Python Discord server][discord-python]. -->
 
 I'm a hobby Python developer, but I dabble in C and front-end web development from time to
 time. Project-wise, tooling and language dev projects are my favourite. When I'm not doing
@@ -29,11 +32,11 @@ Oh... and one more thing. You should know that I like flowers. ✿
 While I do work on a personal project occasionally, I primarily contribute to open source
 projects. The projects I'm proud to have contributed to are:
 
-[black] _co-maintainer_ _2020 - present_
+[black] _co-maintainer_ _2020 - 2023_
 : Black is the most popular Python autoformatter; known for its *uncomprising code style*.
-  I've been a co-maintainer since 2021 and a triager since 2020.
+  I was a co-maintainer since 2021 and a triager since 2020.
 
-[bandersnatch] _co-maintainer_ _2021 - present_
+[bandersnatch] _co-maintainer_ _2021 - 2023_
 : A simple mirror tool generating a PEP 503 compliant index ready to be served on your
   static web server of choice.
 
