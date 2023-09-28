@@ -5,7 +5,7 @@ description: TL;DR, I'm doing my best to not track you and respect your privacy 
   and CCPA. Data processors are GitHub Pages and Microanalytics.io.
 layout: single
 showReadingTime: false
-modified: 2023-09-24
+modified: 2023-09-27
 ---
 
 ## Scope
@@ -69,10 +69,14 @@ stored is purely used for functionality including:
 
 > https://ichard26.github.io/next-pr-number/
 
-- **Uses third-party cookies**: The GitHub REST API sets third-party cookies upon a
-  request sadly
+- **First-party IP and User-Agent logging**: Next PR Number uses an API that I operate.
+  The API logs IP addresses and user-agents for usage monitoring and abuse prevention.
 
 ## History
+
+- **September 27, 2023**: Next PR Number is now powered by a backend that I own and
+  control. The host and API do have minimal logging set up. This eliminates the
+  third-party GitHub cookies though!
 
 - **September 24, 2023**: microanalytics.io recontinued their free plan so everything's
   back to the status quo. Crazy, I know.
