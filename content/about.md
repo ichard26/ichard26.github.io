@@ -1,11 +1,11 @@
 ---
 title: About me
-description: "Short version: I'm Richard aka ichard26 (he/they). I'm a hobby Python\
-  \ developer and OSS contributor. I contribute to mypyc and used to co-maintain Black\
-  \ and Bandersnatch. Staff at Python Discord."
+description: "Short version: I'm Richard aka ichard26 (he/they). I'm a hobby Python
+  developer and OSS contributor. I contribute to mypyc and pip and used to co-maintain
+  Black and Bandersnatch. Staff at Python Discord."
 layout: single
 showReadingTime: false
-modified: 2023-03-19
+modified: 2024-04-19
 ---
 
 Hello! I'm Richard. I go by `ichard26` on the internet[^1]. My pronouns are he/they.
@@ -56,6 +56,9 @@ projects. The projects I'm proud to have contributed to are:
   Python type hints and mypy's type checking and type inference features to generate fast
   code.
 
+[pip] _triager & contributor_ _2024 - present_
+: "pip installs packages" - The de facto official Python package installer.
+
 <!--
 [name] *role* *[YYYY - (present or YYYY)]*
 : about the project
@@ -94,3 +97,4 @@ And please don't message me on Twitter as I almost never check it after Elon too
 [mypy-primer]: https://github.com/hauntsaninja/mypy_primer
 [mypyc]: https://github.com/mypyc/mypyc
 [next-pr-number]: https://ichard26.github.io/next-pr-number/
+[pip]: https://github.com/pypa/pip
