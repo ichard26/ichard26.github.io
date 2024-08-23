@@ -4,7 +4,7 @@
 title = "Richard Si"
 languageCode = 'en-ca'
 defaultContentLanguage = "en-ca"
-timeZone = "Canada/Eastern"
+timeZone = "America/Toronto"
 copyright = "© 2022-present, Richard Si"
 
 theme = "PaperMod"
@@ -22,7 +22,7 @@ lastmod = ["lastmod"]
 blog = "blog/:year/:month/:slug/"
 
 [params]
-description = "Richard Si (ichard26)'s personal place for writings all about FOSS and Python."
+description = "A place for Richard Si (@ichard26) to ramble about Python and open-source software."
 defaultTheme = "auto"
 showReadingTime = true
 showCodeCopyButtons = true
@@ -34,7 +34,7 @@ keywords = ["blog", "python", "black", "oss", "foss"]
 socialIcons = [
   { name = "email", url = "mailto:sichard26@gmail.com" },
   { name = "github", url = "https://github.com/ichard26" },
-  { name = "twitter", url = "https://twitter.com/sichard26" },
+  # { name = "twitter", url = "https://twitter.com/sichard26" },
   { name = "python discourse", url = "https://discuss.python.org/u/ichard26/summary" },
   { name = "stackoverflow", url = "https://stackoverflow.com/users/18155471/ichard26"},
   # { name = "reddit", url = "https://www.reddit.com/user/ichard26" },

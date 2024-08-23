@@ -1,35 +1,30 @@
 ---
 title: About me
 description: "Short version: I'm Richard aka ichard26 (he/they). I'm a hobby Python
-  developer and OSS contributor. I contribute to mypyc and pip and used to co-maintain
+  developer and FOSS contributor. I contribute to mypyc and pip and used to co-maintain
   Black and Bandersnatch. Staff at Python Discord."
 layout: single
 showReadingTime: false
 modified: 2024-04-19
 ---
 
-Hello! I'm Richard. I go by `ichard26` on the internet[^1]. My pronouns are he/they.
+Hello! I'm Richard. I go by `ichard26` on the internet. My pronouns are he/they.
 
 You may know me if you frequent the Python code quality space as I used to co-maintain
-your friendly code formatter, [Black]! I also (kinda) co-maintained [bandersnatch].
+your friendly code formatter, [Black]!
 
-<!-- As maintainer, I like
-to focus on maintenance, documentation, and PR review. On top of that, I'm also staff on
-the [Python Discord server][discord-python]. -->
+I'm a hobby Python developer who writes command line tooling, but I dabble in C and
+front-end web development from time to time. When I'm not doing development work, I like
+to take photographs, go for walks .. or both at the same time! 📷
 
-I'm a hobby Python developer, but I dabble in C and front-end web development from time to
-time. Project-wise, tooling and language dev projects are my favourite. When I'm not doing
-development work, I like to take photographs, go for walks .. or both at the same time! 📷
-
-This website exists as a place to put my programming and OSS ramblings. I'm not quite sure
-what exactly I'll write about it, but hey y'all can watch me as I learn this blogging
-thing.
+This website exists as a place to put my programming and open-source software ramblings.
+I'm just doing this for fun, and there are no hard rules for what I will publish here.
 
 Oh... and one more thing. You should know that I like flowers. ✿
 
 ## Open Source Software (OSS)
 
-While I do work on a personal project occasionally, I primarily contribute to open source
+While I do work on personal projects occasionally, I primarily contribute to open source
 projects. The projects I'm proud to have contributed to are:
 
 [black] _co-maintainer_ _2020 - 2023_
@@ -69,20 +64,16 @@ projects. The projects I'm proud to have contributed to are:
 ## Contact information
 
 I used to not have a public email address, but now I do! Please send random flower facts
-and other inquries to `sichard26 (at) gmail.com`[^2].
+and other inquries to `sichard26 (at) gmail.com`[^1].
 
-Alternatively, you can reach me by either DMing me on Discord (ichard26#4772) or
+Alternatively, you can reach me by either DMing me on Discord (@ichard26) or
 [opening a GitHub discussion here][discussions]. I don't have a preference between the
 two, so use the method that suits you the best :)
 
 > For Discord, you'll find me in the [Python Discord][discord-python],
 > [PyPA][discord-pypa], and [Pallets][discord-pallets] servers.
 
-And please don't message me on Twitter as I almost never check it after Elon took over.
-
-[^1]: Or `sichard26`, notably on Twitter and in my email...
-
-[^2]: [I do have a GPG key][gpg] if you want to use GPG, for some reason...
+[^1]: [I do have a GPG key][gpg] if you want to use GPG, for some reason...
 
 [bandersnatch]: https://github.com/pypa/bandersnatch
 [black]: https://github.com/psf/black
