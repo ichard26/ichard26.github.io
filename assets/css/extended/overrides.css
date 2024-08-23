@@ -134,3 +134,7 @@ body > footer > span:nth-child(2)::after {
   content: "$ ";
   color: grey;
 }
+
+.post-content .highlight pre:has(code) {
+  background: none !important;
+}
