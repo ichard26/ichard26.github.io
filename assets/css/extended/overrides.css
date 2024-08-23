@@ -135,6 +135,28 @@ body > footer > span:nth-child(2)::after {
   color: grey;
 }
 
-.post-content .highlight pre:has(code) {
+/* Try to fix poorly positioned codeblock line numbers */
+.post-content .highlight table td:first-child code {
+  width: fit-content;
+  padding-right: 0 !important;
+}
+.post-content .highlight table td:nth-child(2) code {
+  padding-left: 0 !important;
+}
+
+/* Remove backgrounds that prevent rounded corners */
+.post-content .highlight :where(:has(code), .div) {
   background: none !important;
+}
+
+.post-date {
+  font-weight: bold;
+}
+
+/* Hide last modified in post lists */
+.post-entry .last-modified {
+  display: none;
+}
+.post-entry .last-modified + .delimiter {
+  display: none;
 }
