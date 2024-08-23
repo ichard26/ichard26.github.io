@@ -65,7 +65,7 @@ much since it'd be a whole other story, but suffice to say when we made our newe
 "commitment" (at that point we explicitly worded our intentions to *not* be promises) **we
 were very motivated to get it done and hopefully right.**
 
-We drafted a [stablity policy][stability-policy],
+We drafted a [stability policy][stability-policy],
 [dropped Python 2 support][cya-python-two], [introduced the `--preview` flag][hi-preview],
 and [so much more][changelog] [^11].
 

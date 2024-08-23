@@ -306,7 +306,7 @@ best to respond.
     `black.Mode`) for a given source tree. All of the logic is tied up in `main` and a
     bunch of helper functions. diff-shades needs this information so it knows what files
     to pass to Black and also how to configure it. I could've copied Black's code that
-    calcuates this sort of stuff, but
+    calculates this sort of stuff, but
     [I chose to instead run `black.main` inline passing the project directory and then by replacing `black.reformat_one` and `black.reformat_many` with shims][monkeypatching-shenanigans],
     diff-shades yoinks the sources list and Mode object that would've been used to format
     the project.
