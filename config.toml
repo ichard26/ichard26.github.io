@@ -10,6 +10,7 @@ copyright = "© 2022-present, Richard Si"
 theme = "PaperMod"
 
 baseURL = 'https://ichard26.github.io/'
+enableGitInfo = true
 enableRobotsTXT = true
 paginate = 15
 
