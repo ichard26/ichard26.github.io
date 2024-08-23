@@ -1,314 +1,127 @@
-<!doctype html><html lang=en-ca dir=auto>
-<head><meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
-<meta name=robots content="index, follow">
-<title>What's new in Black 22.10.0 | Richard Si</title>
-<meta name=keywords content="black,release">
-<meta name=description content="Black 22.10.0 removes runtime support for Python 3.6, fixes a major fmt: off/on bug, and other QOL improvements.">
-<meta name=author content>
-<link rel=canonical href=https://ichard26.github.io/blog/2022/10/black-22.10.0/>
-<link crossorigin=anonymous href=/assets/css/stylesheet.d576396e40dce9e0c930f5cc59b30f9cc34b08700d5ab52389ed86c28b4bb180.css integrity="sha256-1XY5bkDc6eDJMPXMWbMPnMNLCHANWrUjie2GwotLsYA=" rel="preload stylesheet" as=style>
-<script defer crossorigin=anonymous src=/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG+9vmJ0cTS+ovo0FeA=" onload=hljs.initHighlightingOnLoad()></script>
-<link rel=icon href=https://ichard26.github.io/favicon.ico>
-<link rel=icon type=image/png sizes=16x16 href=https://ichard26.github.io/favicon-16x16.png>
-<link rel=icon type=image/png sizes=32x32 href=https://ichard26.github.io/favicon-32x32.png>
-<link rel=apple-touch-icon href=https://ichard26.github.io/apple-touch-icon.png>
-<link rel=mask-icon href=https://ichard26.github.io/safari-pinned-tab.svg>
-<meta name=theme-color content="#2e2e33">
-<meta name=msapplication-TileColor content="#2e2e33">
-<noscript>
-<style>#theme-toggle,.top-link{display:none}</style>
-<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
-</noscript>
-<script data-host=https://microanalytics.io data-dnt=true src=https://microanalytics.io/js/script.js id=ZwSg9rf6GA async defer></script>
-<meta name=google-site-verification content="4PNzC3Db8jI_wn9D8lPdAh4B0skrLZHNbQBgVF1XtAo"><meta property="og:title" content="What's new in Black 22.10.0">
-<meta property="og:description" content="Black 22.10.0 removes runtime support for Python 3.6, fixes a major fmt: off/on bug, and other QOL improvements.">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://ichard26.github.io/blog/2022/10/black-22.10.0/"><meta property="article:section" content="blog">
-<meta property="article:published_time" content="2022-10-14T00:00:00-04:00">
-<meta name=twitter:card content="summary">
-<meta name=twitter:title content="What's new in Black 22.10.0">
-<meta name=twitter:description content="Black 22.10.0 removes runtime support for Python 3.6, fixes a major fmt: off/on bug, and other QOL improvements.">
-<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Blogs","item":"https://ichard26.github.io/blog/"},{"@type":"ListItem","position":2,"name":"What's new in Black 22.10.0","item":"https://ichard26.github.io/blog/2022/10/black-22.10.0/"}]}</script>
-<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"What's new in Black 22.10.0","name":"What\u0027s new in Black 22.10.0","description":"Black 22.10.0 removes runtime support for Python 3.6, fixes a major fmt: off/on bug, and other QOL improvements.","keywords":["black","release"],"articleBody":"On October 6th, 2022, we released Black 22.10.0. It’s a smaller release by the size of the changelog, but hey that means I don’t have to write as much!\nThis is meant to be an accompanying blog post for 22.10.0. I won’t discuss every change, just the ones worth highlighting. Instead, I’ll go into more detail, providing context and explanations (and probably some behind of scenes stuff too – this isn’t official anyway). I know this is a bit late, but I hope this is still insightful.\nIf you’d like the full changelog for 22.10.0, please refer to the link above.\nPackaging Goodbye Python 3.6 (and hello Hatchling!) It’s official: you can no longer run Black on Python 3.6 starting with 22.10.0.1\nThis is actually the first time Black has ever dropped runtime support since 3.6+ was required from the start.2\nWe dropped Python 3.6 because we wanted to switch build backends from Setuptools to Hatchling which only supports 3.7+. Setuptools has served us well as a simple and reliable backend, but we wanted to modernize. While Setuptools does finally now support most packaging standards (PEP 517, PEP 621, PEP 660 and more) our needs are a bit unique.\nWe use mypyc to compile Black for a significant performance boost. Before Hatchling we hand-rolled our own integration using mypyc’s basic Setuptools build API. It worked well enough, but it meant we would be stuck with setup.py forever until a Setuptools plugin for mypyc is available. (one does not exist as of writing)\nAll of the reasons behind the switch can be found in the PR, but in essence, Hatchling allowed us to move to static metadata in pyproject.toml while providing us with a nicer mypyc integration thanks to its hatch-mypyc plugin.\nSwitching to Hatchling hasn’t been as simple as I would’ve wished: we had to track down this confusing linker error that only appears when using build isolation (among other situations) and now our macOS builds are producing mislabelled wheels, ugh. It happens.\nCompiled wheels for 3.11 We couldn’t build mypyc wheels for CPython 3.11 since we had been using an older manylinux docker image to avoid the linker error mentioned earlier. It was old enough that 3.11 wasn’t pre-installed!\nOnce the linker error was addressed by @zsol (thank you, I had no chance of figuring it out), it was pretty straightforward to configure cibuildwheel to build CPython 3.11 wheels. Just a CIBW upgrade, a type error fix, and a workaround so that aiohttp doesn’t fail to install on 3.11.\nCode style Failing to put fmt: on at the same indent level as fmt: off no longer crashes Previously Black produced invalid code when # fmt: on is placed on a different indent level than the # fmt: off it’s paired with. Black failed similarly when # fmt: on just didn’t exist.\ndef x(): # fmt: off return def y(): return $ black issue-569.py error: cannot format issue-569.py: INTERNAL ERROR: Black produced code that is not equivalent to the source. Please report a bug on https://github.com/psf/black/issues. This diff might be helpful: /tmp/blk_wv8p1p5k.log Oh no! 💥 💔 💥 1 file failed to reformat. If you disable the safety checks with --fast, you’ll quickly realize that Black badly messed up the indentation.\ndef x(): # fmt: off return def y(): return This annoying bug was often hit. If you look at the original issue’s timeline, you’ll notice that this bug has been reported many, many times over. Yet, this bug was left unfixed for almost three years until @yilei opened GH-3281 to finally fix it.\nBlack still requires # fmt: off and # fmt: on to be used at the same indent level, but now, the code at or above the initial # fmt: off’s block level will be left untouched, when # fmt: on is used on a different level or there is no # fmt: on.\nIn other words, you can now use a single # fmt: off to turn off formatting by block level.\ndef ignore_this_function(condition): # fmt: off if condition: return 'hello, world' def format_this_function(): def except_this_block_level(): # fmt: off return 'hello, world' return except_this_block_level () $ black file.py --diff --color --- file.py\t2022-10-15 18:30:53.887339 +0000 +++ file.py\t2022-10-15 18:30:54.780816 +0000 @@ -7,6 +7,6 @@  def format_this_function(): def except_this_block_level(): # fmt: off return 'hello, world' - return except_this_block_level () + return except_this_block_level() Anyway, I’m so happy this major bug has finally been fixed. Thank you so much @yilei!\nPreview style: fixed a crash related to string keys in dictionaries Parentheses are added around implicitly concatenated strings in various situations under the preview style since 22.8.0. Unfortunately, this introduced a bug where long string keys would be wrapped in extra parentheses along with the value.\nv = { ('a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_' 'a_very_long_str_a_very_long_str_a_very_long_str_'): { 'key': 'value', }, } v = { - ('a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_' - 'a_very_long_str_a_very_long_str_a_very_long_str_'): { - 'key': - 'value', - }, + ( + \"a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_\": { + \"key\": \"value\", + } + ),  } Now Black no longer adds these invalid parentheses, although it just merges the strings together violating the line length which doesn’t seem right…\nGitHub Action improvements The GitHub Action can now format Jupyter Notebooks if you set jupyter: true:\n- uses: psf/black@stable with: src: \"./src\" jupyter: true version: \"22.10.0\" Under the hood, it will install Black with the jupyter extra enabling Black’s optional support for .ipynb files.\nAdditionally, the version key now supports PEP 440 version specifiers. This is a great QOL improvement because if you want to match versions covered by Black’s stability policy, you can use the compatible release operator (~=) to do that now:\n- uses: psf/black@stable with: src: \"./src\" version: \"~= 22.0\" By restricting to 2022 releases, the latest version possible will be used without sudden changes (breaking your CI) since releases within the same year are guaranteed to not change the stable style.\nThis was a backwards-compatible change, you can still specify a single version if you’d like.\n-x / --skip-source-first-line Python has a flag (-x) to skip the first line of files given. I didn’t know this existed, but it turns out it’s commonly used with Python WASM pages. They shove the HTML code in a single line at the start as a non-standard “shebang” (since browsers generally require HTML files to start with ) so it can run in the browser and locally.\nFor example, this browser pong game uses pygame via pygbag (a WASM version of pygame). The start of the HTML file looks like this:\nhtmlheadmeta charset=\"utf-8\"headscript src=\"https://pygame-web.github.io/archives/0.3/pythons.js\" type=module id=\"__main__\" data-src=\"gui\" async defer# import sys import os import asyncio Since all the HTML code is at the top in a single line, you can run it as any other Python script by simply passing -x.\nwget https://pygame-web.github.io/showroom/pygame-scripts/org.pygame.touchpong.html # assuming pygame is installed python -x org.pygame.touchpong.html I was hesitant to add a similar option to Black, but it was a convincing use-case and the issue got a surprising amount of upvotes.\nThis option is also available for Blackd.\n … and that’s all. Thanks for reading! ❀\n  We weren’t planning to remove 3.6 support in 22.10.0. We believed that Python 3.6 was too popular to stop supporting. The earliest agreed-upon removal date was 2023. But after even more internal discussion, we eventually decided to drop 3.6 earlier. ↩︎\n Łukasz couldn’t live without his f-strings :) ↩︎\n   ","wordCount":"1214","inLanguage":"en-ca","datePublished":"2022-10-14T00:00:00-04:00","dateModified":"0001-01-01T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://ichard26.github.io/blog/2022/10/black-22.10.0/"},"publisher":{"@type":"Person","name":"Richard Si","logo":{"@type":"ImageObject","url":"https://ichard26.github.io/favicon.ico"}}}</script>
-</head>
-<body id=top>
-<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
-<header class=header>
-<nav class=nav>
-<div class=logo>
-<a href=https://ichard26.github.io/ accesskey=h title="Richard Si (Alt + H)">Richard Si</a>
-<div class=logo-switches>
-<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-</button>
-</div>
-</div>
-<ul id=menu>
-<li>
-<a href=https://ichard26.github.io/about/ title=About>
-<span>about</span>
-</a>
-</li>
-<li>
-<a href=https://ichard26.github.io/blog/ title=Writing>
-<span>writing</span>
-</a>
-</li>
-<li>
-<a href=https://ichard26.github.io/privacy/ title="Privacy Statement">
-<span>privacy</span>
-</a>
-</li>
-</ul>
-</nav>
-</header>
-<main class=main>
-<article class=post-single>
-<header class=post-header>
-<h1 class=post-title>
-What's new in Black 22.10.0
-</h1>
-<div class=post-description>
-Black 22.10.0 removes runtime support for Python 3.6, fixes a major fmt: off/on bug, and other QOL improvements.
-</div>
-<div class=post-meta><span title="Posted on 2022-10-14 00:00:00 -0400 EDT">Posted on October 14, 2022</span>&nbsp;·&nbsp;6 minutes
-</div>
-</header> <div class=toc>
-<details>
-<summary accesskey=c title="(Alt + C)">
-<span class=details>Table of Contents</span>
-</summary>
-<div class=inner><ul>
-<li>
-<a href=#packaging aria-label=Packaging>Packaging</a><ul>
-<li>
-<a href=#goodbye-python-36-and-hello-hatchling aria-label="Goodbye Python 3.6 (and hello Hatchling!)">Goodbye Python 3.6 (and hello Hatchling!)</a></li>
-<li>
-<a href=#compiled-wheels-for-311 aria-label="Compiled wheels for 3.11">Compiled wheels for 3.11</a></li></ul>
-</li>
-<li>
-<a href=#code-style aria-label="Code style">Code style</a><ul>
-<li>
-<a href=#failing-to-put-fmt-on-at-the-same-indent-level-as-fmt-off-no-longer-crashes aria-label="Failing to put fmt: on at the same indent level as fmt: off no longer crashes">Failing to put <code>fmt: on</code> at the same indent level as <code>fmt: off</code> no longer crashes</a></li>
-<li>
-<a href=#preview-style-fixed-a-crash-related-to-string-keys-in-dictionaries aria-label="Preview style: fixed a crash related to string keys in dictionaries">Preview style: fixed a crash related to string keys in dictionaries</a></li></ul>
-</li>
-<li>
-<a href=#github-action-improvements aria-label="GitHub Action improvements">GitHub Action improvements</a></li>
-<li>
-<a href=#-x----skip-source-first-line aria-label="-x / --skip-source-first-line"><code>-x</code> / <code>--skip-source-first-line</code></a>
-</li>
-</ul>
-</div>
-</details>
-</div>
-<div class=post-content><p>On October 6th, 2022, <a href=https://github.com/psf/black/releases/tag/22.10.0 target=_blank>we released Black 22.10.0</a>. It&rsquo;s a smaller release
-by the size of the changelog, but hey that means I don&rsquo;t have to write as much!</p>
-<p>This is meant to be an accompanying blog post for 22.10.0. I won&rsquo;t discuss every change,
+<!doctype html><html lang=en-ca dir=auto><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>What's new in Black 22.10.0 | Richard Si</title><meta name=keywords content="black,release"><meta name=description content="Black 22.10.0 removes runtime support for Python 3.6, fixes a major fmt: off/on bug, and other QOL improvements."><meta name=author content><link rel=canonical href=https://ichard26.github.io/blog/2022/10/black-22.10.0/><link crossorigin=anonymous href=/assets/css/stylesheet.ae4dc2048190a5641880479e3fb49a6214a06b11db81d2e911734c8779d1fcb6.css integrity="sha256-rk3CBIGQpWQYgEeeP7SaYhSgaxHbgdLpEXNMh3nR/LY=" rel="preload stylesheet" as=style><link rel=icon href=https://ichard26.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://ichard26.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://ichard26.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://ichard26.github.io/apple-touch-icon.png><link rel=mask-icon href=https://ichard26.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript><script data-host=https://microanalytics.io data-dnt=true src=https://microanalytics.io/js/script.js id=ZwSg9rf6GA async defer></script><meta name=google-site-verification content="4PNzC3Db8jI_wn9D8lPdAh4B0skrLZHNbQBgVF1XtAo"><meta property="og:title" content="What's new in Black 22.10.0"><meta property="og:description" content="Black 22.10.0 removes runtime support for Python 3.6, fixes a major fmt: off/on bug, and other QOL improvements."><meta property="og:type" content="article"><meta property="og:url" content="https://ichard26.github.io/blog/2022/10/black-22.10.0/"><meta property="article:section" content="blog"><meta property="article:published_time" content="2022-10-14T00:00:00-04:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="What's new in Black 22.10.0"><meta name=twitter:description content="Black 22.10.0 removes runtime support for Python 3.6, fixes a major fmt: off/on bug, and other QOL improvements."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Blogs","item":"https://ichard26.github.io/blog/"},{"@type":"ListItem","position":2,"name":"What's new in Black 22.10.0","item":"https://ichard26.github.io/blog/2022/10/black-22.10.0/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"What's new in Black 22.10.0","name":"What\u0027s new in Black 22.10.0","description":"Black 22.10.0 removes runtime support for Python 3.6, fixes a major fmt: off/on bug, and other QOL improvements.","keywords":["black","release"],"articleBody":"On October 6th, 2022, we released Black 22.10.0. It’s a smaller release by the size of the changelog, but hey that means I don’t have to write as much!\nThis is meant to be an accompanying blog post for 22.10.0. I won’t discuss every change, just the ones worth highlighting. Instead, I’ll go into more detail, providing context and explanations (and probably some behind of scenes stuff too – this isn’t official anyway). I know this is a bit late, but I hope this is still insightful.\nIf you’d like the full changelog for 22.10.0, please refer to the link above.\nPackaging Goodbye Python 3.6 (and hello Hatchling!) It’s official: you can no longer run Black on Python 3.6 starting with 22.10.0.1\nThis is actually the first time Black has ever dropped runtime support since 3.6+ was required from the start.2\nWe dropped Python 3.6 because we wanted to switch build backends from Setuptools to Hatchling which only supports 3.7+. Setuptools has served us well as a simple and reliable backend, but we wanted to modernize. While Setuptools does finally now support most packaging standards (PEP 517, PEP 621, PEP 660 and more) our needs are a bit unique.\nWe use mypyc to compile Black for a significant performance boost. Before Hatchling we hand-rolled our own integration using mypyc’s basic Setuptools build API. It worked well enough, but it meant we would be stuck with setup.py forever until a Setuptools plugin for mypyc is available. (one does not exist as of writing)\nAll of the reasons behind the switch can be found in the PR, but in essence, Hatchling allowed us to move to static metadata in pyproject.toml while providing us with a nicer mypyc integration thanks to its hatch-mypyc plugin.\nSwitching to Hatchling hasn’t been as simple as I would’ve wished: we had to track down this confusing linker error that only appears when using build isolation (among other situations) and now our macOS builds are producing mislabelled wheels, ugh. It happens.\nCompiled wheels for 3.11 We couldn’t build mypyc wheels for CPython 3.11 since we had been using an older manylinux docker image to avoid the linker error mentioned earlier. It was old enough that 3.11 wasn’t pre-installed!\nOnce the linker error was addressed by @zsol (thank you, I had no chance of figuring it out), it was pretty straightforward to configure cibuildwheel to build CPython 3.11 wheels. Just a CIBW upgrade, a type error fix, and a workaround so that aiohttp doesn’t fail to install on 3.11.\nCode style Failing to put fmt: on at the same indent level as fmt: off no longer crashes Previously Black produced invalid code when # fmt: on is placed on a different indent level than the # fmt: off it’s paired with. Black failed similarly when # fmt: on just didn’t exist.\ndef x(): # fmt: off return def y(): return $ black issue-569.py error: cannot format issue-569.py: INTERNAL ERROR: Black produced code that is not equivalent to the source. Please report a bug on https://github.com/psf/black/issues. This diff might be helpful: /tmp/blk_wv8p1p5k.log Oh no! 💥 💔 💥 1 file failed to reformat. If you disable the safety checks with --fast, you’ll quickly realize that Black badly messed up the indentation.\ndef x(): # fmt: off return def y(): return This annoying bug was often hit. If you look at the original issue’s timeline, you’ll notice that this bug has been reported many, many times over. Yet, this bug was left unfixed for almost three years until @yilei opened GH-3281 to finally fix it.\nBlack still requires # fmt: off and # fmt: on to be used at the same indent level, but now, the code at or above the initial # fmt: off’s block level will be left untouched, when # fmt: on is used on a different level or there is no # fmt: on.\nIn other words, you can now use a single # fmt: off to turn off formatting by block level.\ndef ignore_this_function(condition): # fmt: off if condition: return 'hello, world' def format_this_function(): def except_this_block_level(): # fmt: off return 'hello, world' return except_this_block_level () $ black file.py --diff --color --- file.py\t2022-10-15 18:30:53.887339 +0000 +++ file.py\t2022-10-15 18:30:54.780816 +0000 @@ -7,6 +7,6 @@ def format_this_function(): def except_this_block_level(): # fmt: off return 'hello, world' - return except_this_block_level () + return except_this_block_level() Anyway, I’m so happy this major bug has finally been fixed. Thank you so much @yilei!\nPreview style: fixed a crash related to string keys in dictionaries Parentheses are added around implicitly concatenated strings in various situations under the preview style since 22.8.0. Unfortunately, this introduced a bug where long string keys would be wrapped in extra parentheses along with the value.\nv = { ('a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_' 'a_very_long_str_a_very_long_str_a_very_long_str_'): { 'key': 'value', }, } v = { - ('a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_' - 'a_very_long_str_a_very_long_str_a_very_long_str_'): { - 'key': - 'value', - }, + ( + \"a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_\": { + \"key\": \"value\", + } + ), } Now Black no longer adds these invalid parentheses, although it just merges the strings together violating the line length which doesn’t seem right…\nGitHub Action improvements The GitHub Action can now format Jupyter Notebooks if you set jupyter: true:\n- uses: psf/black@stable with: src: \"./src\" jupyter: true version: \"22.10.0\" Under the hood, it will install Black with the jupyter extra enabling Black’s optional support for .ipynb files.\nAdditionally, the version key now supports PEP 440 version specifiers. This is a great QOL improvement because if you want to match versions covered by Black’s stability policy, you can use the compatible release operator (~=) to do that now:\n- uses: psf/black@stable with: src: \"./src\" version: \"~= 22.0\" By restricting to 2022 releases, the latest version possible will be used without sudden changes (breaking your CI) since releases within the same year are guaranteed to not change the stable style.\nThis was a backwards-compatible change, you can still specify a single version if you’d like.\n-x / --skip-source-first-line Python has a flag (-x) to skip the first line of files given. I didn’t know this existed, but it turns out it’s commonly used with Python WASM pages. They shove the HTML code in a single line at the start as a non-standard “shebang” (since browsers generally require HTML files to start with \u003c) so it can run in the browser and locally.\nFor example, this browser pong game uses pygame via pygbag (a WASM version of pygame). The start of the HTML file looks like this:\n\u003chtml\u003e\u003chead\u003e\u003cmeta charset=\"utf-8\"\u003e\u003c/head\u003e\u003cscript src=\"https://pygame-web.github.io/archives/0.3/pythons.js\" type=module id=\"__main__\" data-src=\"gui\" async defer\u003e#","wordCount":"1214","inLanguage":"en-ca","datePublished":"2022-10-14T00:00:00-04:00","dateModified":"0001-01-01T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://ichard26.github.io/blog/2022/10/black-22.10.0/"},"publisher":{"@type":"Person","name":"Richard Si","logo":{"@type":"ImageObject","url":"https://ichard26.github.io/favicon.ico"}}}</script></head><body id=top><script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add("dark"):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove("dark"):window.matchMedia("(prefers-color-scheme: dark)").matches&&document.body.classList.add("dark")</script><header class=header><nav class=nav><div class=logo><a href=https://ichard26.github.io/ accesskey=h title="Richard Si (Alt + H)">Richard Si</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu><li><a href=https://ichard26.github.io/about/ title=About><span>about</span></a></li><li><a href=https://ichard26.github.io/blog/ title=Writing><span>writing</span></a></li><li><a href=https://ichard26.github.io/privacy/ title="Privacy Statement"><span>privacy</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><h1 class="post-title entry-hint-parent">What's new in Black 22.10.0</h1><div class=post-description>Black 22.10.0 removes runtime support for Python 3.6, fixes a major fmt: off/on bug, and other QOL improvements.</div><div class=post-meta><span class=post-date title='Posted on 2022-10-14 00:00:00 -0400 EDT'>October 14, 2022</span><span class=delimiter>&nbsp;·&nbsp;</span>6 minutes</div></header><div class=toc><details><summary accesskey=c title="(Alt + C)"><span class=details>Table of Contents</span></summary><div class=inner><ul><li><a href=#packaging aria-label=Packaging>Packaging</a><ul><li><a href=#goodbye-python-36-and-hello-hatchling aria-label="Goodbye Python 3.6 (and hello Hatchling!)">Goodbye Python 3.6 (and hello Hatchling!)</a></li><li><a href=#compiled-wheels-for-311 aria-label="Compiled wheels for 3.11">Compiled wheels for 3.11</a></li></ul></li><li><a href=#code-style aria-label="Code style">Code style</a><ul><li><a href=#failing-to-put-fmt-on-at-the-same-indent-level-as-fmt-off-no-longer-crashes aria-label="Failing to put fmt: on at the same indent level as fmt: off no longer crashes">Failing to put fmt: on at the same indent level as fmt: off no longer crashes</a></li><li><a href=#preview-style-fixed-a-crash-related-to-string-keys-in-dictionaries aria-label="Preview style: fixed a crash related to string keys in dictionaries">Preview style: fixed a crash related to string keys in dictionaries</a></li></ul></li><li><a href=#github-action-improvements aria-label="GitHub Action improvements">GitHub Action improvements</a></li><li><a href=#-x----skip-source-first-line aria-label="-x / --skip-source-first-line">-x / --skip-source-first-line</a></li></ul></div></details></div><div class=post-content><p>On October 6th, 2022, <a href=https://github.com/psf/black/releases/tag/22.10.0 target=_blank>we released Black 22.10.0</a>. It&rsquo;s a smaller release
+by the size of the changelog, but hey that means I don&rsquo;t have to write as much!</p><p>This is meant to be an accompanying blog post for 22.10.0. I won&rsquo;t discuss every change,
 just the ones worth highlighting. Instead, I&rsquo;ll go into more detail, providing context and
 explanations (and probably some behind of scenes stuff too &ndash; this isn&rsquo;t official anyway).
-I know this is a bit late, but I hope this is still insightful.</p>
-<p>If you&rsquo;d like the full changelog for 22.10.0, please refer to the link above.</p>
-<h2 id=packaging>Packaging<a hidden class=anchor aria-hidden=true href=#packaging>#</a></h2>
-<h3 id=goodbye-python-36-and-hello-hatchling>Goodbye Python 3.6 (and hello Hatchling!)<a hidden class=anchor aria-hidden=true href=#goodbye-python-36-and-hello-hatchling>#</a></h3>
-<p>It&rsquo;s official: <strong>you can no longer run Black on Python 3.6 starting with 22.10.0</strong>.<sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup></p>
-<p>This is actually the first time Black has ever dropped runtime support since 3.6+ was
-required from the start.<sup id=fnref:2><a href=#fn:2 class=footnote-ref role=doc-noteref>2</a></sup></p>
-<p>We dropped Python 3.6 because we wanted to switch build backends from Setuptools to
+I know this is a bit late, but I hope this is still insightful.</p><p>If you&rsquo;d like the full changelog for 22.10.0, please refer to the link above.</p><h2 id=packaging>Packaging<a hidden class=anchor aria-hidden=true href=#packaging>#</a></h2><h3 id=goodbye-python-36-and-hello-hatchling>Goodbye Python 3.6 (and hello Hatchling!)<a hidden class=anchor aria-hidden=true href=#goodbye-python-36-and-hello-hatchling>#</a></h3><p>It&rsquo;s official: <strong>you can no longer run Black on Python 3.6 starting with 22.10.0</strong>.<sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup></p><p>This is actually the first time Black has ever dropped runtime support since 3.6+ was
+required from the start.<sup id=fnref:2><a href=#fn:2 class=footnote-ref role=doc-noteref>2</a></sup></p><p>We dropped Python 3.6 because we wanted to switch build backends from Setuptools to
 <a href=https://hatch.pypa.io/ target=_blank>Hatchling</a> which only supports 3.7+. Setuptools has served us well as a simple and
 reliable backend, but we wanted to modernize. While Setuptools does finally now support
-most packaging standards (PEP 517, PEP 621, PEP 660 and more) our needs are a bit unique.</p>
-<p>We use <a href=https://mypyc.readthedocs.io/ target=_blank>mypyc</a> to compile Black for a significant performance boost. Before Hatchling we
+most packaging standards (PEP 517, PEP 621, PEP 660 and more) our needs are a bit unique.</p><p>We use <a href=https://mypyc.readthedocs.io/ target=_blank>mypyc</a> to compile Black for a significant performance boost. Before Hatchling we
 hand-rolled our own integration using mypyc&rsquo;s basic Setuptools build API. It worked well
 enough, but it meant we would be stuck with <code>setup.py</code> forever until a Setuptools plugin
-for mypyc is available. (<em>one does not exist as of writing</em>)</p>
-<p>All of the reasons behind the switch <a href=https://github.com/psf/black/pull/3233 target=_blank>can be found in the PR</a>, but in essence,
+for mypyc is available. (<em>one does not exist as of writing</em>)</p><p>All of the reasons behind the switch <a href=https://github.com/psf/black/pull/3233 target=_blank>can be found in the PR</a>, but in essence,
 Hatchling allowed us to move to static metadata in <code>pyproject.toml</code> while providing us
-with a nicer mypyc integration thanks to its <a href=https://github.com/ofek/hatch-mypyc target=_blank>hatch-mypyc</a> plugin.</p>
-<p>Switching to Hatchling hasn&rsquo;t been as simple as I would&rsquo;ve wished: we had to track down
+with a nicer mypyc integration thanks to its <a href=https://github.com/ofek/hatch-mypyc target=_blank>hatch-mypyc</a> plugin.</p><p>Switching to Hatchling hasn&rsquo;t been as simple as I would&rsquo;ve wished: we had to track down
 <a href=https://github.com/psf/black/pull/3272 target=_blank>this confusing linker error</a> that only appears when using build isolation (among
 other situations) and now our <a href=https://github.com/psf/black/issues/3312 target=_blank>macOS builds are producing mislabelled wheels</a>,
-ugh. It happens.</p>
-<h3 id=compiled-wheels-for-311>Compiled wheels for 3.11<a hidden class=anchor aria-hidden=true href=#compiled-wheels-for-311>#</a></h3>
-<p>We couldn&rsquo;t build mypyc wheels for CPython 3.11 since we had been using an older manylinux
+ugh. It happens.</p><h3 id=compiled-wheels-for-311>Compiled wheels for 3.11<a hidden class=anchor aria-hidden=true href=#compiled-wheels-for-311>#</a></h3><p>We couldn&rsquo;t build mypyc wheels for CPython 3.11 since we had been using an older manylinux
 docker image to avoid the linker error mentioned earlier. It was old enough that 3.11
-wasn&rsquo;t pre-installed!</p>
-<p>Once the linker error was addressed by <a href=https://github.com/zsol target=_blank>@zsol</a> (thank you, I had no chance of figuring it
+wasn&rsquo;t pre-installed!</p><p>Once the linker error was addressed by <a href=https://github.com/zsol target=_blank>@zsol</a> (thank you, I had no chance of figuring it
 out), it was pretty straightforward to configure cibuildwheel to build CPython 3.11
 wheels.
-<a href=https://github.com/psf/black/pull/3276 target=_blank>Just a CIBW upgrade, a type error fix, and a workaround so that aiohttp doesn&rsquo;t fail to install on 3.11.</a></p>
-<h2 id=code-style>Code style<a hidden class=anchor aria-hidden=true href=#code-style>#</a></h2>
-<h3 id=failing-to-put-fmt-on-at-the-same-indent-level-as-fmt-off-no-longer-crashes>Failing to put <code>fmt: on</code> at the same indent level as <code>fmt: off</code> no longer crashes<a hidden class=anchor aria-hidden=true href=#failing-to-put-fmt-on-at-the-same-indent-level-as-fmt-off-no-longer-crashes>#</a></h3>
-<p>Previously Black produced invalid code when <code># fmt: on</code> is placed on a different indent
+<a href=https://github.com/psf/black/pull/3276 target=_blank>Just a CIBW upgrade, a type error fix, and a workaround so that aiohttp doesn&rsquo;t fail to install on 3.11.</a></p><h2 id=code-style>Code style<a hidden class=anchor aria-hidden=true href=#code-style>#</a></h2><h3 id=failing-to-put-fmt-on-at-the-same-indent-level-as-fmt-off-no-longer-crashes>Failing to put <code>fmt: on</code> at the same indent level as <code>fmt: off</code> no longer crashes<a hidden class=anchor aria-hidden=true href=#failing-to-put-fmt-on-at-the-same-indent-level-as-fmt-off-no-longer-crashes>#</a></h3><p>Previously Black produced invalid code when <code># fmt: on</code> is placed on a different indent
 level than the <code># fmt: off</code> it’s paired with. Black failed similarly when <code># fmt: on</code> just
-didn&rsquo;t exist.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python3 data-lang=python3><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>x</span>():
-    <span style=color:#75715e># fmt: off</span>
-    <span style=color:#66d9ef>return</span>
-
-<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>y</span>():
-    <span style=color:#66d9ef>return</span>
-</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console>$ black issue-569.py
-error: cannot format issue-569.py: INTERNAL ERROR: Black produced code that is not equivalent to the source.  Please report a bug on https://github.com/psf/black/issues.  This diff might be helpful: /tmp/blk_wv8p1p5k.log
-<span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010></span>Oh no! 💥 💔 💥
-1 file failed to reformat.
-</code></pre></div><p>If you disable the safety checks with <code>--fast</code>, you&rsquo;ll quickly realize that Black badly
-messed up the indentation.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python3 data-lang=python3><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>x</span>():
-    <span style=color:#75715e># fmt: off</span>
-    <span style=color:#66d9ef>return</span>
-
-    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>y</span>():
-        <span style=color:#66d9ef>return</span>
-</code></pre></div><p>This annoying bug was often hit. If you look at the <a href=https://github.com/psf/black/issues/569 target=_blank>original issue&rsquo;s timeline</a>,
+didn&rsquo;t exist.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python3 data-lang=python3><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>x</span>():
+</span></span><span style=display:flex><span>    <span style=color:#75715e># fmt: off</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>y</span>():
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console><span style=display:flex><span>$ black issue-569.py
+</span></span><span style=display:flex><span>error: cannot format issue-569.py: INTERNAL ERROR: Black produced code that is not equivalent to the source.  Please report a bug on https://github.com/psf/black/issues.  This diff might be helpful: /tmp/blk_wv8p1p5k.log
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>
+</span></span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010></span>Oh no! 💥 💔 💥
+</span></span><span style=display:flex><span>1 file failed to reformat.
+</span></span></code></pre></div><p>If you disable the safety checks with <code>--fast</code>, you&rsquo;ll quickly realize that Black badly
+messed up the indentation.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python3 data-lang=python3><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>x</span>():
+</span></span><span style=display:flex><span>    <span style=color:#75715e># fmt: off</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>y</span>():
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span>
+</span></span></code></pre></div><p>This annoying bug was often hit. If you look at the <a href=https://github.com/psf/black/issues/569 target=_blank>original issue&rsquo;s timeline</a>,
 you&rsquo;ll notice that this bug has been reported many, <em>many</em> times over. Yet, this bug was
-left unfixed for almost three years until <a href=https://github.com/yilei target=_blank>@yilei</a> opened <a href=https://github.com/psf/black/pull/3281 target=_blank>GH-3281</a> to finally fix it.</p>
-<p>Black still requires <code># fmt: off</code> and <code># fmt: on</code> to be used at the same indent level, but
+left unfixed for almost three years until <a href=https://github.com/yilei target=_blank>@yilei</a> opened <a href=https://github.com/psf/black/pull/3281 target=_blank>GH-3281</a> to finally fix it.</p><p>Black still requires <code># fmt: off</code> and <code># fmt: on</code> to be used at the same indent level, but
 now, the code at or above the initial <code># fmt: off</code>&rsquo;s block level will be left untouched,
-when <code># fmt: on</code> is used on a different level or there is no <code># fmt: on</code>.</p>
-<p>In other words, you can now use a single <code># fmt: off</code> to turn off formatting by block
-level.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python3 data-lang=python3><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>ignore_this_function</span>(condition):
-    <span style=color:#75715e># fmt: off</span>
-    <span style=color:#66d9ef>if</span> condition:
-        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#39;hello, world&#39;</span>
-
-
-<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>format_this_function</span>():
-    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>except_this_block_level</span>():
-        <span style=color:#75715e># fmt: off</span>
-        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#39;hello, world&#39;</span>
-
-    <span style=color:#66d9ef>return</span> except_this_block_level ()
-</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-diff data-lang=diff>$ black file.py --diff --color
-<span style=color:#f92672>--- file.py	2022-10-15 18:30:53.887339 +0000
-</span><span style=color:#f92672></span><span style=color:#a6e22e>+++ file.py	2022-10-15 18:30:54.780816 +0000
-</span><span style=color:#a6e22e></span><span style=color:#75715e>@@ -7,6 +7,6 @@
-</span><span style=color:#75715e></span> def format_this_function():
-     def except_this_block_level():
-         # fmt: off
-         return &#39;hello, world&#39;
-
-<span style=color:#f92672>-    return except_this_block_level ()
-</span><span style=color:#f92672></span><span style=color:#a6e22e>+    return except_this_block_level()
-</span></code></pre></div><p>Anyway, I&rsquo;m so happy this major bug has finally been fixed. Thank you so much @yilei!</p>
-<h3 id=preview-style-fixed-a-crash-related-to-string-keys-in-dictionaries>Preview style: fixed a crash related to string keys in dictionaries<a hidden class=anchor aria-hidden=true href=#preview-style-fixed-a-crash-related-to-string-keys-in-dictionaries>#</a></h3>
-<p><a href=https://github.com/psf/black/pull/3162 target=_blank>Parentheses are added around implicitly concatenated strings in various situations under the preview style</a>
+when <code># fmt: on</code> is used on a different level or there is no <code># fmt: on</code>.</p><p>In other words, you can now use a single <code># fmt: off</code> to turn off formatting by block
+level.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python3 data-lang=python3><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>ignore_this_function</span>(condition):
+</span></span><span style=display:flex><span>    <span style=color:#75715e># fmt: off</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> condition:
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#39;hello, world&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>format_this_function</span>():
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>except_this_block_level</span>():
+</span></span><span style=display:flex><span>        <span style=color:#75715e># fmt: off</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#39;hello, world&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> except_this_block_level ()
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-diff data-lang=diff><span style=display:flex><span>$ black file.py --diff --color
+</span></span><span style=display:flex><span><span style=color:#f92672>--- file.py	2022-10-15 18:30:53.887339 +0000
+</span></span></span><span style=display:flex><span><span style=color:#f92672></span><span style=color:#a6e22e>+++ file.py	2022-10-15 18:30:54.780816 +0000
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e></span><span style=color:#75715e>@@ -7,6 +7,6 @@
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span> def format_this_function():
+</span></span><span style=display:flex><span>     def except_this_block_level():
+</span></span><span style=display:flex><span>         # fmt: off
+</span></span><span style=display:flex><span>         return &#39;hello, world&#39;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>-    return except_this_block_level ()
+</span></span></span><span style=display:flex><span><span style=color:#f92672></span><span style=color:#a6e22e>+    return except_this_block_level()
+</span></span></span></code></pre></div><p>Anyway, I&rsquo;m so happy this major bug has finally been fixed. Thank you so much @yilei!</p><h3 id=preview-style-fixed-a-crash-related-to-string-keys-in-dictionaries>Preview style: fixed a crash related to string keys in dictionaries<a hidden class=anchor aria-hidden=true href=#preview-style-fixed-a-crash-related-to-string-keys-in-dictionaries>#</a></h3><p><a href=https://github.com/psf/black/pull/3162 target=_blank>Parentheses are added around implicitly concatenated strings in various situations under the preview style</a>
 since 22.8.0. Unfortunately, this introduced a bug where long string keys would be wrapped
-in extra parentheses along with the value.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python3 data-lang=python3>v <span style=color:#f92672>=</span> {
-    (<span style=color:#e6db74>&#39;a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_&#39;</span>
-     <span style=color:#e6db74>&#39;a_very_long_str_a_very_long_str_a_very_long_str_&#39;</span>): {
-        <span style=color:#e6db74>&#39;key&#39;</span>:
-            <span style=color:#e6db74>&#39;value&#39;</span>,
-    },
-}
-</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-diff data-lang=diff> v = {
-<span style=color:#f92672>-    (&#39;a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_&#39;
-</span><span style=color:#f92672>-     &#39;a_very_long_str_a_very_long_str_a_very_long_str_&#39;): {
-</span><span style=color:#f92672>-        &#39;key&#39;:
-</span><span style=color:#f92672>-            &#39;value&#39;,
-</span><span style=color:#f92672>-    },
-</span><span style=color:#f92672></span><span style=color:#a6e22e>+    (
-</span><span style=color:#a6e22e>+        &#34;a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_&#34;: {
-</span><span style=color:#a6e22e>+            &#34;key&#34;: &#34;value&#34;,
-</span><span style=color:#a6e22e>+        }
-</span><span style=color:#a6e22e>+    ),
-</span><span style=color:#a6e22e></span> }
-</code></pre></div><p>Now Black no longer adds these invalid parentheses, although it just merges the strings
-together violating the line length which doesn&rsquo;t seem right&mldr;</p>
-<h2 id=github-action-improvements>GitHub Action improvements<a hidden class=anchor aria-hidden=true href=#github-action-improvements>#</a></h2>
-<p>The GitHub Action can now format Jupyter Notebooks if you set <code>jupyter: true</code>:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml>- <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>psf/black@stable</span>
-  <span style=color:#f92672>with</span>:
-    <span style=color:#f92672>src</span>: <span style=color:#e6db74>&#34;./src&#34;</span>
-    <span style=color:#f92672>jupyter</span>: <span style=color:#66d9ef>true</span>
-    <span style=color:#f92672>version</span>: <span style=color:#e6db74>&#34;22.10.0&#34;</span>
-</code></pre></div><p>Under the hood, it will install Black with the <code>jupyter</code> extra enabling Black&rsquo;s optional
-support for <code>.ipynb</code> files.</p>
-<p>Additionally, the <code>version</code> key now supports <a href=https://peps.python.org/pep-0440/ target=_blank>PEP 440</a> version specifiers. This is a great
+in extra parentheses along with the value.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python3 data-lang=python3><span style=display:flex><span>v <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>    (<span style=color:#e6db74>&#39;a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_&#39;</span>
+</span></span><span style=display:flex><span>     <span style=color:#e6db74>&#39;a_very_long_str_a_very_long_str_a_very_long_str_&#39;</span>): {
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;key&#39;</span>:
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;value&#39;</span>,
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-diff data-lang=diff><span style=display:flex><span> v = {
+</span></span><span style=display:flex><span><span style=color:#f92672>-    (&#39;a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_&#39;
+</span></span></span><span style=display:flex><span><span style=color:#f92672>-     &#39;a_very_long_str_a_very_long_str_a_very_long_str_&#39;): {
+</span></span></span><span style=display:flex><span><span style=color:#f92672>-        &#39;key&#39;:
+</span></span></span><span style=display:flex><span><span style=color:#f92672>-            &#39;value&#39;,
+</span></span></span><span style=display:flex><span><span style=color:#f92672>-    },
+</span></span></span><span style=display:flex><span><span style=color:#f92672></span><span style=color:#a6e22e>+    (
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>+        &#34;a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_a_very_long_str_&#34;: {
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>+            &#34;key&#34;: &#34;value&#34;,
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>+        }
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>+    ),
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e></span> }
+</span></span></code></pre></div><p>Now Black no longer adds these invalid parentheses, although it just merges the strings
+together violating the line length which doesn&rsquo;t seem right&mldr;</p><h2 id=github-action-improvements>GitHub Action improvements<a hidden class=anchor aria-hidden=true href=#github-action-improvements>#</a></h2><p>The GitHub Action can now format Jupyter Notebooks if you set <code>jupyter: true</code>:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span>- <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>psf/black@stable</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>with</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>src</span>: <span style=color:#e6db74>&#34;./src&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>jupyter</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>version</span>: <span style=color:#e6db74>&#34;22.10.0&#34;</span>
+</span></span></code></pre></div><p>Under the hood, it will install Black with the <code>jupyter</code> extra enabling Black&rsquo;s optional
+support for <code>.ipynb</code> files.</p><p>Additionally, the <code>version</code> key now supports <a href=https://peps.python.org/pep-0440/ target=_blank>PEP 440</a> version specifiers. This is a great
 QOL improvement because if you want to match versions covered by Black’s
-<a href=https://black.readthedocs.io/en/stable/the_black_code_style/index.html#labels-stability-policy target=_blank>stability policy</a>, you can use the compatible release operator (<code>~=</code>) to do that now:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml>- <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>psf/black@stable</span>
-  <span style=color:#f92672>with</span>:
-    <span style=color:#f92672>src</span>: <span style=color:#e6db74>&#34;./src&#34;</span>
-    <span style=color:#f92672>version</span>: <span style=color:#e6db74>&#34;~= 22.0&#34;</span>
-</code></pre></div><p>By restricting to 2022 releases, the latest version possible will be used without sudden
+<a href=https://black.readthedocs.io/en/stable/the_black_code_style/index.html#labels-stability-policy target=_blank>stability policy</a>, you can use the compatible release operator (<code>~=</code>) to do that now:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span>- <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>psf/black@stable</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>with</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>src</span>: <span style=color:#e6db74>&#34;./src&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>version</span>: <span style=color:#e6db74>&#34;~= 22.0&#34;</span>
+</span></span></code></pre></div><p>By restricting to 2022 releases, the latest version possible will be used without sudden
 changes (breaking your CI) since releases within the same year are guaranteed to not
-change the stable style.</p>
-<p>This was a backwards-compatible change, you can still specify a single version if you&rsquo;d
-like.</p>
-<h2 id=-x----skip-source-first-line><code>-x</code> / <code>--skip-source-first-line</code><a hidden class=anchor aria-hidden=true href=#-x----skip-source-first-line>#</a></h2>
-<p><a href=https://docs.python.org/dev/using/cmdline.html#cmdoption-x target=_blank>Python has a flag (<code>-x</code>) to skip the first line of files given</a>. I didn&rsquo;t know this
+change the stable style.</p><p>This was a backwards-compatible change, you can still specify a single version if you&rsquo;d
+like.</p><h2 id=-x----skip-source-first-line><code>-x</code> / <code>--skip-source-first-line</code><a hidden class=anchor aria-hidden=true href=#-x----skip-source-first-line>#</a></h2><p><a href=https://docs.python.org/dev/using/cmdline.html#cmdoption-x target=_blank>Python has a flag (<code>-x</code>) to skip the first line of files given</a>. I didn&rsquo;t know this
 existed, but it turns out it&rsquo;s commonly used with Python WASM pages. They shove the HTML
 code in a single line at the start as a non-standard &ldquo;shebang&rdquo; (since browsers generally
-require HTML files to start with <code>&lt;</code>) so it can run in the browser <em>and</em> locally.</p>
-<p>For example, <a href=https://pygame-web.github.io/showroom/pygame-scripts/org.pygame.touchpong.html target=_blank>this browser pong game uses pygame</a> via <a href=https://pypi.org/project/pygbag/ target=_blank>pygbag</a> (a WASM
-version of pygame). The start of the HTML file looks like this:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html>&lt;<span style=color:#f92672>html</span>&gt;&lt;<span style=color:#f92672>head</span>&gt;&lt;<span style=color:#f92672>meta</span> <span style=color:#a6e22e>charset</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;utf-8&#34;</span>&gt;&lt;/<span style=color:#f92672>head</span>&gt;&lt;<span style=color:#f92672>script</span> <span style=color:#a6e22e>src</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;https://pygame-web.github.io/archives/0.3/pythons.js&#34;</span> <span style=color:#a6e22e>type</span><span style=color:#f92672>=</span><span style=color:#e6db74>module</span> <span style=color:#a6e22e>id</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;__main__&#34;</span> <span style=color:#a6e22e>data-src</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;gui&#34;</span> <span style=color:#a6e22e>async</span> <span style=color:#a6e22e>defer</span>&gt;<span style=color:#960050;background-color:#1e0010>#&lt;!--</span>
-import sys
-import os
-import asyncio
-</code></pre></div><p>Since all the HTML code is at the top in a single line, you can run it as any other Python
-script by simply passing <code>-x</code>.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console>wget https://pygame-web.github.io/showroom/pygame-scripts/org.pygame.touchpong.html
-# assuming pygame is installed
-python -x org.pygame.touchpong.html
-</code></pre></div><p>I was hesitant to add a similar option to Black, but it was a convincing use-case and
-<a href=https://github.com/psf/black/issues/3214 target=_blank>the issue got a surprising amount of upvotes</a>.</p>
-<p>This option is also available for Blackd.</p>
-<hr>
-<p>&mldr; and that&rsquo;s all. Thanks for reading! ❀</p>
-<section class=footnotes role=doc-endnotes>
-<hr>
-<ol>
-<li id=fn:1 role=doc-endnote>
-<p>We weren&rsquo;t planning to remove 3.6 support in 22.10.0. We believed that Python 3.6 was
+require HTML files to start with <code>&lt;</code>) so it can run in the browser <em>and</em> locally.</p><p>For example, <a href=https://pygame-web.github.io/showroom/pygame-scripts/org.pygame.touchpong.html target=_blank>this browser pong game uses pygame</a> via <a href=https://pypi.org/project/pygbag/ target=_blank>pygbag</a> (a WASM
+version of pygame). The start of the HTML file looks like this:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style=display:flex><span>&lt;<span style=color:#f92672>html</span>&gt;&lt;<span style=color:#f92672>head</span>&gt;&lt;<span style=color:#f92672>meta</span> <span style=color:#a6e22e>charset</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;utf-8&#34;</span>&gt;&lt;/<span style=color:#f92672>head</span>&gt;&lt;<span style=color:#f92672>script</span> <span style=color:#a6e22e>src</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;https://pygame-web.github.io/archives/0.3/pythons.js&#34;</span> <span style=color:#a6e22e>type</span><span style=color:#f92672>=</span><span style=color:#e6db74>module</span> <span style=color:#a6e22e>id</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;__main__&#34;</span> <span style=color:#a6e22e>data-src</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;gui&#34;</span> <span style=color:#a6e22e>async</span> <span style=color:#a6e22e>defer</span>&gt;<span style=color:#960050;background-color:#1e0010>#&lt;!--</span>
+</span></span><span style=display:flex><span>import sys
+</span></span><span style=display:flex><span>import os
+</span></span><span style=display:flex><span>import asyncio
+</span></span></code></pre></div><p>Since all the HTML code is at the top in a single line, you can run it as any other Python
+script by simply passing <code>-x</code>.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console><span style=display:flex><span>wget https://pygame-web.github.io/showroom/pygame-scripts/org.pygame.touchpong.html
+</span></span><span style=display:flex><span># assuming pygame is installed
+</span></span><span style=display:flex><span>python -x org.pygame.touchpong.html
+</span></span></code></pre></div><p>I was hesitant to add a similar option to Black, but it was a convincing use-case and
+<a href=https://github.com/psf/black/issues/3214 target=_blank>the issue got a surprising amount of upvotes</a>.</p><p>This option is also available for Blackd.</p><hr><p>&mldr; and that&rsquo;s all. Thanks for reading! ❀</p><div class=footnotes role=doc-endnotes><hr><ol><li id=fn:1><p>We weren&rsquo;t planning to remove 3.6 support in 22.10.0. We believed that Python 3.6 was
 too popular to stop supporting. The earliest agreed-upon removal date was 2023. But
 after even more internal discussion,
-<a href=https://github.com/psf/black/issues/3169#issuecomment-1221624251 target=_blank>we eventually decided to drop 3.6 earlier</a>.&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p>
-</li>
-<li id=fn:2 role=doc-endnote>
-<p>Łukasz couldn&rsquo;t live without his f-strings :)&#160;<a href=#fnref:2 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
-</div>
-<footer class=post-footer>
-<ul class=post-tags>
-<li><a href=https://ichard26.github.io/tags/black/>black</a></li>
-<li><a href=https://ichard26.github.io/tags/release/>release</a></li>
-</ul>
-<nav class=paginav>
-<a class=prev href=https://ichard26.github.io/blog/2022/12/black-23.1a1/>
-<span class=title>« Newer</span>
-<br>
-<span>Black 23.1a1 - please help us test the 2023 stable style!</span>
-</a>
-<a class=next href=https://ichard26.github.io/blog/2022/05/compiling-black-with-mypyc-part-3/>
-<span class=title>Older »</span>
-<br>
-<span>Compiling Black with mypyc, Pt. 3 - Deployment</span>
-</a>
-</nav>
-</footer>
-</article>
-</main>
-<footer class=footer>
-<span>© 2022-present, Richard Si</span>
-<span>
-Powered by
+<a href=https://github.com/psf/black/issues/3169#issuecomment-1221624251 target=_blank>we eventually decided to drop 3.6 earlier</a>.&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li><li id=fn:2><p>Łukasz couldn&rsquo;t live without his f-strings :)&#160;<a href=#fnref:2 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li></ol></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://ichard26.github.io/tags/black/>black</a></li><li><a href=https://ichard26.github.io/tags/release/>release</a></li></ul><nav class=paginav><a class=prev href=https://ichard26.github.io/blog/2022/12/black-23.1a1/><span class=title>« Newer</span><br><span>Black 23.1a1 - please help us test the 2023 stable style!</span></a>
+<a class=next href=https://ichard26.github.io/blog/2022/05/compiling-black-with-mypyc-part-3/><span class=title>Older »</span><br><span>Compiling Black with mypyc, Pt. 3 - Deployment</span></a></nav></footer></article></main><footer class=footer><span>© 2022-present, Richard Si</span> ·
+<span>Powered by
 <a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
-        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a>
-</span>
-</footer>
-<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
-</a>
-<script>let menu=document.getElementById('menu');menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
-<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
-<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
-<script>document.querySelectorAll('pre > code').forEach(b=>{const c=b.parentNode.parentNode,a=document.createElement('button');a.classList.add('copy-code'),a.innerHTML='copy';function d(){a.innerHTML='copied!',setTimeout(()=>{a.innerHTML='copy'},2e3)}a.addEventListener('click',e=>{if('clipboard'in navigator){navigator.clipboard.writeText(b.textContent),d();return}const a=document.createRange();a.selectNodeContents(b);const c=window.getSelection();c.removeAllRanges(),c.addRange(a);try{document.execCommand('copy'),d()}catch(a){}c.removeRange(a)}),c.classList.contains("highlight")?c.appendChild(a):c.parentNode.firstChild==c||(b.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?b.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(a):b.parentNode.appendChild(a))})</script>
-</body>
-</html>
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg></a><script>let menu=document.getElementById("menu");menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove("dark"),localStorage.setItem("pref-theme","light")):(document.body.classList.add("dark"),localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>
