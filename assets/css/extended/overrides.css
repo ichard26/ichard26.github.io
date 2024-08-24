@@ -1,13 +1,18 @@
 main {
-  --main-width: 760px;
+  /* --main-width: 800px; */
+  --main-width: 74ch;
+}
+
+.profile img {
+  margin: 20px;
 }
 
 /* Better links and include branding colour :wink: */
-.post-header, .post-content, .post-footer {
+.post-header, .post-content, .post-footer > .paginav, h2 {
   --secondary: #bf0041;
 }
 /* The theme defaults to light mode, so that's why this comes after */
-.dark :where(.post-header, .post-content, .post-footer) {
+.dark :where(.post-header, .post-content, .post-footer > .paginav, h2) {
   --secondary: orange;
 }
 
@@ -16,7 +21,7 @@ main {
 .post-content a, .post-content a > code {
   box-shadow: none;
   text-decoration: underline;
-  text-underline-offset: 20%;
+  text-underline-offset: 25%;
 }
 
 a:hover {
@@ -27,6 +32,11 @@ a:hover {
 :is(.post-header, .post-content, .post-footer) a:active {
   filter: brightness(75%);
   transition-duration: 70ms;
+}
+
+blockquote {
+  border-inline-start: 3px solid color-mix(in srgb,var(--secondary), var(--theme) 40%) !important;
+  font-weight: 300;
 }
 
 /* Spacing for definition lists (thank you @pradyunsg) */
@@ -92,9 +102,6 @@ a:hover {
 /* This might be a hack, but this allows me to improve the footer contents without
    having to copy the whole footer.html template.
 */
-body > footer > span:nth-child(2)::before {
-  content: "·";
-}
 body > footer > span:nth-child(2)::after {
   content: "with many tweaks";
 }
@@ -104,9 +111,29 @@ body > footer > span:nth-child(2)::after {
   font-size: 17px;
 }
 
+/* Highlight h2 uniquely */
+.post-content h2 {
+  font-family: serif;
+  background-color: color-mix(in srgb,var(--secondary), var(--theme) 92%);
+  width: fit-content;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-left: calc(-1em - 6px) !important;
+}
+.post-content h2::before{
+  content:">";
+  color: var(--secondary);
+  width: 1em;
+  display: inline-block;
+}
+
+article.post-entry:has(a:hover) {
+  transform: scale(0.95);
+}
+
 /* Make h3 bigger since h4 is being enlarged below. */
 .post-content h3 {
-  font-size: 26px;
+  font-size: 24px;
 }
 
 /* This should at least match if not be bigger than regular text. */
@@ -130,7 +157,7 @@ body > footer > span:nth-child(2)::after {
 }
 
 /* $ prompt for command code blocks. */
-.command code::before {
+.command code > span:first-child::before {
   content: "$ ";
   color: grey;
 }

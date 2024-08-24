@@ -12,7 +12,7 @@ theme = "PaperMod"
 baseURL = 'https://ichard26.github.io/'
 enableGitInfo = true
 enableRobotsTXT = true
-paginate = 15
+paginate = 8
 
 [frontmatter]
 date = ["date", ":filename"]
@@ -59,7 +59,7 @@ sameAs = [
 # Configure the home page
 [params.profileMode]
 enabled = true
-title = "Hi, I'm Richard ❀"
+title = "Hi, I'm Richard."
 subtitle = "I'm a hobby Python developer & FOSS maintainer who likes flowers."
 imageUrl = "/flower-profile-picture.webp"
 
