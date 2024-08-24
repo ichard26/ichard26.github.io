@@ -1,4 +1,4 @@
 ---
-title: Blogs
-description: Assorted thoughts and ramblings ❀ [Tags](../tags) - [RSS](index.xml)
+title: Blog
+description: Assorted thoughts and ramblings ❀
 ---

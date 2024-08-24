@@ -28,6 +28,8 @@ defaultTheme = "auto"
 showReadingTime = true
 showCodeCopyButtons = true
 showPostNavLinks = true
+ShowRssButtonInSectionTermList = true
+# ShowShareButtons = true
 env = "development"
 keywords = ["blog", "python", "black", "oss", "foss"]
 
@@ -62,6 +64,9 @@ enabled = true
 title = "Hi, I'm Richard."
 subtitle = "I'm a hobby Python developer & FOSS maintainer who likes flowers."
 imageUrl = "/flower-profile-picture.webp"
+buttons = [
+  { name = "Next PR Number", url = "https://ichard26.github.io/next-pr-number/" }
+]
 
 # Site-wide navigation
 [[menu.main]]

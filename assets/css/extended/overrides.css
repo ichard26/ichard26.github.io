@@ -9,19 +9,20 @@ main {
 
 /* Better links and include branding colour :wink: */
 .post-header, .post-content, .post-footer > .paginav, h2 {
-  --secondary: #bf0041;
+  --secondary: hsl(340, 100%, 37%);
 }
 /* The theme defaults to light mode, so that's why this comes after */
 .dark :where(.post-header, .post-content, .post-footer > .paginav, h2) {
-  --secondary: orange;
+  /* --secondary: orange !important; */
+  --secondary: hsl(354, 100%, 73%) !important;
 }
 
 /* box-shadow behaves weirdly in some situations, so let's use the more appropriate
  * text-underline-offset property to achieve the same look. */
 .post-content a, .post-content a > code {
+  color: color-mix(in srgb, var(--secondary) 35%, var(--content));
   box-shadow: none;
   text-decoration: underline;
-  text-underline-offset: 25%;
 }
 
 a:hover {
@@ -118,8 +119,14 @@ body > footer > span:nth-child(2)::after {
   width: fit-content;
   padding: 8px 12px;
   border-radius: 6px;
-  margin-left: calc(-1em - 6px) !important;
+  margin-left: 0;
 }
+@media (min-width: calc(768px + 3em)) {
+  .post-content h2 {
+    margin-left: calc(-1em - 6px) !important;
+  }
+}
+
 .post-content h2::before{
   content:">";
   color: var(--secondary);
@@ -186,4 +193,15 @@ article.post-entry:has(a:hover) {
 }
 .post-entry .last-modified + .delimiter {
   display: none;
+}
+
+.post-content .footnotes li {
+  margin-top: 12px;
+}
+
+.post-content a.footnote-ref::before {
+  content: "["
+}
+.post-content a.footnote-ref::after {
+  content: "]"
 }
