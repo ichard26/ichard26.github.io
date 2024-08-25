@@ -39,6 +39,9 @@ blockquote {
   border-inline-start: 3px solid color-mix(in srgb,var(--secondary), var(--theme) 40%) !important;
   font-weight: 300;
 }
+blockquote strong {
+  font-weight: bold;
+}
 
 /* Spacing for definition lists (thank you @pradyunsg) */
 .post-content > dl {
