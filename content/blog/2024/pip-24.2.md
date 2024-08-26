@@ -20,59 +20,12 @@ team, I'll walk you through the noteworthy or interesting changes from pip 24.2.
 >
 > \<insert-call-to-action>
 
-Here's a [link to the 24.2 changelog][changelog] if you'd like to have it while following
-along.
-
-## System HTTPS certificates by default(\*)
-
-If you've ever used pip in a corporate environment, there is a good chance that you've
-encountered a network or SSL verification error because the remote index server (PyPI or a
-private index) returned a HTTPS certificate that couldn't be verified.
-
-```console {.command hl_lines=[8]}
-python -m pip install toto
-Looking in indexes: https://repos.company/api/pypi/python_pypi/simple
-WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLError(0, 'unknown error (_ssl.c:3630)'),)': /api/pypi/python_pypi/simple/toto/
-WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLError(0, 'unknown error (_ssl.c:3630)'),)': /api/pypi/python_pypi/simple/toto/
-WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLError(0, 'unknown error (_ssl.c:3630)'),)': /api/pypi/python_pypi/simple/toto/
-WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLError(0, 'unknown error (_ssl.c:3630)'),)': /api/pypi/python_pypi/simple/toto/
-WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLError(0, 'unknown error (_ssl.c:3630)'),)': /api/pypi/python_pypi/simple/toto/
-Could not fetch URL https://repos.company/api/pypi/python_pypi/simple/toto/: There was a problem confirming the ssl certificate: HTTPSConnectionPool(host= 'repos.company', port=443): Max retries exceeded with url: /api/pypi/python_pypi/simple/toto/ (Caused by SSLError(SSLError(0, 'unknown error (_ssl.c:3630)'),)) - skipping
-ERROR: Could not find a version that satisfies the requirement toto (from versions: none)
-ERROR: No matching distribution found for toto
-```
-
-The problem is that while your system may be configured with the required certificate
-authorities, _pip had no ability to use those system CAs_. This resulted in a confusing
-user experience, because while your browser was likely able to access the index server,
-pip [blew up][issue-12560] with a non-obvious [error][issue-10777].
-
-To be able to verify HTTPS certificates, since the early days, pip has shipped with the
-[certifi] CA bundle, which is simply a Python repackaging of the Mozilla CA bundle. To get
-pip to verify HTTPS certificates not trusted by certifi, you had to pass your own bundle
-via the `--cert` option, which is clunky.
-
-In pip 22.2, pip gained the ability to use [truststore] for HTTPS certificate validation,
-enabling pip to use the system certificate store instead of solely relying on certifi. The
-integration was experimental; users had to have truststore already installed and to opt-in
-via `--use-feature=truststore`, but it was a step forward.[^1] The plan was to enable
-truststore by default once the feature matured.
-
-Two years later, in this pip release, **truststore is now enabled by default**.[^tandem]
-Thus, assuming your system is configured properly with the required CAs, pip should simply
-"just work" even in many corporate environments. 🎉
-
-There is one major problem though—you saw that asterisk, right? **Truststore only works on
-Python 3.10 or higher**, so on Python 3.9 or 3.8, pip will continue to exclusively use its
-certifi bundle. Additionally,
-[any Python implementation that does not implement the `ssl` module APIs needed by truststore][graalpy]
-will not be able to use the system trust store either. In these situations, you will need
-to continue using `--cert`.
-
-Major thanks goes to [@sethmlarson] for co-authoring truststore and writing patches
-improving and fixing pip's truststore integration!
+Here's a [link to the 24.2 changelog][changelog] if you'd like the full list of changes.
 
 ## Legacy editable installs are deprecated
+
+> TL;DR, **don't panic**. The `-e` option is _not_ deprecated, but the way it works under
+> the hood will change, potentially necessitating changes to how your project is packaged.
 
 Over the last decade, there has been a major transition towards **standardized
 mechanisms** for packaging Python projects:
@@ -104,10 +57,11 @@ project's backend supports PEP 660, `pip install -e` will continue to work. No s
 required. (Although modern setuptools works fine as well.)
 
 This release, pip has deprecated support for the `setup.py develop` fallback which is used
-when a project lacks support for modern editable installs.
+when a project lacks support for modern editable installs. **It will be removed in pip
+25.1 (Q2 2025)** after which projects MUST support PEP 660 to perform an editable install.
 
-```console {hl_lines=[5]}
-$ pip install -e temp/pip-test-package
+```console {.command hl_lines=[5]}
+pip install -e temp/pip-test-package
 Obtaining file:///home/ichard26/dev/oss/pip/temp/pip-test-package
   Preparing metadata (setup.py) ... done
 Installing collected packages: version_pkg
@@ -151,15 +105,174 @@ It's _long_, but packs way more information than I could ever _hope_ to cover. I
 addition, [setuptools' build system docs] and [setuptools' editable install docs] are good
 to read too.
 
-[^1]: This [was recognized as a problem in 2014][#1680], and pip gained the ability to
-    [use system certificates on Unix in 2015][pull-1866], but this change was later
-    reverted because it turned out
-    [none of the major distributions had a functional OpenSSL configuration at the time][system-ca-revert].
+## System HTTPS certificates by default(\*)
 
-[^tandem]: pip continues to use truststore in tandem with certifi. This is necessary for
-    platforms that do not support truststore, but also provides a fallback if the system
-    trust store is broken or otherwise inaccessible for some reason. There are currently
-    no plans for pip to switch to exclusively use truststore.
+If you've ever used pip in a corporate environment, there is a good chance that you've
+encountered a network or SSL verification error because the remote index server (PyPI or a
+private index) returned a HTTPS certificate that couldn't be verified.
+
+```console {.command hl_lines=[8]}
+pip install toto
+Looking in indexes: https://repos.company/api/pypi/python_pypi/simple
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLError(0, 'unknown error (_ssl.c:3630)'),)': /api/pypi/python_pypi/simple/toto/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLError(0, 'unknown error (_ssl.c:3630)'),)': /api/pypi/python_pypi/simple/toto/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLError(0, 'unknown error (_ssl.c:3630)'),)': /api/pypi/python_pypi/simple/toto/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLError(0, 'unknown error (_ssl.c:3630)'),)': /api/pypi/python_pypi/simple/toto/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLError(0, 'unknown error (_ssl.c:3630)'),)': /api/pypi/python_pypi/simple/toto/
+Could not fetch URL https://repos.company/api/pypi/python_pypi/simple/toto/: There was a problem confirming the ssl certificate: HTTPSConnectionPool(host= 'repos.company', port=443): Max retries exceeded with url: /api/pypi/python_pypi/simple/toto/ (Caused by SSLError(SSLError(0, 'unknown error (_ssl.c:3630)'),)) - skipping
+ERROR: Could not find a version that satisfies the requirement toto (from versions: none)
+ERROR: No matching distribution found for toto
+```
+
+The problem is that while your system may be configured with the required certificate
+authorities, _pip had no ability to use those system CAs_. This resulted in a confusing
+user experience, because while your browser was likely able to access the index server,
+pip [blew up][issue-12560] with a non-obvious [error][issue-10777].
+
+To be able to verify HTTPS certificates, since the early days, pip has shipped with the
+[certifi] CA bundle, which is simply a Python repackaging of the Mozilla CA bundle. To get
+pip to verify HTTPS certificates not trusted by certifi, you had to pass your own bundle
+via the `--cert` option, which is clunky.
+
+In pip 22.2, pip gained the ability to use [truststore] for HTTPS certificate validation,
+enabling pip to use the system certificate store instead of solely relying on certifi. The
+integration was experimental; users had to have truststore already installed and to opt-in
+via `--use-feature=truststore`, but it was a step forward.[^1] The plan was to enable
+truststore by default once the feature matured.
+
+Two years later, in this pip release, **truststore is now enabled by default**.[^tandem]
+Thus, assuming your system is configured properly with the required CAs, pip should simply
+"just work" even in many corporate environments. 🎉
+
+There is one major problem though—you saw that asterisk, right? **Truststore only works on
+Python 3.10 or higher**, so on Python 3.9 or 3.8, pip will continue to exclusively use its
+certifi bundle. Additionally,
+[any Python implementation that does not implement the `ssl` module APIs needed by truststore][graalpy]
+will not be ab le to use the system trust store either. In these situations, you will need
+to continue using `--cert`.
+
+Major thanks goes to [@sethmlarson] for co-authoring truststore and writing patches
+improving and fixing pip's truststore integration!
+
+## Performance optimizations, duh!
+
+In this release, several optimizations of the environment inspection, download, dependency
+resolution, and installation logic landed. While individually they are minor
+optimizations, together they provide a noticeable performance uplift in certain workloads!
+
+### Faster discovery of installed packages
+
+First of all, on Python 3.11 or higher, pip is significantly faster to discover installed
+packages (especially if there are a lot of 'em). This not only makes `pip list` faster,
+but also makes pip generally faster as it has to figure out what packages are already
+installed [quite frequently throughout its operation][importlib-opt-makes-install-faster].
+
+These are the before and after runtimes of `pip list` in my pip development environment
+which has 75 packages installed:
+
+```ini {hl_lines=[2]}
+# before: pip list (24.1)
+real	0m0.227s
+user	0m0.192s
+sys 	0m0.035s
+```
+
+```ini {hl_lines=[2]}
+# after: pip list (24.2)
+real	0m0.207s
+user	0m0.170s
+sys 	0m0.036s
+```
+
+On slower systems, the performance improvement will be greater.[^pip-startup-times] This
+uplift was achieved by optimizing pip's `importlib` based metadata backend to read
+distribution names and versions from the installed metadata directory
+names.[^installed-metadata] Previously, pip would read the name and version from the
+[`METADATA` file], which is slow as it involves an extra file read and invoking an email
+header parser.
+
+### Other optimizations
+
+- <download progress bar optimization>
+- <wheel extraction optimization>
+- <dependency optimization>
+- <wheel cache lookup optimization >
+
+## `pip check` just got a bit stricter
+
+The `check` pip command now verifies whether installed packages are declared to support
+the current platform, issuing a warning if a package is incompatible.
+
+```console {.command}
+pip check
+catboost 1.1.1 is not supported on this platform
+ninja 1.11.1.1 is not supported on this platform
+xgboost 1.6.1 is not supported on this platform
+frozendict 2.3.8 is not supported on this platform
+```
+
+Under the hood, for every package[^package-vs-distribution], pip reads the `WHEEL`
+metadata file that's installed alongside the package, and checks whether at least one of
+the compatibility tags is supported on the platform.
+
+For example, this is the `WHEEL` file from pip 24.2's wheel:
+
+```yaml
+# pip-24.2.dist-info/WHEEL
+Wheel-Version: 1.0
+Generator: setuptools (71.1.0)
+Root-Is-Purelib: true
+Tag: py3-none-any
+```
+
+`py3-none-any` is a platform compatibility tag. What's a compatibility tag?
+[They're essentially markers for what systems a package supports.][compat-tags] You can
+think of them like languages. They include information on the architecture, Python ABI,
+and Python version. Every system has a set of compatibility tags it supports. If a package
+and the system it's being installed to share a common tag—or with the analogy, _speak a
+shared language_—the package is considered compatible.
+
+Now, `pip install` already uses compatibility tags to ensure it only installs compatible
+packages. This extra check in `pip check` is designed to surface packages that were
+**compatible at the time of installation, but are no longer supported due to a system
+upgrade**. This is possible, especially as
+[Apple transitions from the `x86-64` architecture (Intel) to `arm64` (Apple Silicon)][apple].
+
+(Un)fortunately, this has had the side-effect of
+[revealing numerous packages with inaccurate or outright malformed metadata, leading to false positives][false-positives].
+This is annoying, but the pip project has been moving towards enforcing standards
+compliance so pip follows the standards instead of de facto writing
+them.[^pip-isn't-a-standard]
+
+## Oh yeah, `--require-virtualenv` is a thing
+
+You can configure pip to only function when running in _an activated virtual environment_
+via the `--require-virtual` flag. You can set this via a system-side or user-side
+configuration file, and it's great for ensuring you don't scribble all over your system or
+user Python environment.
+
+```console {.command}
+pip install black
+ERROR: Could not find an activated virtualenv (required).
+```
+
+Anyway, it's supposed to only apply to commands **that modify the environment**, like
+`pip install` or `pip uninstall`. Read-only commands, such as `pip list`, are unaffected
+by flag and will function even if a virtual environment is not activated.
+
+This release extends this QoL feature to `pip check` and `pip index`. You can now discover
+unsupported packages whenever you want :P
+
+## Summary
+
+pip 24.2 delivers considerable performance and QoL improvements. It also continues the pip
+project's goal of following and enforcing the use of and compliance with the
+interoperatability standards that have shaped modern Python packaging.
+
+I realize that this post is long, but this release contained some cool changes and I
+believed they deserved more attention than a brief entry in the changelog. I'm making no
+promises that I'll continue this series for future pip releases, but this sure was fun to
+write!
 
 [^its-more-complicated]: In reality, pip calls other hooks as well to query additional build dependencies and
     generate metadata, but this isn't the post where I explain pip's entire PEP 517
@@ -171,12 +284,50 @@ to read too.
     root of your package on `sys.path`. The new method is designed to ensure only files
     present at installation are exposed, mimicking a normal installation.
 
+[^1]: This [was recognized as a problem in 2014][#1680], and pip gained the ability to
+    [use system certificates on Unix in 2015][pull-1866], but this change was later
+    reverted because it turned out
+    [none of the major distributions had a functional OpenSSL configuration at the time][system-ca-revert].
+
+[^tandem]: pip continues to use truststore in tandem with certifi. This is necessary for
+    platforms that do not support truststore, but also provides a fallback if the system
+    trust store is broken or otherwise inaccessible for some reason. There are currently
+    no plans for pip to switch to exclusively use truststore.
+
+[^pip-startup-times]: Also, it's worth mentioning that 3/4 of the 200ms is taken by Python's own startup
+    overhead and importing everything `pip list` needs.
+
+[^installed-metadata]: If you dig into your `site-packages` directory, you'll notice that there is a bunch of
+    `<name>-<version>.dist-info` directories. These contain package metadata, and there is
+    one for each package installed. They are included in wheels and are copied during
+    installation.
+
+[^package-vs-distribution]: OK, so technically I should be saying "distribution" to avoid ambiguity as the term
+    "package" means something different under the Python import system, but distribution
+    sounds weird which is why I'm saying "package" still. I'm horribly inconsistent about
+    this though.
+
+[^pip-isn't-a-standard]: Historically, as pip was the only installer in town, various bits of pip's design or
+    behaviour has been become de facto standards. Even if there is a standard, "pip
+    supports X" or "pip does X" can be regularly seen in the issue trackers of other
+    packaging tools. While this is expected and unavoidable, it's unideal. We don't want
+    to be in the business of telling what everyone else should be doing, especially as pip
+    is old and has quirks and design flaws that frankly shouldn't exist, let alone be
+    copied by other tools. By gradually enforcing standards compliance, the Python
+    packaging ecosystem becomes more and more defined by _common specifications_, allowing
+    other packaging tools to function without reimplementing a bunch of pip bugs or
+    whatever.
+
 [#1680]: https://github.com/pypa/pip/issues/1680
 [@sethmlarson]: https://sethmlarson.dev/
+[apple]: https://github.com/pypa/pip/issues/12884
 [certifi]: https://pypi.org/project/certifi/
 [changelog]: https://pip.pypa.io/en/stable/news/#v24-2
+[compat-tags]: https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/
+[false-positives]: https://github.com/pypa/pip/issues/12884
 [graalpy]: https://github.com/pypa/pip/issues/12892
 [hatch]: https://hatch.pypa.io/latest/
+[importlib-opt-makes-install-faster]: https://github.com/pypa/pip/pull/12656#issuecomment-2097040577
 [issue-10777]: https://github.com/pypa/pip/issues/10777
 [issue-12560]: https://github.com/pypa/pip/issues/12560
 [paul ganssle article]: https://blog.ganssle.io/articles/2021/10/setup-py-deprecated.html
@@ -194,3 +345,4 @@ to read too.
 [strict editable installs]: https://setuptools.pypa.io/en/latest/userguide/development_mode.html#strict-editable-installs
 [system-ca-revert]: https://github.com/pypa/pip/commit/c77d4ab55ed412a3b72d0b73f504e8ddec918683
 [truststore]: https://pypi.org/project/truststore/
+[`metadata` file]: https://packaging.python.org/en/latest/specifications/recording-installed-packages/#the-metadata-file
