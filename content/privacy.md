@@ -2,16 +2,16 @@
 title: Privacy Statement
 description: TL;DR, I'm doing my best to not track you and respect your privacy as
   much as practically possible. All analytics are anonymized and follow GDPR, PECR
-  and CCPA. Data processors are GitHub Pages and Microanalytics.io.
+  and CCPA. Hosting is provided by GitHub Pages and DigitalOcean.
 layout: single
 showReadingTime: false
-modified: 2023-09-27
+modified: 2024-08-26
 ---
 
 ## Scope
 
-All content and resources served under <https://ichard26.github.io/> are subject to this
-privacy statement unless noted otherwise.
+All content and resources served under the `ichard26.github.io` and `floralily.dev`
+domains are subject to this privacy statement unless noted otherwise.
 
 **Exception**: this statement does not apply to the following URLs prefixes as they are
 served under a different GitHub repository without any data subprocessers (except for
@@ -26,31 +26,17 @@ source to help preserve your privacy.
 ## What is collected and not?
 
 This website does not use any cookies and all data used for analytics is anonymized.
-Please note as this website is hosted and served by [GitHub Pages][pages] (GitHub, Inc.)
-which does
+However, this website is hosted and served by [GitHub Pages][pages] (GitHub, Inc.) which
+does
 [**log IP addresses regardless whether you are signed into a GitHub account or not**][pages-data].
 
-Analytics are collected, processed, and provided by [Microanalytics.io] which is a privacy
-friendly web analytics service based in the EU. It is GDPR, PECR and CCPA compliant and
-does not track with IP addresses, cookies or fingerprinting. It currently collects the
-following information:
+Analytics are collected, processed, and provided by a self-hosted [Plausible] instance.
+Plausible is a privacy-focused analytics solution that collects no personally identifiable
+information and does not use persistent identifiers such as cookies or browser
+fingerprints.
 
-- Location as associated with your IP address
-
-- What and when pages were accessed, and the referring websites, search engines and social
-  networks
-
-- The operating system, browser, and the screen resolution of your device
-
-**If you would like to opt out of all analytics, please turn on Do Not Track in your
-browser.** To enable DNT for the major browsers please see the following resources:
-
-- **Google Chrome**: <https://support.google.com/chrome/answer/2790761>
-- **Firefox**: <https://support.mozilla.org/en-US/kb/how-do-i-turn-do-not-track-feature>
-- **Safari**: DNT cannot be enabled
-- **Google Chrome for Android**:
-  <https://support.google.com/chrome/answer/2790761?co=GENIE.Platform%3DAndroid&oco=1>
-- **Google Chrome for iPhone & iPad**: DNT is not available at this time
+Plausible and any other self-hosted APIs or services are hosted on a DigitalOcean VPS,
+with nginx access logs enabled.
 
 ## Cookies & localStorage
 
@@ -73,6 +59,12 @@ stored is purely used for functionality including:
   The API logs IP addresses and user-agents for usage monitoring and abuse prevention.
 
 ## History
+
+<details>
+<summary>Click to show</summary>
+
+- **August 26, 2024**: Web analytics are now provided by a self-hosted Plausible Community
+  Edition instance.
 
 - **September 27, 2023**: Next PR Number is now powered by a backend that I own and
   control. The host and API do have minimal logging set up. This eliminates the
@@ -100,6 +92,9 @@ stored is purely used for functionality including:
 - **May 13, 2022**: Next PR Number (<https://ichard26.github.io/next-pr-number/>) now uses
   [microanalytics.io] in accordance in this privacy statement
 
+</details>
+
 [microanalytics.io]: https://microanalytics.io/
 [pages]: https://pages.github.com/
 [pages-data]: https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages#data-collection
+[plausible]: https://plausible.io/data-policy
