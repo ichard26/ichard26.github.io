@@ -81,8 +81,9 @@ In practice, this usually means one of two things:
 - The declared setuptools version (in the `[build-system].requires` field) is too old and
   doesn't support PEP 660, i.e. anything older than [setuptools 64.0.0]
 
-For affected projects, the best solution is to **use a modern version of setuptools and
-declare this via `pyproject.toml`**.
+For affected projects, the best solution is likely to **use a modern version of setuptools
+and declare this via `pyproject.toml`**. You can place your project metadata in this file
+as well, but it's _not_ required to stop the legacy editable deprecation warnings.
 
 ```toml
 # pyproject.toml
@@ -101,11 +102,18 @@ declared, pip will assume that the project uses setuptools and ensure it's avail
 the isolated build environment. As long as setuptools 64+ still supports your Python
 version, a modern editable install will be performed.
 
-One potential snag is that setuptools has introduced a new kind of editable installs while
-rolling out PEP 660. They're called [strict editable installs], which behave closer to a
-normal installation, but are implemented in an entirely different way from
-`setup.py develop`, potentially breaking certain workflows. If the
-[legacy behaviour is desired][legacy-editable], one must pass
+Finally, if you don't like either of those solutions, you can always throw away setuptools
+and switch to a different backend entirely. I've mentioned a few earlier, but there are
+even more options to choose from if you're willing to do some research and play around.
+I'd start with with the
+[Python Packaging User Guide's list of the commonly used backends][backends] if you want
+to replace setuptools.
+
+If you stick with setuptools, one potential snag is that setuptools has introduced a new
+kind of editable installs while rolling out PEP 660. They're called
+[strict editable installs], which behave closer to a normal installation, but are
+implemented in an entirely different way from `setup.py develop`, potentially breaking
+certain workflows. If the [legacy behaviour is desired][legacy-editable], one must pass
 `--config-settings editable_mode=compat`.[^strict-editables]
 
 > **Warning**: Static analysis tools including mypy, pyright, and pylint may not function
@@ -375,6 +383,7 @@ of course my own.
 [#1680]: https://github.com/pypa/pip/issues/1680
 [@sethmlarson]: https://sethmlarson.dev/
 [apple]: https://github.com/pypa/pip/issues/12884
+[backends]: https://packaging.python.org/en/latest/guides/tool-recommendations/#build-backends
 [certifi]: https://pypi.org/project/certifi/
 [changelog]: https://pip.pypa.io/en/stable/news/#v24-2
 [compat-tags]: https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/
