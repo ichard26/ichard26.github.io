@@ -35,11 +35,13 @@ a:hover {
   transition-duration: 70ms;
 }
 
-blockquote {
-  border-inline-start: 3px solid color-mix(in srgb,var(--secondary), var(--theme) 40%) !important;
+.post-content blockquote {
+  background-color: color-mix(in srgb,var(--secondary), var(--theme) 96%);
+  max-width: fit-content;
+  border-inline-start: 3px solid color-mix(in srgb,var(--secondary), var(--theme) 40%);
   font-weight: 300;
 }
-blockquote strong {
+.post-content blockquote strong {
   font-weight: bold;
 }
 
@@ -207,4 +209,8 @@ article.post-entry:has(a:hover) {
 }
 .post-content a.footnote-ref::after {
   content: "]"
+}
+
+.post-content :not(.highlight > pre) > code {
+  white-space: nowrap;
 }
