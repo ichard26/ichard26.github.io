@@ -1,11 +1,12 @@
 ---
-title: What's new in pip 24.2
+title: What's new in pip 24.2 — or why legacy editable installs are deprecated
+slug: whats-new-in-pip-24.2
 description: &desc >-
   In version 24.2, pip learns to use system certificates by default, receives a
-  handful of optimizations, and deprecates legacy editable installations.
+  handful of optimizations, and deprecates legacy (setup.py develop) editable installations.
 summary: *desc
 date: 2024-08-26
-tags: [pip, release]
+tags: [pip, release, deprecation]
 showToc: true
 ---
 
@@ -17,7 +18,7 @@ team, I'll walk you through the noteworthy or interesting changes from pip 24.2.
 > If you're using setuptools, do not have a `pyproject.toml`, and use pip's `-e` flag, you
 > may be impacted by the [deprecation of legacy editable installs][editable-deprecation].
 >
-> If this is the case, you should read the next part to avoid future breakage.
+> If this is the case, you should read the next part to avoid **future breakage**.
 
 Here's a [link to the 24.2 changelog][changelog] if you'd like the full list of changes.
 
@@ -30,8 +31,8 @@ Over the last decade, there has been a major transition towards **standardized
 mechanisms** for packaging Python projects:
 
 - **[PEP 517]**: introduced an interface where frontends (e.g. the pip installer) can
-  interact with a build backend (e.g. poetry), including asking it to build a wheel for
-  later installation
+  interact with a build backend (e.g. Poetry[^backends]), including asking it to build a
+  wheel for later installation
 - **[PEP 518]**: introduced `pyproject.toml` and defined a standard format for declaring
   build-time dependencies using this file
 - **[PEP 621]**: defined a standard format for declaring project metadata in
@@ -39,7 +40,7 @@ mechanisms** for packaging Python projects:
 - **[PEP 660]**: augmented the PEP 517 interface to define a way to ask a build backend to
   prepare an editable install
 
-These PEPs are what enable the use of alternative backends like [poetry], [hatch], and
+These PEPs are what enable the use of alternative backends like [Poetry], [Hatch], and
 [scikit-build-core] _without needing to add specific support for each backend_ in every
 frontend (e.g. pip, tox, uv). Instead of running `setup.py bdist_wheel` to ask setuptools
 to build a wheel for installation, pip can simply call the `build_wheel`
@@ -54,6 +55,8 @@ only feature, requiring pip to call the project's `setup.py` with the `develop`
 sub-command. However, this stopped being the case under [PEP 660]. As long as your
 project's backend supports PEP 660, `pip install -e` will continue to work. No setuptools
 required. (Although modern setuptools works fine as well.)
+
+### OK, so what now?
 
 This release,
 [pip has deprecated support for the `setup.py develop` fallback][editable-deprecation]
@@ -110,12 +113,17 @@ normal installation, but are implemented in an entirely different way from
 > [This is a known issue][strict-editable-analysis]. The recommended workaround is to pass
 > `--config-settings editable_mode=compat`.
 
+For more details using setuptools with `pyproject.toml`, you should read their
+documentation:
+
+- ⭐ [User guide to using `pyproject.toml`][setuptools-pyproject.toml] ⭐
+- ⭐ [setuptools' editable install docs] ⭐
+- [setuptools' build system docs]
+
 If you'd like to learn more, especially about the history of why and how these standards
 came to exist, **I strongly recommend
 [reading Paul Ganssle's excellent "Why you shouldn't invoke setup.py directly" article][paul ganssle article]**.
-It's _long_, but packs way more information than I could ever _hope_ to cover. In
-addition, [setuptools' build system docs] and [setuptools' editable install docs] are good
-to read too.
+It's _long_, but packs way more information than I could ever _hope_ to cover.
 
 ## System HTTPS certificates by default(\*)
 
@@ -312,6 +320,14 @@ believed they deserved more attention than a brief entry in the changelog. I mak
 promises that I'll continue this series for future pip releases, but this sure was fun to
 write!
 
+Finally, I'd like to thank Bartosz Sokorski, Bradley Reynolds, Hugo van Kemenade, and Paul
+Moore for reviewing this post in draft form and suggesting improvements. Any mistakes are
+of course my own.
+
+[^backends]: Poetry is the all encompassing user-facing tool for packaging and dependency
+    management, while `poetry-core` is its backend. The same nitpick exists for all other
+    "backends" I mention.
+
 [^its-more-complicated]: In reality, pip calls other hooks as well to query additional build dependencies and
     generate metadata, but this isn't the post where I explain pip's entire PEP 517
     implementation.
@@ -387,6 +403,7 @@ write!
 [setuptools 64.0.0]: https://setuptools.pypa.io/en/latest/history.html#v64-0-0
 [setuptools' build system docs]: https://setuptools.pypa.io/en/latest/build_meta.html
 [setuptools' editable install docs]: https://setuptools.pypa.io/en/latest/userguide/development_mode.html
+[setuptools-pyproject.toml]: https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
 [strict editable installs]: https://setuptools.pypa.io/en/latest/userguide/development_mode.html#strict-editable-installs
 [strict-editable-analysis]: https://github.com/pypa/setuptools/issues/3518
 [system-ca-revert]: https://github.com/pypa/pip/commit/c77d4ab55ed412a3b72d0b73f504e8ddec918683
