@@ -18,7 +18,9 @@ team, I'll walk you through the noteworthy or interesting changes from pip 24.2.
 > If you're using setuptools, do not have a `pyproject.toml`, and use pip's `-e` flag, you
 > may be impacted by the [deprecation of legacy editable installs][editable-deprecation].
 >
-> If this is the case, you should read the next part to avoid **future breakage**.
+> If you're an user of setuptools and came to this post after seeing the legacy editable
+> install deprecation warning,
+> [you should read the deprecation issue for solutions, **not here**][editable-deprecation].
 
 Here's a [link to the 24.2 changelog][changelog] if you'd like the full list of changes.
 
@@ -58,10 +60,16 @@ required. (Although modern setuptools works fine as well.)
 
 ### OK, so what now?
 
+> If you're an user of setuptools and came to this post after seeing this deprecation
+> warning,
+> [you should read the deprecation issue for solutions, **not here**][editable-deprecation].
+> The text below is geared towards technical users interested in learning more about how
+> Python packaging works.
+
 This release,
 [pip has deprecated support for the `setup.py develop` fallback][editable-deprecation]
 which is used when a project lacks support for modern editable installs. **It will be
-removed in pip 25.1 (Q2 2025)** after which projects MUST support PEP 660 to perform an
+removed in pip 25.0 (Q1 2025)** after which projects MUST support PEP 660 to perform an
 editable install. Affected projects will see this deprecation warning:
 
 ```console {.command hl_lines=[5]}
@@ -99,8 +107,9 @@ build-backend = "setuptools.build_meta"
 Alternatively, projects can pass the `--enable-pep517` flag to force pip to use the PEP
 517 interface, including the editable install extensions from PEP 660. If no backend is
 declared, pip will assume that the project uses setuptools and ensure it's available in
-the isolated build environment. As long as setuptools 64+ still supports your Python
-version, a modern editable install will be performed.
+the isolated build environment.[^isolation] As long as setuptools 64+ still supports your
+Python version, a modern editable install will be performed. Once the legacy mechanism is
+removed, `--use-pep517` will have no effect and will essentially be enabled by default.
 
 Finally, if you don't like either of those solutions, you can always throw away setuptools
 and switch to a different backend entirely. I've mentioned a few earlier, but there are
@@ -339,6 +348,10 @@ of course my own.
 [^its-more-complicated]: In reality, pip calls other hooks as well to query additional build dependencies and
     generate metadata, but this isn't the post where I explain pip's entire PEP 517
     implementation.
+
+[^isolation]: `--no-build-isolation` may be needed if the project has build-time requirements beyond
+    setuptools and wheel. By passing this flag, you are responsible for making sure your
+    environment already has the required dependencies to build your package.
 
 [^strict-editables]: As of writing, the TL;DR is that strict editables are implemented as a tree of file
     links to the original source files in an auxiliary directory which is then added to
