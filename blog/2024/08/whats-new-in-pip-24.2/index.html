@@ -145,7 +145,7 @@ reasons, like <code>requires-python</code> restrictions).</p><p>Now, <code>pip i
 packages. This extra check in <code>pip check</code> is designed to surface packages that were
 <strong>compatible at the time of installation, but are no longer supported due to a system
 upgrade</strong>. This is possible, especially as
-<a href=https://github.com/pypa/pip/issues/12884 target=_blank>Apple transitions from the <code>x86-64</code> architecture (Intel) to <code>arm64</code> (Apple Silicon)</a>.</p><p>(Un)fortunately, this has had the side-effect of
+<a href=https://github.com/pypa/pip/issues/11054 target=_blank>Apple transitions from the <code>x86-64</code> architecture (Intel) to <code>arm64</code> (Apple Silicon)</a>.</p><p>(Un)fortunately, this has had the side-effect of
 <a href=https://github.com/pypa/pip/issues/12884 target=_blank>revealing numerous packages with inaccurate or outright malformed metadata, leading to false positives</a>.
 This is annoying, but regarded as an intentional side-effect as the pip project has been
 moving towards enforcing standards compliance so pip follows the standards instead of de
