@@ -382,7 +382,7 @@ of course my own.
 
 [#1680]: https://github.com/pypa/pip/issues/1680
 [@sethmlarson]: https://sethmlarson.dev/
-[apple]: https://github.com/pypa/pip/issues/12884
+[apple]: https://github.com/pypa/pip/issues/11054
 [backends]: https://packaging.python.org/en/latest/guides/tool-recommendations/#build-backends
 [certifi]: https://pypi.org/project/certifi/
 [changelog]: https://pip.pypa.io/en/stable/news/#v24-2
