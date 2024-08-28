@@ -116,15 +116,18 @@ I'd start with with the
 [Python Packaging User Guide's list of the commonly used backends][backends] if you want
 to replace setuptools.
 
-If you stick with setuptools, one potential snag is that setuptools has introduced a new
+~~If you stick with setuptools, one potential snag is that setuptools has introduced a new
 kind of editable installs while rolling out PEP 660. They're called
 [strict editable installs], which behave closer to a normal installation, but are
 implemented in an entirely different way from `setup.py develop`, potentially breaking
 certain workflows. If the [legacy behaviour is desired][legacy-editable], one must pass
-`--config-settings editable_mode=compat`.[^strict-editables]
+`--config-settings editable_mode=compat`.[^strict-editables]~~ (**Update**: a setuptools
+maintainer reached out to me and informed that strict editable installs are not enabled by
+default. The situation regarding potential breakage is a bit more nuanced. I'll fix this
+post later when I get the chance.)
 
 > **Warning**: Static analysis tools including mypy, pyright, and pylint may not function
-> properly with strict editable installs.
+> properly when setuptools uses an import hook to implement an editable install.
 > [This is a known issue][strict-editable-analysis]. The recommended workaround is to pass
 > `--config-settings editable_mode=compat`.
 
