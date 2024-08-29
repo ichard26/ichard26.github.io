@@ -6,7 +6,7 @@ description: &desc >-
   handful of optimizations, and deprecates legacy (setup.py develop) editable installations.
 summary: *desc
 date: 2024-08-26
-modified: 2024-08-28
+modified: 2024-08-29
 tags: [pip, release, deprecation]
 showToc: true
 ---
@@ -116,15 +116,25 @@ I'd start with with the
 [Python Packaging User Guide's list of the commonly used backends][backends] if you want
 to replace setuptools.
 
-~~If you stick with setuptools, one potential snag is that setuptools has introduced a new
-kind of editable installs while rolling out PEP 660. They're called
-[strict editable installs], which behave closer to a normal installation, but are
-implemented in an entirely different way from `setup.py develop`, potentially breaking
-certain workflows. If the [legacy behaviour is desired][legacy-editable], one must pass
-`--config-settings editable_mode=compat`.[^strict-editables]~~ (**Update**: a setuptools
-maintainer reached out to me and informed that strict editable installs are not enabled by
-default. The situation regarding potential breakage is a bit more nuanced. I'll fix this
-post later when I get the chance.)
+If you stick with setuptools, one potential snag is that setuptools has introduced a new
+kind of editable installs while rolling out PEP 660 by default:
+
+- If a package uses the "src" layout or otherwise places the source code in a separate
+  top-level directory, setuptools will create a static `.pth` file to extend the Python
+  import path with that directory
+- If a package uses the "flat" layout, setuptools will install a custom import hook which
+  intercepts imports and "redirects" them to the original modules (so auxiliary top-level
+  files like `noxfile.py` or `setup.py` or a `tests` package aren't importable)
+
+If the [legacy behaviour is desired][legacy-editable], one must pass
+`--config-settings editable_mode=compat`. There is also one more method:
+[strict editable installs]. They behave closer to a normal installation, but are
+implemented in an entirely different way from `setup.py` or the default method described
+above.[^strict-editables]
+
+_(**Update**: a setuptools maintainer reached out to strict editable installs are not
+enabled by default. It turns out that the situation behind potential breakage is a bit
+more nuanced. Sorry!)_
 
 > **Warning**: Static analysis tools including mypy, pyright, and pylint may not function
 > properly when setuptools uses an import hook to implement an editable install.
