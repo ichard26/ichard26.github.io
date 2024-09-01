@@ -368,7 +368,9 @@ of course my own.
     links to the original source files in an auxiliary directory which is then added to
     `sys.path`, while legacy "compat mode" editables are implemented by placing the entire
     root of your package on `sys.path`. The new method is designed to ensure only files
-    present at installation are exposed, mimicking a normal installation.
+    present at installation are exposed, mimicking a normal installation. It's rather neat
+    that setuptools has support for all three methods described for implementing an
+    editable install in PEP 660.
 
 [^1]: This [was recognized as a problem in 2014][#1680], and pip gained the ability to
     [use system certificates on Unix in 2015][pull-1866], but this change was later

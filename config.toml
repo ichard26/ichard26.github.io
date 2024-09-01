@@ -40,6 +40,7 @@ socialIcons = [
   # { name = "twitter", url = "https://twitter.com/sichard26" },
   { name = "python discourse", url = "https://discuss.python.org/u/ichard26/summary" },
   { name = "stackoverflow", url = "https://stackoverflow.com/users/18155471/ichard26"},
+  { name = "mastodon", url = "https://fosstodon.org/@ichard26" }
   # { name = "reddit", url = "https://www.reddit.com/user/ichard26" },
 ]
 
