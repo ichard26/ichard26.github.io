@@ -214,3 +214,8 @@ article.post-entry:has(a:hover) {
 .post-content :not(.highlight > pre) > code {
   white-space: nowrap;
 }
+
+.post-content summary {
+  color: var(--secondary);
+  margin: 1rem 0;
+}

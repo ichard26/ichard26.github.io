@@ -21,5 +21,5 @@
 {{- end }}
 
 {{- with ($scratch.Get "meta") }}
-{{- delimit . "<span class='delimiter'>&nbsp;·&nbsp;</span>" -}}
+{{- delimit . "<span class='delimiter'>&nbsp;·&nbsp;</span>" | safeHTML -}}
 {{- end -}}
