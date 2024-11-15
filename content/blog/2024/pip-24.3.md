@@ -49,18 +49,19 @@ but all you need to know is that:
 - There are two potential root causes:
   - **You don't have a `pyproject.toml` file**, thus pip will opt-out of the modern
     mechanisms and run `setup.py` directly as required
-  - **OR**: Your packaging setup is so old that it requires a version of setuptools (>64)
+  - **OR**: Your packaging setup is so old that it requires a version of setuptools (\<64)
     which lacks support for the modern editable installation mechanism (PEP 660)
 - The easiest way to address the deprecation is to **add a `pyproject.toml` file that
   declares your package's build system to be setuptools**
+  ([see this issue for an example][deprecation])
 - **You can keep your `setup.py` file.** It's a configuration file for setuptools, and
   setuptools still supports it. Pip simply won't be running it directly anymore,
   delegating to setuptools.
   - If you wish, you can migrate your packaging setup to `pyproject.toml` entirely, but
     this isn't necessary
 
-To learn more, please [see the issue tracking this deprecation][deprecation] and
-[this comment]. You can also read my write-up on pip 24.2 which goes into more detail.
+**For more advice, please [see the issue tracking this deprecation][deprecation] and
+[this comment].** You can also read my [write-up on pip 24.2] which goes into more detail.
 
 ## QoL improvements
 
@@ -168,6 +169,7 @@ horrible traceback in these cases.
 <summary> Show another lengthy error </summary>
 
 ```console { .command }
+pip install celery
 Requirement already satisfied: celery in ./venv/lib/python3.12/site-packages (4.4.7)
 ERROR: Exception:
 Traceback (most recent call last):
@@ -368,3 +370,4 @@ they are not :)
 [truststore bug]: https://github.com/pypa/pip/pull/12918
 [version specifier standard]: https://packaging.python.org/en/latest/specifications/version-specifiers/#implicit-post-releases
 [wheel-filenames]: https://packaging.python.org/en/latest/specifications/binary-distribution-format/#file-name-convention
+[write-up on pip 24.2]: /blog/2024/08/whats-new-in-pip-24.2/
