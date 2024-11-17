@@ -8,6 +8,7 @@ description: &desc >-
   deprecation of noncompliant wheel filenames.
 summary: *desc
 date: 2024-11-14
+modified: 2024-11-17
 tags: [pip, release]
 showToc: true
 ---
@@ -25,8 +26,8 @@ of this write-up.
 > TL;DR, **don't panic**. The `-e` option is _not_ deprecated, but the way it works under
 > the hood will change, potentially necessitating changes to how your project is packaged.
 
-If you aren't aware, since pip 24.2, legacy editable installs are deprecated and **support
-is scheduled for removal in pip 25.0 in the new year** (at the time of writing).
+If you aren't aware, since pip 24.2, **legacy** editable installs are deprecated and
+**support is scheduled for removal in pip 25.0 in the new year** (at the time of writing).
 
 ```console {.command hl_lines=[5]}
 pip install -e temp/pip-test-package
@@ -46,23 +47,26 @@ in [PEP 660].
 If you're confused, don't worry. The implementation details are admittedly a bit complex,
 but all you need to know is that:
 
-- This will only affect you if you're using setuptools to package your project
-- There are two potential root causes:
-  - **You don't have a `pyproject.toml` file**, thus pip will opt-out of the modern
-    mechanisms and run `setup.py` directly as required
-  - **OR**: Your packaging setup is so old that it requires a version of setuptools (\<64)
-    which lacks support for the modern editable installation mechanism (PEP 660)
+- You will see this deprecation notice **if the package** you are trying to install has
+  **setuptools as its build backend AND**:
+  - **EITHER this package does not have a valid [build system declaration]**, thus pip
+    will opt-out of the modern mechanisms and run `setup.py` directly as required
+  - **OR this package’s build system declaration explicitly requests a version setuptools
+    older than version 64** which lacks support for the modern editable installation
+    mechanism (PEP 660)
 - The easiest way to address the deprecation is to **add a `pyproject.toml` file that
-  declares your package's build system to be setuptools**
-  ([see this issue for an example][deprecation])
+  declares your package's build system to be setuptools** (see the guide
+  ["How to modernize a setup.py based project?"] for more details)
 - **You can keep your `setup.py` file.** It's a configuration file for setuptools, and
   setuptools still supports it. pip simply won't be running it directly anymore,
-  delegating to setuptools.
+  delegating to setuptools (see the discussion ["Is setup.py deprecated?"] for more
+  details).
   - If you wish, you can migrate your packaging setup to `pyproject.toml` entirely, but
     this isn't necessary
 
 **For more advice, please [see the issue tracking this deprecation][deprecation] and
-[this comment].** You can also read my [write-up on pip 24.2] which goes into more detail.
+[this comment].** You can also read my [write-up on pip 24.2] which discusses the context
+behind the deprecation.
 
 ## QoL improvements
 
@@ -249,8 +253,11 @@ they are not :)
     8000 PyPI packages and could only find 4 ancient wheels that have this quirk in their
     filename.
 
+["how to modernize a setup.py based project?"]: https://packaging.python.org/en/latest/guides/modernize-setup-py-project/
+["is setup.py deprecated?"]: https://packaging.python.org/en/latest/discussions/setup-py-deprecated/
 [#12918]: https://github.com/pypa/pip/pull/12918
 [#13046]: https://github.com/pypa/pip/issues/13046
+[build system declaration]: https://packaging.python.org/en/latest/specifications/pyproject-toml/#declaring-build-system-dependencies-the-build-system-table
 [compat-tags]: /blog/2024/08/whats-new-in-pip-24.2/#pip-check-just-got-a-bit-stricter
 [confusing crashes]: https://github.com/pypa/pip/issues/8438
 [data race crash anymore]: https://github.com/pypa/pip/issues/12666

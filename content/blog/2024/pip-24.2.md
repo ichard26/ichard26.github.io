@@ -19,8 +19,8 @@ team, I'll walk you through the noteworthy or interesting changes from pip 24.2.
 > If you're using setuptools, do not have a `pyproject.toml`, and use pip's `-e` flag, you
 > may be impacted by the [deprecation of legacy editable installs][editable-deprecation].
 >
-> If you're an user of setuptools and came to this post after seeing the legacy editable
-> install deprecation warning,
+> **If you're an user of setuptools and came to this post after seeing the legacy editable
+> install deprecation warning**,
 > [you should first read the deprecation issue for solutions, **not here**][editable-deprecation].
 >
 > You can come back and read this after for more historical context on the deprecation,
