@@ -51,7 +51,7 @@ projects. The projects I'm proud to have contributed to are:
   Python type hints and mypy's type checking and type inference features to generate fast
   code.
 
-[pip] _triager & contributor_ _2024 - present_
+[pip] _co-maintainer_ _2024 - present_
 : "pip installs packages" - The de facto official Python package installer.
 
 <!--
