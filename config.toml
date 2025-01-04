@@ -12,7 +12,9 @@ theme = ["hugo-admonitions", "PaperMod"]
 baseURL = 'https://ichard26.github.io/'
 enableGitInfo = true
 enableRobotsTXT = true
-paginate = 8
+
+[pagination]
+pagerSize = 8
 
 [frontmatter]
 date = ["date", ":filename"]
