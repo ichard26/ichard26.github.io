@@ -1,3 +1,8 @@
+:root {
+  /* Shrink regular text by a bit since it feels too big. */
+  --text-size: 16px;
+}
+
 main {
   /* --main-width: 800px; */
   --main-width: 74ch;
@@ -13,7 +18,6 @@ main {
 }
 /* The theme defaults to light mode, so that's why this comes after */
 .dark :where(.post-header, .post-content, .post-footer > .paginav, h2) {
-  /* --secondary: orange !important; */
   --secondary: hsl(354, 100%, 73%) !important;
 }
 
@@ -105,57 +109,35 @@ a:hover {
   margin: calc(var(--content-gap) * 1.5) 2px;
 }
 
-/* This might be a hack, but this allows me to improve the footer contents without
-   having to copy the whole footer.html template.
-*/
-body > footer > span:nth-child(2)::after {
-  content: "with many tweaks";
-}
-
-/* Shrink regular text by a bit since it feels too big. */
-.post-content p, .post-content li {
-  font-size: 17px;
+.post-content p, .post-content li, .post-single .post-description {
+  font-size: var(--text-size);
 }
 
 /* Highlight h2 uniquely */
 .post-content h2 {
-  font-family: serif;
-  background-color: color-mix(in srgb,var(--secondary), var(--theme) 92%);
+  border-bottom: 3px solid var(--tertiary);
   width: fit-content;
-  padding: 8px 12px;
-  border-radius: 6px;
+  padding: 8px 6px;
+  padding-left: 0;
   margin-left: 0;
-}
-@media (min-width: calc(768px + 3em)) {
-  .post-content h2 {
-    margin-left: calc(-1em - 6px) !important;
-  }
+  font-size: calc(var(--text-size) * 1.9);
 }
 
 .post-content h2::before{
   content:">";
   color: var(--secondary);
-  width: 1em;
   display: inline-block;
+  position: absolute;
+  left: -10px;
 }
 
 article.post-entry:has(a:hover) {
   transform: scale(0.95);
 }
 
-/* Make h3 bigger since h4 is being enlarged below. */
-.post-content h3 {
-  font-size: 24px;
-}
-
 /* This should at least match if not be bigger than regular text. */
 .post-content h4 {
-  font-size: 20px;
-}
-
-/* Post descriptions should visually differ from the post text. */
-.post-single .post-description {
-  font-size: 16px;
+  font-size: calc(var(--text-size) + 2px);
 }
 
 /* Images should be centered horizontally instead of being left-aligned. */
@@ -165,7 +147,7 @@ article.post-entry:has(a:hover) {
 
 /* Footnotes can and should be smaller than regular text. */
 .footnotes p {
-  font-size: 16px;
+  font-size: calc(var(--text-size) - 1px);
 }
 
 /* $ prompt for command code blocks. */
@@ -218,4 +200,20 @@ article.post-entry:has(a:hover) {
 .post-content summary {
   color: var(--secondary);
   margin: 1rem 0;
+}
+
+/* More compact admonitions */
+.post-content .admonition-header {
+  font-size: 1rem;
+  padding: 0.2rem 1rem;
+}
+.post-content .admonition-content {
+  padding: 0.8rem;
+}
+.post-content .admonition-content p {
+  font-size: calc(var(--text-size) - 1px);
+}
+.post-content .admonition-content code {
+  background: var(--code-bg) !important;
+  color: var(--content) !important;
 }

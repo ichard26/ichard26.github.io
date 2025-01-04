@@ -7,7 +7,7 @@ defaultContentLanguage = "en-ca"
 timeZone = "America/Toronto"
 copyright = "© 2022-present, Richard Si"
 
-theme = "PaperMod"
+theme = ["hugo-admonitions", "PaperMod"]
 
 baseURL = 'https://ichard26.github.io/'
 enableGitInfo = true
