@@ -109,8 +109,13 @@ a:hover {
   margin: calc(var(--content-gap) * 1.5) 2px;
 }
 
-.post-content p, .post-content li, .post-single .post-description {
+/* Enforce a customized text size */
+.post-content p, .post-content li, .post-single .post-description, .post-content table {
   font-size: var(--text-size);
+}
+/* Add more horizontal spacing between cells */
+table :where(th, td) {
+  padding: 6px 8px !important;
 }
 
 /* Highlight h2 uniquely */
@@ -209,6 +214,14 @@ article.post-entry:has(a:hover) {
 }
 .post-content .admonition-content {
   padding: 0.8rem;
+}
+body .admonition-content {
+  background: white !important;
+  color: black !important;
+}
+body.dark .admonition-content {
+  background: #1D1E20 !important;
+  color: #e6e6e6 !important;
 }
 .post-content .admonition-content p {
   font-size: calc(var(--text-size) - 1px);
