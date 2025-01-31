@@ -76,6 +76,9 @@ a:hover {
 .post-content dt em:nth-child(2) {
   font-weight: 500;
 }
+.post-content dd {
+  font-size: var(--text-size);
+}
 
 /* Make navigation look nicer (thanks @pradyunsg) */
 .paginav {
@@ -200,6 +203,7 @@ article.post-entry:has(a:hover) {
 
 .post-content :not(.highlight > pre) > code {
   white-space: nowrap;
+  padding: 3px 5px;
 }
 
 .post-content summary {
@@ -210,23 +214,38 @@ article.post-entry:has(a:hover) {
 /* More compact admonitions */
 .post-content .admonition-header {
   font-size: 1rem;
-  padding: 0.2rem 1rem;
+  font-weight: 500;
+  padding: 0.1rem 0.8rem;
+}
+.post-content .admonition-content p {
+  font-size: calc(var(--text-size) - 1.5px);
 }
 .post-content .admonition-content {
-  padding: 0.8rem;
+  padding: 0.5rem 0.8rem;
+}
+/* Style adminition to match blog style */
+body.dark .post-content .admonition {
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4)
+}
+.admonition:not(.warning) {
+  border-left-color: var(--secondary) !important;
+}
+.admonition:not(.warning) .admonition-header {
+  color: var(--secondary) !important;
+  background-color: color-mix(in srgb, var(--secondary), transparent 92%) !important;
+}
+.post-content .admonition-header svg {
+  height: 1rem;
 }
 body .admonition-content {
   background: white !important;
-  color: black !important;
+  color: var(--content) !important;
 }
 body.dark .admonition-content {
   background: #1D1E20 !important;
-  color: #e6e6e6 !important;
-}
-.post-content .admonition-content p {
-  font-size: calc(var(--text-size) - 1px);
 }
 .post-content .admonition-content code {
   background: var(--code-bg) !important;
   color: var(--content) !important;
+  font-size: 0.78em;  /* taken from papermod to override adminition's bad value */
 }
