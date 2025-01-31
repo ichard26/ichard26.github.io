@@ -131,12 +131,14 @@ table :where(th, td) {
   font-size: calc(var(--text-size) * 1.9);
 }
 
-.post-content h2::before{
-  content:">";
-  color: var(--secondary);
-  display: inline-block;
-  position: absolute;
-  left: -10px;
+@media (min-width: calc(768px + 6em)) {
+  .post-content h2::before{
+    content:">";
+    color: var(--secondary);
+    display: inline-block;
+    position: absolute;
+    left: -10px;
+  }
 }
 
 article.post-entry:has(a:hover) {

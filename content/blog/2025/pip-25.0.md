@@ -38,7 +38,7 @@ packages can declare the path to their licensing-related files.
 
 It took a few months, but it is now generally supported by build backends, publishing
 tools, and PyPI. With this release, `pip show` will display the `License-Expression` over
-the `License` field.[^metadata-version]
+the `License` field when available.[^metadata-version]
 
 ```console { hl_lines=[9] }
 $ pip install prettytable==3.13.0
