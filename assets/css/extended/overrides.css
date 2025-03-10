@@ -191,6 +191,9 @@ article.post-entry:has(a:hover) {
   margin-top: 12px;
 }
 
+.post-content a.footnote-ref {
+  color: var(--secondary);
+}
 .post-content a.footnote-ref::before {
   content: "["
 }
