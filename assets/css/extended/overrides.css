@@ -160,6 +160,9 @@ article.post-entry:has(a:hover) {
   content: "$ ";
   color: grey;
 }
+.command code > span:first-child:has(+ span){
+  color: goldenrod;
+}
 
 /* Try to fix poorly positioned codeblock line numbers */
 .post-content .highlight table td:first-child code {
@@ -212,6 +215,9 @@ article.post-entry:has(a:hover) {
 }
 
 /* More compact admonitions */
+.post-content div.admonition {
+  margin: 1.5rem 0 1rem 0;
+}
 .post-content .admonition-header {
   font-size: 1rem;
   font-weight: 500;
@@ -248,4 +254,13 @@ body.dark .admonition-content {
   background: var(--code-bg) !important;
   color: var(--content) !important;
   font-size: 0.78em;  /* taken from papermod to override adminition's bad value */
+}
+
+/* Scale videos to fit article container */
+.post-content video {
+  box-sizing: border-box;
+  width: var(--main-width);
+  margin: 0.5rem;
+  margin-bottom:  var(--content-gap);
+  padding-right: 10rem;
 }
