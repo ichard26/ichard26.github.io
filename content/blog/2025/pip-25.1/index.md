@@ -1,17 +1,17 @@
 ---
-title: What's new in pip 25.1
+title: What's new in pip 25.1 - Dependency groups!
 slug: whats-new-in-pip-25.1
 description: &desc >-
   pip 25.1 introduces support for Dependency Groups (PEP 735), resumable
   downloads, and an installation progress bar. Dependency resolution has also
   received a raft of bugfixes and improvements.
 summary: *desc
-date: 2025-04-26
+date: 2025-04-25
 tags: [pip, release]
 showToc: true
 ---
 
-On April 26, 2025, the pip team released pip 25.1.
+On April 26, 2025, we, the pip team released pip 25.1.
 
 Compared to previous releases, this release is a large one. The [changelog] is quite long.
 Among the changes, there are numerous new features, including an install progress bar and
@@ -21,53 +21,6 @@ I won't cover every single change here, so as always, please refer to the change
 the full list of changes.
 
 ## Key features ✨
-
-### Package installation progress bar
-
-A temporary progress bar has been added to `pip install` that tracks the installation
-step.
-
-<video controls loop>
-  <source src="install-progress.webm">
-</video>
-
-Previously, pip would provide no feedback on how many packages have been installed. Is pip
-slowly installing a large package (e.g., numpy) or is pip simply stuck? Who knows! The
-only time you do know is when pip first needs to uninstall an existing package to install
-a new version, emitting `Attempting uninstall: mypackage` as it goes.
-
-Now, you can install every single [home-assistant] dependency and know much progress pip
-has made after dependency resolution and downloads.
-
-### Resumable downloads
-
-Support for automatic download retrying is available as an experimental feature starting
-with pip 25.1. The download retry limit can be configured using the `--resume-retries`
-option.
-
-> [!important]
-> Download retrying (`--resume-retries`) is separate from *connection* retrying
-> (`--retries`).
-
-When a download terminates early, pip will attempt to resume the download from where it
-left off. If the remote server does not support download resumption, pip will fall back to
-restarting the download. If the download is still incomplete after pip has run out of
-retries, a diagnostic error will be raised.
-
-![screeenshot of pip diagnostic incomplete-download error](incomplete-download-error.png)
-
-It has been a long-standing complaint that pip is unreliable on poor/flaky connections.
-[Any downloads of a sufficiently large package would fail midway through][resume-issue],
-forcing the user to retry the entire pip command, only for it to fail again. For users on
-a slow or metered connection, pip is likely unusable. And if hash-checking was enabled,
-then
-[a confusing and misleading hash mismatch error would be raised][hash-mismatch-issue].
-
-If you use the feature, **please let us know how it goes**! We want to make sure it works
-well. Assuming nothing is fundamentally broken, `--resume-retries` will be changed in the
-next release to allow a few download retries by default.
-
-Thank you to [George Margaritis] for contributing this feature!
 
 ### Dependency groups (PEP 735)
 
@@ -128,14 +81,61 @@ feature came about.
 Thank you to [Stephen Rosen] for writing and shepherding PEP 735 and contributing the pip
 implementation. Congratulations! 🎉
 
+### Package installation progress bar
+
+A progress bar has been added to `pip install` that tracks the installation
+step.
+
+<video controls loop>
+  <source src="install-progress.webm">
+</video>
+
+Previously, pip would provide no feedback on how many packages have been installed. Is pip
+slowly installing a large package (e.g., torch) or is pip simply stuck? Who knows! The
+only time you do know is when pip first needs to uninstall an existing package to install
+a new version, emitting `Attempting uninstall: mypackage` as it goes.
+
+Now, you can install every single [home-assistant] dependency and know much progress pip
+has made after dependency resolution and downloads.
+
+### Resumable downloads
+
+Support for automatic download retrying is available as an experimental feature starting
+with pip 25.1. The download retry limit can be configured using the `--resume-retries`
+option.
+
+> [!important]
+> Download retrying (`--resume-retries`) is separate from *connection* retrying
+> (`--retries`).
+
+When a download terminates early, pip will attempt to resume the download from where it
+left off. If the remote server does not support download resumption, pip will fall back to
+restarting the download. If the download is still incomplete after pip has run out of
+retries, a diagnostic error will be raised.
+
+![screeenshot of pip diagnostic incomplete-download error](incomplete-download-error.png)
+
+It has been a long-standing complaint that pip is unreliable on poor/flaky connections.
+[Any downloads of a sufficiently large package would fail midway through][resume-issue],
+forcing the user to retry the entire pip command, only for it to fail again. For users on
+a slow or metered connection, pip is likely unusable. And if hash-checking was enabled,
+then
+[a confusing and misleading hash mismatch error would be raised][hash-mismatch-issue].
+
+If you use the feature, **please let us know how it goes**! We want to make sure it works
+well. Assuming nothing is fundamentally broken, `--resume-retries` will be changed in the
+next release to allow a few download retries by default.
+
+Thank you to [George Margaritis] for contributing this feature!
+
 ### Experimental lockfile (PEP 751) generation: `pip lock`
 
 `pylock.toml` ([PEP 751]) is the recently accepted standard for Python lockfiles.
 Lockfiles are alternatives to the classic `requirements.txt` format, designed to enable
 reproducible installation in a Python environment.
 
-pip 25.1 makes the first step at supporting the new lockfile format. The `pip lock`
-command has been added to create a `pylock.toml` from a set of requirements.
+pip 25.1 makes the first step at supporting the new lockfile format. [The `pip lock`
+command][pip-lock] has been added to create a `pylock.toml` from a set of requirements.
 
 ```console {.command}
 pip lock six --output - -qq
@@ -153,6 +153,9 @@ url = "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496a
 [packages.wheels.hashes]
 sha256 = "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"
 ```
+
+The produced lockfile is specific to the Python version and platform pip is invoked under.
+In other words, the lockfile is **NOT** an universal lockfile.
 
 The command is experimental, meant to enable basic locked installation scenarios. It is
 expected to undergo further development once the lockfile standard sees more widespread
@@ -193,7 +196,7 @@ Thank you to [Krishan Bhasin] for stabilizing `pip index versions` and adding JS
 ### Dependency resolution improvements
 
 Dependency resolution is not my area of expertise, so I'm going to shamelessly steal the
-changelog entries that Damian Shaw wrote:
+changelog entries that [Damian Shaw] wrote:
 
 - Speed up resolution by first *only* considering the "priorities" of candidates that must
   be required to complete the resolution.
@@ -263,6 +266,11 @@ Non-standard wheel filenames *To be removed in pip 25.3*
   all non-standard wheel filenames.
   [See the pip 25.0 post for more details.][old-deprecations]
 
+## Acknowledgements
+
+Thank you to Emma Smith and Damian Shaw for reviewing the draft of this post. Any typos
+or glaring mistakes are my own.
+
 [^separate-metadata]: They are not defined under the `project` table because Dependency Groups
     are meant to be a general feature that work regardless of whether you have an actual Python
     package to install or not.
@@ -288,6 +296,7 @@ Non-standard wheel filenames *To be removed in pip 25.3*
 [bdist_wheel]: https://github.com/pypa/pip/issues/6334
 [changelog]: https://pip.pypa.io/en/latest/news/#v25-1
 [dependency groups]: https://packaging.python.org/en/latest/specifications/dependency-groups/
+[damian shaw]: https://github.com/notatallshaw
 [george margaritis]: https://github.com/gmargaritis
 [hash-mismatch-issue]: https://github.com/pypa/pip/issues/11153
 [home-assistant]: https://github.com/home-assistant/core/blob/dev/requirements_all.txt
@@ -298,6 +307,7 @@ Non-standard wheel filenames *To be removed in pip 25.3*
 [pep 735]: https://peps.python.org/pep-0735/
 [pep 751]: https://peps.python.org/pep-0751/
 [pip-group-docs]: https://pip.pypa.io/en/latest/user_guide/#dependency-groups
+[pip-lock]: https://pip.pypa.io/en/latest/cli/pip_lock/
 [resolution-too-deep]: https://github.com/pypa/pip/issues/13281
 [resume-issue]: https://github.com/pypa/pip/issues/4796
 [stephen rosen]: https://github.com/sirosen
