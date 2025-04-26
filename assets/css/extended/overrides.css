@@ -259,8 +259,14 @@ body.dark .admonition-content {
 /* Scale videos to fit article container */
 .post-content video {
   box-sizing: border-box;
-  width: var(--main-width);
+  width: 100%;
   margin: 0.5rem;
-  margin-bottom:  var(--content-gap);
+  margin-bottom: var(--content-gap);
   padding-right: 10rem;
+  object-fit: contain;
+}
+@media (max-width: calc(768px + 6em)) {
+  .post-content video {
+    padding-right: 9px;
+  }
 }
