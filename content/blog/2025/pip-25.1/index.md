@@ -28,8 +28,8 @@ Support for installing [Dependency Groups] (PEP 735) is now available with the `
 option.
 
 > [!tip] What are Dependency Groups?
-> [Dependency Groups] are the modern standardized replacement for `requirements.txt` files
-> and extras that are not meant for use by end-users.
+> [Dependency Groups] are the modern standardized replacement for non-pinned
+> subject-specific `*-requirements.txt` files and extras that are not meant for use by end users.
 >
 > They are meant to replace files like `test-requirements.txt` or extras like `[test]`,
 > `[dev]`, or `[doc]`. They are defined in a `pyproject.toml` file under the
@@ -75,7 +75,7 @@ pip install --group ./dev/vem/pyproject.toml:lint
 > should continue to use a `requirements.txt` file.[^no-pip-specific-syntax]
 
 Please read the [pip user guide for more information][pip-group-docs]. You can also read
-the motivation and rational sections of [PEP 735] if you are curious about why this
+the motivation and rationale sections of [PEP 735] if you are curious about why this
 feature came about.
 
 Thank you to [Stephen Rosen] for writing and shepherding PEP 735 and contributing the pip
@@ -95,7 +95,7 @@ slowly installing a large package (e.g., torch) or is pip simply stuck? Who know
 only time you do know is when pip first needs to uninstall an existing package to install
 a new version, emitting `Attempting uninstall: mypackage` as it goes.
 
-Now, you can install every single [home-assistant] dependency and know much progress pip
+Now, you can install every single [Home Hssistant] dependency and know much progress pip
 has made after dependency resolution and downloads.
 
 ### Resumable downloads
@@ -137,10 +137,19 @@ reproducible installation in a Python environment.
 pip 25.1 makes the first step at supporting the new lockfile format. [The `pip lock`
 command][pip-lock] has been added to create a `pylock.toml` from a set of requirements.
 
+Here's an example locking the pip project in editable mode and six.
+
 ```console {.command}
-pip lock six --output - -qq
+pip lock -e ./pip six --output - -qq
 lock-version = "1.0"
 created-by = "pip"
+
+[[packages]]
+name = "pip"
+
+[packages.directory]
+path = "pip"
+editable = true
 
 [[packages]]
 name = "six"
@@ -155,14 +164,14 @@ sha256 = "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"
 ```
 
 The produced lockfile is specific to the Python version and platform pip is invoked under.
-In other words, the lockfile is **NOT** an universal lockfile.
+In other words, the lockfile is **NOT** a universal lockfile.
 
 The command is experimental, meant to enable basic locked installation scenarios. It is
 expected to undergo further development once the lockfile standard sees more widespread
 adoption and matures.
 
 Installing *from* a lockfile is **unsupported**, but
-[it is the on the roadmap][installing-pylock].
+[it is on the roadmap][installing-pylock].
 
 ### `pip index versions` is stable
 
@@ -204,7 +213,7 @@ changelog entries that [Damian Shaw] wrote:
 - Improved heuristics for determining the order of dependency resolution by preferring
   direct URL candidates and requirements with upper bounds.[^upper-bounds]
 
-- The upgrade to Resolvelib 1.1.0 fixes a known issue where pip
+- The upgrade to ResolveLib 1.1.0 fixes a known issue where pip
   [**would report a `ResolutionImpossible` error even though there is a valid solution**][backjump-bug].
   However, some very complex scenarios that previously resolved may resolve slower or fail
   with an `ResolutionTooDeep` error.
@@ -253,7 +262,7 @@ Non-bare project name in egg fragment *To be removed in pip 25.2*
 Legacy setup.py editable installs *To be removed in pip 25.3*
 : Please read [the deprecation issue for more details and advice][#11457]. This was
   scheduled for removal in 25.0 and then 25.1, but it got pushed back (again) to coincide
-  with the deprecation of `setup.py bdist_wheel` installs
+  with the deprecation of `setup.py bdist_wheel` installs.
 
 Legacy setup.py `bdist_wheel` installs *To be removed in pip 25.3*
 : Please read [the deprecation issue for more details and advice][bdist_wheel], however,
@@ -268,8 +277,8 @@ Non-standard wheel filenames *To be removed in pip 25.3*
 
 ## Acknowledgements
 
-Thank you to Emma Smith and Damian Shaw for reviewing the draft of this post. Any typos
-or glaring mistakes are my own.
+Thank you to Damian Shaw, Emma Smith, Hugo van Kemenade, and Stéphane Bidoul reviewing the
+draft of this post. Any typos or glaring mistakes are my own.
 
 [^separate-metadata]: They are not defined under the `project` table because Dependency Groups
     are meant to be a general feature that work regardless of whether you have an actual Python
@@ -278,10 +287,10 @@ or glaring mistakes are my own.
 [^pip-project-model]: There has been extensive discussion about pip's fundamental design
     and whether it should change. There is too much to easily summarize, but broadly, pip
     has always been designed as a package manager, and *not* as a *project* workflow tool.
-    There are many other tools that compete in the project management space. "We" believe
-    that pip is valuable as a foundational tool that simply manages your installed Python
-    packages and does what you want without too much fuss. More practically, shifting to a
-    project-based model would constitute a major redesign of the pip UI and UX.
+    There are many other tools that compete in the project management space. The consensus
+    during review is that pip is valuable as a foundational tool that simply manages your
+    installed Python packages and does what you want without too much fuss. More practically,
+    shifting to a project-based model would constitute a major redesign of the pip UI and UX.
 
 [^no-pip-specific-syntax]: This is a limitation of the specification. However, if sufficient
     consensus builds around certain tool-specific flags, they can be standardized so they
@@ -299,7 +308,7 @@ or glaring mistakes are my own.
 [damian shaw]: https://github.com/notatallshaw
 [george margaritis]: https://github.com/gmargaritis
 [hash-mismatch-issue]: https://github.com/pypa/pip/issues/11153
-[home-assistant]: https://github.com/home-assistant/core/blob/dev/requirements_all.txt
+[home assistant]: https://github.com/home-assistant/core/blob/dev/requirements_all.txt
 [installing-pylock]: https://github.com/pypa/pip/issues/13334
 [krishan bhasin]: https://github.com/KrishanBhasin
 [no-version-hack]: https://github.com/pypa/pip/issues/12852
