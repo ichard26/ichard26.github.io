@@ -95,7 +95,7 @@ slowly installing a large package (e.g., torch) or is pip simply stuck? Who know
 only time you do know is when pip first needs to uninstall an existing package to install
 a new version, emitting `Attempting uninstall: mypackage` as it goes.
 
-Now, you can install every single [Home Hssistant] dependency and know much progress pip
+Now, you can install every single [Home Assistant] dependency and know much progress pip
 has made after dependency resolution and downloads.
 
 ### Resumable downloads
