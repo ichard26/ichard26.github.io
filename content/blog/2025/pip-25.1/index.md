@@ -7,6 +7,7 @@ description: &desc >-
   received a raft of bugfixes and improvements.
 summary: *desc
 date: 2025-04-25
+modified: 2025-04-26
 tags: [pip, release]
 showToc: true
 ---
@@ -28,8 +29,9 @@ Support for installing [Dependency Groups] (PEP 735) is now available with the `
 option.
 
 > [!tip] What are Dependency Groups?
-> [Dependency Groups] are the modern standardized replacement for non-pinned
-> subject-specific `*-requirements.txt` files and extras that are not meant for use by end users.
+> [Dependency Groups] are the modern standardized replacement for requirements.txt files
+> and extras used for development workflows. Dependency Groups are **NOT** published
+> nor installable by the end user, unlike extras.
 >
 > They are meant to replace files like `test-requirements.txt` or extras like `[test]`,
 > `[dev]`, or `[doc]`. They are defined in a `pyproject.toml` file under the
@@ -43,6 +45,8 @@ First, let's assume there is a `pyproject.toml` file in the current directory th
 [dependency-groups]
 test = ["pytest", "pytest-xdist"]
 lint = ["mypy", "isort"]
+# Dependency Groups can include other groups! ✨
+dev = [ {include-group = "test"}, {include-group = "lint"} ]
 ```
 
 To install the `test` group, one can simply pass `--group test`.
@@ -52,7 +56,8 @@ pip install --group test
 ```
 
 You can repeat the option to install multiple groups. You can also use `--group` with
-`-r`, `-e`, and any other dependency specifier.
+`-r`, `-e`, and any other dependency specifier. Want to install the local project,
+two groups, and a requirements.txt? You bet you can.
 
 ```console {.command}
 pip install . --group lint --group test -r my-old-requirements.txt
@@ -62,7 +67,7 @@ To install a dependency group from a `pyproject.toml` file that exists in a diff
 directory, state the path before the group separated with a colon.
 
 ```console {.command}
-pip install --group ./dev/vem/pyproject.toml:lint
+pip install --group ./dev/vem/pyproject.toml:dev
 ```
 
 > [!warning]
@@ -172,6 +177,10 @@ adoption and matures.
 
 Installing *from* a lockfile is **unsupported**, but
 [it is on the roadmap][installing-pylock].
+
+Congratulations to [Brett Cannon] for getting a lockfile standardized after many years(!) of
+PEP drafting and several rounds of discussion. I look forward to seeing `pylock.toml`
+mature!
 
 ### `pip index versions` is stable
 
@@ -303,6 +312,7 @@ draft of this post. Any typos or glaring mistakes are my own.
 [#11457]: https://github.com/pypa/pip/issues/11457
 [backjump-bug]: https://github.com/pypa/pip/issues/12317
 [bdist_wheel]: https://github.com/pypa/pip/issues/6334
+[brett cannon]: https://github.com/brettcannon
 [changelog]: https://pip.pypa.io/en/latest/news/#v25-1
 [dependency groups]: https://packaging.python.org/en/latest/specifications/dependency-groups/
 [damian shaw]: https://github.com/notatallshaw
