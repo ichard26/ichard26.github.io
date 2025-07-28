@@ -1,14 +1,12 @@
 ---
 title: About me
-description: "Short version: I'm Richard aka ichard26 (he/they). I'm a hobby Python
-  developer and FOSS contributor. I contribute to mypyc and pip and used to co-maintain
-  Black and Bandersnatch. Staff at Python Discord."
+description: I'm Richard aka ichard26. I'm a hobby Python developer and FOSS contributor. I contribute to mypyc and pip and used to co-maintain Black and Bandersnatch. Staff at Python Discord.
 layout: single
 showReadingTime: false
 modified: 2024-04-19
 ---
 
-Hello! I'm Richard. I go by `ichard26` on the internet. My pronouns are he/they.
+Hello! I'm Richard. I go by `ichard26` on the internet.
 
 You may know me if you frequent the Python code quality space as I used to co-maintain
 your friendly code formatter, [Black]!
