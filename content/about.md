@@ -1,9 +1,9 @@
 ---
 title: About me
-description: I'm Richard aka ichard26. I'm a hobby Python developer and FOSS contributor. I contribute to mypyc and pip and used to co-maintain Black and Bandersnatch. Staff at Python Discord.
+description: I'm Richard aka ichard26. I'm a hobby Python developer and FOSS contributor. I contribute to mypyc and pip and used to co-maintain Black and Bandersnatch.
 layout: single
 showReadingTime: false
-modified: 2024-04-19
+modified: 2025-07-28
 ---
 
 Hello! I'm Richard. I go by `ichard26` on the internet.
@@ -14,11 +14,6 @@ your friendly code formatter, [Black]!
 I'm a hobby Python developer who writes command line tooling, but I dabble in C and
 front-end web development from time to time. When I'm not doing development work, I like
 to take photographs, go for walks .. or both at the same time! 📷
-
-This website exists as a place to put my programming and open-source software ramblings.
-I'm just doing this for fun, and there are no hard rules for what I will publish here.
-
-Oh... and one more thing. You should know that I like flowers. ✿
 
 ## Open Source Software (OSS)
 
@@ -68,8 +63,8 @@ Alternatively, you can reach me by either DMing me on Discord (@ichard26) or
 [opening a GitHub discussion here][discussions]. I don't have a preference between the
 two, so use the method that suits you the best :)
 
-> For Discord, you'll find me in the [Python Discord][discord-python],
-> [PyPA][discord-pypa], and [Pallets][discord-pallets] servers.
+> For Discord, you'll find me in the [Python Discord][discord-python] and
+> [PyPA][discord-pypa] servers.
 
 [^1]: [I do have a GPG key][gpg] if you want to use GPG, for some reason...
 
@@ -77,7 +72,6 @@ two, so use the method that suits you the best :)
 [black]: https://github.com/psf/black
 [black-primer]: https://github.com/psf/black/blob/9bd4134f3138448eb92af7031d994b2cec7d08ad/docs/contributing/gauging_changes.md#black-primer
 [diff-shades]: https://github.com/ichard26/diff-shades
-[discord-pallets]: https://discord.gg/pallets
 [discord-pypa]: https://discord.gg/pypa
 [discord-python]: https://discord.gg/python
 [discussions]: https://github.com/ichard26/ichard26.github.io/discussions
