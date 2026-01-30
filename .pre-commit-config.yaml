@@ -2,24 +2,24 @@ exclude: ^layouts/_default/_markup/
 
 repos:
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.3.0
+    rev: v2.4.1
     hooks:
       - id: codespell
 
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.17
+    rev: 1.0.0
     hooks:
       - id: mdformat
         args: [--wrap=90]
         additional_dependencies:
           - mdformat-footnote
-          - mdformat-frontmatter
+          - mdformat-front-matters
           - mdformat-deflist
-          - mdformat-tables
-          # currently broken: - mdformat-gfm-alerts
+          - mdformat-gfm
+          - mdformat-gfm-alerts
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
