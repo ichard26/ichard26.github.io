@@ -55,7 +55,7 @@ Successfully installed black-24.3.0 click-8.1.7 mypy-extensions-1.0.0 packaging-
 > While similar to uv's `--exclude-newer` option,
 > `--uploaded-prior-to` behaves a bit differently. Notably, `--uploaded-prior-to` is an
 > exclusive upper bound for both datetimes and dates. In other words,
-> `--uploaded-prior-to 2025-01-01` is equivalent to `--uploaded-prior-to 00:00:00`, not
+> `--uploaded-prior-to 2025-01-01` is equivalent to `--uploaded-prior-to 2025-01-01 00:00:00`, not
 > `2025-01-01 23:59:59` as with `--exclude-newer`.
 
 [More information can be found in the pip user guide][prior-to-docs]. We thank uv for the
@@ -106,7 +106,7 @@ available that satisfy the requirement. The `--all-releases` and `--only-final` 
 provide **per-package control** over pre-release selection.
 
 As their names imply, these new options allow you to tell pip to only consider stable or all
-versions when resolving packages. They function like their `--no-binary` and `--prefer-binary`
+versions when resolving packages. They function like their `--no-binary` and `--only-binary`
 cousins.
 
 ```shell
@@ -201,6 +201,11 @@ needed**.
   We're making this change to accommodate the planned transition to installing build
   dependencies in-process. Affected users should use `--build-constraint` or
   `PIP_BUILD_CONSTRAINT`.
+
+## Acknowledgements
+
+Thank you to Damian Shaw for reviewing and correcting some glaring mistakes. Any remaining
+mistakes are my own.
 
 [^uv-run]: You can use `uv run` as well.
 
