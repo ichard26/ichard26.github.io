@@ -48,8 +48,8 @@ than the Ubuntu and macOS runners.</p><p>As a package installer, <strong>pip&rsq
 tests require at least setting a scratch environment and installing something into it.
 Countless files and directories are created, opened, and deleted during a run.</p><h2 id=moving-temp-to-the-d-drive>Moving TEMP to the D: drive<a hidden class=anchor aria-hidden=true href=#moving-temp-to-the-d-drive>#</a></h2><p><a href=https://github.com/pypa/pip/pull/13123#issuecomment-2561079373 target=_blank>According to Steve Dower</a>, the GHA Windows workers have a <strong>slow</strong> (but read-optimized)
 <strong>C: system drive and a faster D: drive for working space</strong>.</p><div class="admonition warning"><div class=admonition-header><svg viewBox="0 0 512 512"><path d="M256 32c14.2.0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7.2 40.1S486.3 480 472 480H40c-14.3.0-27.6-7.7-34.7-20.1s-7-27.8.2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3.0-24 10.7-24 24v112c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 10-64 0 32 32 0 1064 0z"/></svg>
-<span>Warning</span></div><div class=admonition-content><p>Only the standard Windows runners have a D: drive. The larger (paid) Window runners do
-NOT have a D: drive. For such situations,
+<span>Warning</span></div><div class=admonition-content><p>Only the standard Windows runners have a D: drive. The larger (paid) Window
+runners do NOT have a D: drive. For such situations,
 <a href=#what-about-refs-or-dev-drives>ReFS/Dev Drives should be considered</a>.</p></div></div><p>For many projects, this is <em>probably</em> fine. The repository is still checked out on the D:
 drive. Any files you create in the checkout will be on the D: drive. For pip&rsquo;s test suite,
 however, all of the temporary files are created under the system temporary directory.
@@ -70,8 +70,8 @@ mind</strong>.</p><p>The
 <a href=https://github.com/astral-sh/uv/pull/3522 target=_blank>uv project has had good success with using ReFS to speed up their Windows GHA jobs</a>,
 thus I actually started with a ReFS drive<sup id=fnref:4><a href=#fn:4 class=footnote-ref role=doc-noteref>4</a></sup> while optimising pip&rsquo;s Windows CI.
 Unfortunately, using a ReFS drive
-<a href=https://github.com/pypa/pip/pull/13129 target=_blank>was noticeably slower than simply moving <code>TEMP</code> to the D: drive</a>. ReFS did save
-~a minute for <code>Python 3.8 (1)</code> but that pales in comparison with the nearly five minutes
+<a href=https://github.com/pypa/pip/pull/13129 target=_blank>was noticeably slower than simply moving <code>TEMP</code> to the D: drive</a>. ReFS did save ~a
+minute for <code>Python 3.8 (1)</code> but that pales in comparison with the nearly five minutes
 improvement from <code>TEMP=D:/Temp</code>.</p><p>The performance improvements of ReFS/Dev Drives are primarily realized by <strong>deferring
 malware scans</strong> (Dev Drive only) and the <strong>inherent optimizations of the newer ReFS
 filesystem</strong>. Presumably the malware scans are already disabled on GitHub Actions, which
@@ -82,10 +82,11 @@ dependent.</strong> If you would like to experiment with ReFS/Dev Drives, my Pow
 drive letter and volume size: <code>devdrive.ps1 -Drive R -Size 4GB</code>.</p><p>Happy experimenting!</p><div class=footnotes role=doc-endnotes><hr><ol><li id=fn:1><p>Before you kill me for complaining, let me provide some context&mldr; When I used to
 maintain Black, I never really noticed how CI took. Most of the jobs would finish in
 3-6 minutes. Short enough that I could look over my changes one last time, add notes
-as comments, and then come back to merge.<br><br>I did notice that Black&rsquo;s test suite was slow, taking a good few minutes on the slow
-laptop I had at that time. I took a look at the test logic, <a href=https://github.com/psf/black/pull/2205 target=_blank>trimmed redundant work</a>,
-and <a href=https://github.com/psf/black/pull/2196 target=_blank>added pytest-xdist for parallelized testing</a>. Afterwards, local test suite runs
-took less a minute!<br><br>I was spoiled by Black&rsquo;s fast tests and CI, admittedly.&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li><li id=fn:2><p>I wrote the majority of this post in January&mldr;&#160;<a href=#fnref:2 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li><li id=fn:3><p>We&rsquo;ve actually set it to <code>C:/Temp</code> to work around <a href=https://github.com/pypa/pip/actions/runs/12450425946/job/34757228568/#step:8:2982 target=_blank>filename too long errors</a>. Also,
+as comments, and then come back to merge.<br><br>I did notice that Black&rsquo;s test suite was
+slow, taking a good few minutes on the slow laptop I had at that time. I took a look
+at the test logic, <a href=https://github.com/psf/black/pull/2205 target=_blank>trimmed redundant work</a>, and
+<a href=https://github.com/psf/black/pull/2196 target=_blank>added pytest-xdist for parallelized testing</a>. Afterwards, local test suite runs took
+less a minute!<br><br>I was spoiled by Black&rsquo;s fast tests and CI, admittedly.&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li><li id=fn:2><p>I wrote the majority of this post in January&mldr;&#160;<a href=#fnref:2 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li><li id=fn:3><p>We&rsquo;ve actually set it to <code>C:/Temp</code> to work around <a href=https://github.com/pypa/pip/actions/runs/12450425946/job/34757228568/#step:8:2982 target=_blank>filename too long errors</a>. Also,
 the exact default system temporary directory may vary from worker to worker. I don&rsquo;t
 feel like double checking this.&#160;<a href=#fnref:3 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li><li id=fn:4><p>When I did my experiments, the Windows GHA runners did not support Dev Drives. Only
 ReFS was supported.&#160;<a href=#fnref:4 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li></ol></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://ichard26.github.io/tags/pip/>Pip</a></li></ul><nav class=paginav><a class=prev href=https://ichard26.github.io/blog/2025/04/whats-new-in-pip-25.1/><span class=title>« Newer</span><br><span>What's new in pip 25.1 - Dependency groups!</span>
