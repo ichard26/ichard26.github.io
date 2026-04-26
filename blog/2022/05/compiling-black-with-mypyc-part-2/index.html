@@ -371,9 +371,9 @@ produce faster binaries. The answer turned out to be <a href=https://github.com/
 find a potential workaround. I found one, but it was useless 🙂 Collecting numbers for
 both gcc-10 and clang showed that gcc fails in basically all departments:</p><ul><li>takes almost twice as long to compile Black AND definitely uses 200%+ more memory</li><li>had no meaningful difference in generated binary size all while being far more picky
 about the C code it&rsquo;s given</li><li>oh and of course produced binaries that were around 8% slower 🙃</li></ul><p>I&rsquo;m honestly happy that GCC failed to compile on that parser setup code, clang (for
-Linux) is so much better.</p></blockquote><hr><h3 id=results>Results<a hidden class=anchor aria-hidden=true href=#results>#</a></h3><blockquote><p><strong>Quick note</strong><br>I also did some micro-optimizations like reordering if checks to hit the
-common case first or replacing <code>x = x + 1</code> with <code>x += 1</code>, but to this day I don&rsquo;t know
-whether they actually had an impact.</p><p>Additionally, I haven&rsquo;t discussed the last
+Linux) is so much better.</p></blockquote><hr><h3 id=results>Results<a hidden class=anchor aria-hidden=true href=#results>#</a></h3><blockquote><p><strong>Quick note</strong><br>I also did some micro-optimizations like reordering if checks to hit the common case
+first or replacing <code>x = x + 1</code> with <code>x += 1</code>, but to this day I don&rsquo;t know whether they
+actually had an impact.</p><p>Additionally, I haven&rsquo;t discussed the last
 <a href=https://github.com/psf/black/pull/2431/commits/c7de2eafb5d07033429ab3a18ce02ed093b645c5 target=_blank>optimization round I did for src/black</a>, but there&rsquo;s nothing in that which
 I haven&rsquo;t covered yet.</p></blockquote><p>Anyhow, these optimizations bumped the parsing speedup over interpreted from ~1.73x to
 ~1.9x. You can see the <a href=https://github.com/psf/black/pull/2431/commits/f6a3e788bb8714e41fe0a4cc1ee2058b0a7cb3ac target=_blank>changes made here</a> <a href=https://github.com/psf/black/pull/2431/commits/911d0d8601318fcc04069f2af91a066e499f0db0 target=_blank>and also here</a>.</p><p>For more detail, see the tables at the bottom for the <code>compiled-mypyc-preopt</code> and
