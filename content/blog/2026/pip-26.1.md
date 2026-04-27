@@ -7,6 +7,7 @@ description: &desc >
   resolver, and drops support for Python 3.9.
 summary: *desc
 date: 2026-04-26
+modified: 2026-04-27
 tags: [pip, release]
 showToc: true
 ---
@@ -28,7 +29,7 @@ it made sense for pip to drop support as well.
 
 ### Experimental: installing from pylock files
 
-After a year since the acceptance of [PEP 751] which standardized `pylock.toml` lock files,
+After a year[ since the acceptance of [PEP 751] which standardized `pylock.toml` lock files,
 pip 26.1 gains **experimental** ([see below for more details on "experimental"](#whats-next))
 support for reading and installing from such lockfiles. 🎉
 
@@ -113,6 +114,9 @@ to `pip-sync` and `uv sync` although in a way that makes sense for pip's operati
 We intend for `pip sync` to be primary way in which pip interacts with lockfiles once
 available.
 
+Thank you to Stéphane Bidoul who not only championed pip's implementation, but upstreamed
+pylock.toml support into the `packaging` library so the whole Python ecosystem can benefit.
+
 #### We need your feedback!
 
 In the meanwhile, if you can, please test out `-r pylock.toml`. If you have any feedback,
@@ -128,7 +132,7 @@ does not enable your use-case.
 ### Dependency cooldowns
 
 `--uploaded-prior-to` now supports accepts a relative duration in the `PnD` format, where `n`
-is the number of days. This is meant to enable dependency cooldowns, which aim to reduce the
+is the number of days.[^4] This is meant to enable dependency cooldowns, which aim to reduce the
 impact of compromised upstream packages.
 
 ```console { .command}
@@ -248,6 +252,10 @@ None so far. I did write this on a compressed timeline, however, so please forgi
 [^3]: In general, we don't want pip to be an _innovator_ when it comes to new features
       or new UX flows. We will aim to match pre-existing features from other package
       managers where feasible.
+
+[^4]: We chose to only support the simple `PnD` ISO 8601 duration format to keep the parsing
+      code as minimal as feasible. We did not want to vendor a human time parsing library
+      or roll our own.
 
 [changelog]: https://pip.pypa.io/en/latest/news/#v26-1
 [cooldown]: https://blog.yossarian.net/2025/11/21/We-should-all-be-using-dependency-cooldowns
