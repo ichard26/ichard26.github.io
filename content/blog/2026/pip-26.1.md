@@ -124,7 +124,7 @@ let us know in the following issues!
 
 - ["What's next for `-r pylock.toml`?"][r-lock]
 - ["What's next for `pip lock`?"][lock-cmd]
-- ["First `pip sync` command"][sync-cmd]
+- ["First party `pip sync` command"][sync-cmd]
 
 We'd especially appreciate comments on your use-case for lockfiles and how pip enables or
 does not enable your use-case.
@@ -199,7 +199,7 @@ following signals, in decreasing priority:
 Thank you to Dmitrii Sutiagin for contributing a fix and to Caleb Brown for reporting this
 issue responsibly to the pip team.
 
-### Fix ACE caused by self check deferred imports
+### Fix ACE caused by self check deferred imports (CVE-2026-6357)
 
 pip will issue a notice if there is a newer version of pip available. For performance reasons
 this check occurs at the end of a command invocation, with the responsible code being imported
