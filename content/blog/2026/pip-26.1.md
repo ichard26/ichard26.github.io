@@ -29,7 +29,7 @@ it made sense for pip to drop support as well.
 
 ### Experimental: installing from pylock files
 
-After a year[ since the acceptance of [PEP 751] which standardized `pylock.toml` lock files,
+After a year since the acceptance of [PEP 751] which standardized `pylock.toml` lock files,
 pip 26.1 gains **experimental** ([see below for more details on "experimental"](#whats-next))
 support for reading and installing from such lockfiles. 🎉
 
@@ -86,8 +86,8 @@ likely to change as the pip project stabilizes its lockfile support.
 > - [VCS][vcs-limit] and [local directory][dir-limit] entries currently cannot be mixed
 >   with external requirements that are hash-locked
 > - The optional fallback to using `packages.index` to resolve broken URLs is unsupported
-> - By default, pip will let requirements from lock files pull in additional non-locked
->   requirements. Pass `--no-deps` if this is undesirable.
+> - **By default, pip will let requirements from lock files pull in additional non-locked
+>   requirements.** Pass `--no-deps` if this is undesirable.
 > - Archive file sizes are currently not validated
 > - Only the format control options `--only-binary` and `--no-binary` will influence
 >   locked requirements. All other package selection options (such as `--pre`, `--abi`,
