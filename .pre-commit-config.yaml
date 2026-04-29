@@ -2,21 +2,21 @@ exclude: ^layouts/_default/_markup/
 
 repos:
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.1
+    rev: v2.4.2
     hooks:
       - id: codespell
 
-  - repo: https://github.com/executablebooks/mdformat
-    rev: 1.0.0
-    hooks:
-      - id: mdformat
-        args: [--wrap=90]
-        additional_dependencies:
-          - mdformat-footnote
-          - mdformat-front-matters
-          - mdformat-deflist
-          - mdformat-gfm
-          - mdformat-gfm-alerts
+#   - repo: https://github.com/executablebooks/mdformat
+#     rev: 1.0.0
+#     hooks:
+#       - id: mdformat
+#         args: [--wrap=90]
+#         additional_dependencies:
+#           - mdformat-footnote
+#           - mdformat-front-matters
+#           - mdformat-deflist
+#           - mdformat-gfm
+#           - mdformat-gfm-alerts
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
