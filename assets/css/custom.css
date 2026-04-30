@@ -1,0 +1,80 @@
+/* Branding colour */
+:root {
+  --primary-hue: 340deg;
+  --primary-saturation: 100%;
+  --primary-lightness: 37%;
+  --sichard: hsl(340, 100%, 37%);
+  --hextra-max-page-width: 85rem;
+}
+
+:root:where(.dark) {
+  --primary-hue: 354deg;
+  --primary-saturation: 100%;
+  --primary-lightness: 80%;
+  --sichard: hsl(354, 100%, 73%);
+}
+
+/* Quality of life improvements */
+a:hover {
+  opacity: 50%;
+  transition-duration: 70ms;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Add brand color to blog post list entries */
+main > div.hx\:mb-10 {
+  border-left: 3px solid color-mix(in srgb, var(--sichard), transparent 70%);
+  padding-left: 1em;
+}
+
+/* Force use of brand colors w/o adjustments */
+main > div.hx\:mb-10 p > a {
+  color: var(--sichard);      /* in blog post list */
+}
+.content :where(a):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  color: var(--sichard);      /* regular content links */
+}
+
+/* Custom blockquote styling */
+.content blockquote {
+  background-color: color-mix(in srgb, var(--sichard), transparent 96%);
+  max-width: fit-content;
+  padding: 0 1em;
+  border-inline-start: 3px solid var(--sichard);
+  font-weight: 300;
+  font-style: normal;
+}
+.content blockquote strong {
+  font-weight: bold;
+}
+
+.content a.footnote-ref::before {
+  content: "["
+}
+.content a.footnote-ref::after {
+  content: "]"
+}
+
+/* Adjust theme variables */
+@layer theme {
+  :root {
+     --hx-color-dark: rgb(29, 30, 32);  /* Match papermod's dark background */
+  }
+}
+
+/* Prevent anchor links from wrapping over */
+.content .subheading-anchor::after {
+  position: absolute;
+}
+
+/* Remove weird drop shadow in TOC sidebar */
+.hextra-scrollbar > div {
+  box-shadow: none;
+}
+
+html {
+  scroll-padding-top: 5rem;
+}

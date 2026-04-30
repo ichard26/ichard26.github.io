@@ -2,10 +2,8 @@
 title: Privacy Statement
 description: TL;DR, I'm doing my best to not track you and respect your privacy as
   much as practically possible. All analytics are anonymized and follow GDPR, PECR
-  and CCPA. Hosting is provided by GitHub Pages and DigitalOcean.
-layout: single
-showReadingTime: false
-modified: 2024-08-26
+  and CCPA. Hosting is provided by GitHub Pages and Netcup.
+toc: false
 ---
 
 ## Scope
@@ -35,7 +33,7 @@ Plausible is a privacy-focused analytics solution that collects no personally id
 information and does not use persistent identifiers such as cookies or browser
 fingerprints.
 
-Plausible and any other self-hosted APIs or services are hosted on a DigitalOcean VPS,
+Plausible and any other self-hosted APIs or services are hosted on an European Netcup VPS,
 with nginx access logs enabled.
 
 ## Cookies & localStorage
@@ -60,8 +58,10 @@ stored is purely used for functionality including:
 
 ## History
 
-<details>
-<summary>Click to show</summary>
+{{< details title="Click to show" closed="true" >}}
+
+- **April 29, 2026**: The VPS I use to host non-static pages/services is now provided by
+  Netcup and is now located in Europe.
 
 - **August 26, 2024**: Web analytics are now provided by a self-hosted Plausible Community
   Edition instance.
@@ -92,7 +92,7 @@ stored is purely used for functionality including:
 - **May 13, 2022**: Next PR Number (<https://ichard26.github.io/next-pr-number/>) now uses
   [microanalytics.io] in accordance in this privacy statement
 
-</details>
+{{< /details >}}
 
 [microanalytics.io]: https://microanalytics.io/
 [pages]: https://pages.github.com/

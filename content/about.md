@@ -1,9 +1,8 @@
 ---
 title: About me
 description: I'm Richard aka ichard26. I'm a hobby Python developer and FOSS contributor. I contribute to mypyc and pip and used to co-maintain Black and Bandersnatch.
-layout: single
-showReadingTime: false
 modified: 2025-07-28
+toc: false
 ---
 
 Hello! I'm Richard. I go by `ichard26` on the internet.
