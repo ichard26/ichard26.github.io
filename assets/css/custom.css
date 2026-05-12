@@ -26,7 +26,7 @@ html {
 
 /* Add brand color to blog post list entries */
 main > div.hx\:mb-10 {
-  border-left: 3px solid color-mix(in srgb, var(--sichard), transparent 70%);
+  border-left: 5px solid color-mix(in srgb, var(--sichard), transparent 30%);
   padding-left: 1em;
 }
 
@@ -73,6 +73,15 @@ main > div.hx\:mb-10 p > a {
 /* Remove weird drop shadow in TOC sidebar */
 .hextra-scrollbar > div {
   box-shadow: none;
+}
+
+/* About me */
+.hextra-badge.hextra-card-tag {
+  top: 10px;
+  right: 10px;
+}
+.hextra-badge.hextra-card-tag > div {
+  font-size: 0.7rem;
 }
 
 html {

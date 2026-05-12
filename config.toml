@@ -91,8 +91,9 @@ params = { icon = "github" }
 
 [[menu.main]]
 weight = 6
-nameble = "Theme Toggle"
-params = { type = "theme-toggle" }
+name = "Mastodon"
+url = "https://fosstodon.org/@ichard26"
+params = { icon = "mastodon" }
 
 # Allow HTML in my content pages.
 [markup.goldmark.renderer]
