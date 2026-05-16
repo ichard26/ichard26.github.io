@@ -1,0 +1,10 @@
+<div class="pip-deprecation">
+  <div class="header">
+    <div class="title">{{ .Params.title | .Page.RenderString }}</div>
+    <div class="line"></div>
+    <div class="date">To be removed in pip {{ .Params.version }}</div>
+  </div>
+  <div class="content"><p>
+    {{ .Inner | .Page.RenderString }}
+  </p></div>
+</div>

@@ -87,3 +87,72 @@ main > div.hx\:mb-10 p > a {
 html {
   scroll-padding-top: 5rem;
 }
+
+/* pip deprecation shortcode */
+div.pip-deprecation {
+  border-left: 5px solid color-mix(in srgb, var(--hx-color-slate-900), transparent 50%);
+  margin: 1em 0;
+  padding: 0.75em 1em;
+  background-color: color-mix(in srgb, var(--hx-color-slate-900), transparent 97%);
+}
+
+@media (width >= 800px) {
+  .pip-deprecation .header {
+    display: grid;
+    grid-template-columns: fit-content(80%) 1fr fit-content(25ch);
+  }
+  .pip-deprecation .title {
+    margin: 10px 0 15px 0;
+  }
+  .pip-deprecation .line {
+    position: relative;
+    top: -2px;
+    margin: auto 2ch;
+    height: 2px;
+    background-color: color-mix(in srgb, var(--hx-color-slate-900), transparent 80%);
+   }
+  .pip-deprecation .date {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    font-size: 1rem;
+  }
+}
+
+.pip-deprecation .title {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+.pip-deprecation .date {
+  margin: 10px 0 15px 0;
+  color: var(--sichard);
+  font-size: 0.9rem;
+}
+.pip-deprecation .content {
+  font-weight: 300;
+}
+
+/* Admonitions (why is there no semantic class for this... grr */
+.hx\:rounded-lg > p:has(svg) {
+  font-weight: bold;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+}
+
+/* Blog descriptions */
+div.sichard-description {
+  margin-top: 1em;
+}
+
+/* Increase contrast */
+.dark .hextra-card {
+  border-width: 2px;
+}
+
+.content :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  line-height: 1.6 !important;
+}
+
+.footnotes li > p {
+  margin-left: var(--hx-spacing);
+}
