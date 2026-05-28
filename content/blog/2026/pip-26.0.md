@@ -43,8 +43,8 @@ The option accepts ISO 8601 datetime strings in several formats:
 
 For consistency, the timezone should be explicitly provided, although it is not required.
 
-```console { .command }
-pip install -r requirements.txt --uploaded-prior-to 2024-03-16T12:30:00+05:00
+```console
+$ pip install -r requirements.txt --uploaded-prior-to 2024-03-16T12:30:00+05:00
 
 [...]
 Installing collected packages: platformdirs, pathspec, packaging, mypy-extensions, click, black
@@ -74,13 +74,12 @@ This can be useful when a new release of a build backend is causing a package bu
 error. You can constrain (block) the problematic versions of the backend and continue with
 happily installing whatever you were installing earlier.
 
-```python
-# constraints.txt
+```python { filename = "constraints.txt" }
 setuptools != 80.0.0  # imagine this version broke your build
 ```
 
-```console {.command}
-pip install myproject.tar.gz --build-constraint constraints.txt
+```console
+$ pip install myproject.tar.gz --build-constraint constraints.txt
 ```
 
 Previously, your best option to constrain build dependencies was through setting the
@@ -196,11 +195,12 @@ Here's the current list of current deprecations with the release in which they a
 scheduled for removal. As always, any given removal may be **pushed to a future release as
 needed**.
 
-`PIP_CONSTRAINT` for build dependencies *To be removed in pip 26.1*
-: The `PIP_CONSTRAINT` envvar will eventually stop taking effect for build dependencies.
+{{% pip/deprecation title="`PIP_CONSTRAINT` for build dependencies" version="26.2" %}}
+  The `PIP_CONSTRAINT` envvar will eventually stop taking effect for build dependencies.
   We're making this change to accommodate the planned transition to installing build
   dependencies in-process. Affected users should use `--build-constraint` or
   `PIP_BUILD_CONSTRAINT`.
+{{% /pip/deprecation %}}
 
 ## Acknowledgements
 
@@ -211,7 +211,7 @@ mistakes are my own.
 
 [^uv-compat]: This also has the nice benefit of aligning our constraint options with uv which
     already has `--build-constraint`.
-  
+
 [^stable]: What is a stable version? Any package whose version does NOT contain a development
   segment or pre-release segment (`.alpha`, `.beta`, `.rc`, `.dev`).
 

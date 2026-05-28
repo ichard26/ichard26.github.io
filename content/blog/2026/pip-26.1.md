@@ -36,8 +36,8 @@ support for reading and installing from such lockfiles. 🎉
 The `-r <file>`, `--requirement <file>` option now accepts `pylock.toml` files. You may pass a local
 lockfile or a remote lockfile as long it is named as expected: `pylock.toml` or `pylock.<name>.toml`.
 
-```console { .command }
-pip install -r pylock.toml
+```console
+$ pip install -r pylock.toml
 WARNING: Using pylock.toml as a requirements source is an experimental feature. It may be removed/changed in a future release without prior warning.
 Collecting six==1.17.0 (from pylock.toml)
   Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
@@ -50,8 +50,8 @@ Successfully installed six-1.17.0 urllib3-2.6.3
 `pip install`, `pip download`, and `pip wheel` all support reading lockfiles since
 they accept `-r`.
 
-```console { .command}
-pip wheel -r pylock.toml -w ./wheelhouse
+```console
+$ pip wheel -r pylock.toml -w ./wheelhouse
 WARNING: Using pylock.toml as a requirements source is an experimental feature. It may be removed/changed in a future release without prior warning.
 Collecting six==1.17.0 (from pylock.toml)
   Using cached six-1.17.0-py2.py3-none-any.whl (11 kB)
@@ -61,8 +61,8 @@ Saved ./wheelhouse/six-1.17.0-py2.py3-none-any.whl
 Saved ./wheelhouse/urllib3-2.6.3-py3-none-any.whl
 ```
 
-```console { .command }
-pip install wheelhouse/*.whl --no-deps --no-index
+```console
+$ pip install wheelhouse/*.whl --no-deps --no-index
 Processing ./wheelhouse/six-1.17.0-py2.py3-none-any.whl
 Processing ./wheelhouse/urllib3-2.6.3-py3-none-any.whl
 Installing collected packages: urllib3, six
@@ -135,8 +135,8 @@ does not enable your use-case.
 is the number of days.[^4] This is meant to enable dependency cooldowns, which aim to reduce the
 impact of compromised upstream packages.
 
-```console { .command}
-pip install --uploaded-prior-to=P3D pip --force-reinstall  # exclude the recent pip release
+```console
+$ pip install --uploaded-prior-to=P3D pip --force-reinstall  # exclude the recent pip release
 Collecting pip
   Downloading pip-26.0.1-py3-none-any.whl.metadata (4.7 kB)
 Downloading pip-26.0.1-py3-none-any.whl (1.8 MB)
@@ -232,11 +232,12 @@ Here's the current list of current deprecations with the release in which they a
 scheduled for removal. As always, any given removal may be **pushed to a future release as
 needed**.
 
-`PIP_CONSTRAINT` for build dependencies *To be removed in pip 26.2*
-: The `PIP_CONSTRAINT` envvar will eventually stop taking effect for build dependencies.
+{{% pip/deprecation title="`PIP_CONSTRAINT` for build dependencies" version="26.2" %}}
+  The `PIP_CONSTRAINT` envvar will eventually stop taking effect for build dependencies.
   We're making this change to accommodate the planned transition to installing build
   dependencies in-process. Affected users should use `--build-constraint` or
   `PIP_BUILD_CONSTRAINT`.
+{{% /pip/deprecation %}}
 
 ## Acknowledgements
 

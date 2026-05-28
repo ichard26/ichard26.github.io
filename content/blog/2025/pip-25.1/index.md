@@ -40,8 +40,7 @@ option.
 First, let's assume there is a `pyproject.toml` file in the current directory that defines
 `test` and `lint` dependency groups:
 
-```toml
-# pyproject.toml
+```toml { filename = "pyproject.toml" }
 [dependency-groups]
 test = ["pytest", "pytest-xdist"]
 lint = ["mypy", "isort"]
@@ -52,7 +51,7 @@ dev = [ {include-group = "test"}, {include-group = "lint"} ]
 To install the `test` group, one can simply pass `--group test`.
 
 ```console {.command}
-pip install --group test
+$ pip install --group test
 ```
 
 You can repeat the option to install multiple groups. You can also use `--group` with
@@ -60,14 +59,14 @@ You can repeat the option to install multiple groups. You can also use `--group`
 two groups, and a requirements.txt? You bet you can.
 
 ```console {.command}
-pip install . --group lint --group test -r my-old-requirements.txt
+$ pip install . --group lint --group test -r my-old-requirements.txt
 ```
 
 To install a dependency group from a `pyproject.toml` file that exists in a different
 directory, state the path before the group separated with a colon.
 
 ```console {.command}
-pip install --group ./dev/vem/pyproject.toml:dev
+$ pip install --group ./dev/vem/pyproject.toml:dev
 ```
 
 > [!warning]
@@ -145,7 +144,7 @@ command][pip-lock] has been added to create a `pylock.toml` from a set of requir
 Here's an example locking the pip project in editable mode and six.
 
 ```console {.command}
-pip lock -e ./pip six --output - -qq
+$ pip lock -e ./pip six --output - -qq
 lock-version = "1.0"
 created-by = "pip"
 
@@ -189,7 +188,7 @@ for the old `pip install mypackage==` hack which used to be an
 [easy way to get the list of all available versions][no-version-hack].
 
 ```console {.command}
-pip index versions six
+$ pip index versions six
 six (1.17.0)
 Available versions: 1.17.0, 1.16.0, 1.15.0, 1.14.0, 1.13.0, 1.12.0, 1.11.0, 1.10.0, 1.9.0, 1.8.0, 1.7.3, 1.7.2, 1.7.1, 1.7.0, 1.6.1, 1.6.0, 1.5.2, 1.5.1, 1.5.0, 1.4.1, 1.4.0, 1.3.0, 1.2.0, 1.1.0, 1.0.0, 0.9.2, 0.9.1, 0.9.0
   INSTALLED: 1.17.0
@@ -199,7 +198,7 @@ Available versions: 1.17.0, 1.16.0, 1.15.0, 1.14.0, 1.13.0, 1.12.0, 1.11.0, 1.10
 In addition, you can now ask for JSON output using the `--json` flag.
 
 ```console {.command}
-pip index versions six --json
+$ pip index versions six --json
 {"name": "six", "versions": ["1.17.0", "1.16.0", "1.15.0", "1.14.0", "1.13.0", "1.12.0", "1.11.0", "1.10.0", "1.9.0", "1.8.0", "1.7.3", "1.7.2", "1.7.1", "1.7.0", "1.6.1", "1.6.0", "1.5.2", "1.5.1", "1.5.0", "1.4.1", "1.4.0", "1.3.0", "1.2.0", "1.1.0", "1.0.0", "0.9.2", "0.9.1", "0.9.0"], "latest": "1.17.0", "installed_version": "1.17.0"}
 ```
 
@@ -247,7 +246,7 @@ This meant that `.egg` distributions were being discovered several times. The
 leading to this confusing `pip list` output.
 
 ```console {.command}
-pip list
+$ pip list
 Package                       Version
 ----------------------------- ---------------------
 mypackage                     0.7.16
@@ -265,24 +264,28 @@ Starting with this release, the pip project no longer supports Python 3.8.
 In addition, here is a list of current deprecations and the release they will be removed.
 As always, any given removal may be **pushed to a future release as needed**.
 
-Non-bare project name in egg fragment *To be removed in pip 25.2*
-: [See the pip 25.0 post for more details.][old-deprecations]
+{{% pip/deprecation title="Non-bare project name in egg fragment" version="25.2" %}}
+  [See the pip 25.0 post for more details.][old-deprecations]
+{{% /pip/deprecation %}}
 
-Legacy setup.py editable installs *To be removed in pip 25.3*
-: Please read [the deprecation issue for more details and advice][#11457]. This was
+{{% pip/deprecation title="Legacy setup.py editable installs" version="25.3" %}}
+  Please read [the deprecation issue for more details and advice][#11457]. This was
   scheduled for removal in 25.0 and then 25.1, but it got pushed back (again) to coincide
   with the deprecation of `setup.py bdist_wheel` installs.
+{{% /pip/deprecation %}}
 
-Legacy setup.py `bdist_wheel` installs *To be removed in pip 25.3*
-: Please read [the deprecation issue for more details and advice][bdist_wheel], however,
+{{% pip/deprecation title="Legacy setup.py `bdist_wheel` installs" version="25.3" %}}
+  Please read [the deprecation issue for more details and advice][bdist_wheel], however,
   the summary is that pip will stop running `setup.py bdist_wheel` directly to build a
   wheel for installation. This is a compatibility fallback for old environments that do
   not support the modern PEP 517 interface.
+{{% /pip/deprecation %}}
 
-Non-standard wheel filenames *To be removed in pip 25.3*
-: This is a continuation of the old deprecation as the original deprecation did not catch
+{{% pip/deprecation title="Non-standard wheel filenames" version="25.3" %}}
+  This is a continuation of the old deprecation as the original deprecation did not catch
   all non-standard wheel filenames.
   [See the pip 25.0 post for more details.][old-deprecations]
+{{% /pip/deprecation %}}
 
 ## Acknowledgements
 

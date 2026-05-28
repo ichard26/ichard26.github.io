@@ -158,13 +158,13 @@ Finally, here is a list of deprecations currently scheduled for removal in pip 2
 2025). As always, this schedule is subject to change. **Any given removal may be pushed to
 a future release as needed.**
 
-Legacy (setup.py) editable installs _Deprecated since pip 24.2_
+Legacy (setup.py) editable installs (Deprecated since pip 24.2)
 : I've already said enough on this deprecation, so I'm going to simply ask that you read
   [the deprecation issue for information and advice][#11457]. This was originally
   scheduled for removal in 25.0, but it got pushed back as the removal wasn't finished in
   time.
 
-Legacy installed .egg distributions _Deprecated since pip 23.2_
+Legacy installed .egg distributions (Deprecated since pip 23.2)
 : ([#12330]) On Python 3.11 or later, support for detecting and uninstalling installed
   `.egg` distributions is deprecated. Eggs are the legacy format used to record installed
   distributions. It has been long since replaced by [`.dist-info`]. Today, they're most
@@ -172,7 +172,7 @@ Legacy installed .egg distributions _Deprecated since pip 23.2_
   the distribution using a recent pip. FWIW, this removal has been pushed back several
   times.
 
-Non-bare project name in egg fragment _Deprecated since pip 23.0_
+Non-bare project name in egg fragment (Deprecated since pip 23.0)
 : ([#13157]) If you're ever seen `#egg=mypkg` at the end of an URL requirement, that's
   called an egg fragment. It's the old syntax used to tell pip what project the URL is
   for. They've been largely replaced by the standardized [Direct URLs references]. When
@@ -182,14 +182,14 @@ Non-bare project name in egg fragment _Deprecated since pip 23.0_
   is blocked on adding support for requesting extras via the Direct URL syntax for VCS
   references.
 
-Non-standard wheel filenames _Deprecated since pip 24.3_
+Non-standard wheel filenames (Deprecated since pip 24.3)
 : ([#12938]) For historical reasons, pip does its own parsing of wheel filenames. We'd
   like to replace this with the reference parser in [packaging]. The side-effect is that
   wheels that violate the [wheel filename specification] are now rejected. Unless you use
   old packaging tooling or play shenanigans with your project name or wheel filenames, you
   shouldn't be affected.
 
--​-no-python-version-warning _Deprecated since pip 25.0_
+--no-python-version-warning (Deprecated since pip 25.0)
 : ([#13154]) The flag has long done nothing since Python 2 support was removed in pip
   21.0. pip has also never warned about deprecations of any other Python version as the
   flag's help suggests.

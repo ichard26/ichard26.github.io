@@ -30,7 +30,7 @@ If you aren't aware, since pip 24.2, **legacy** editable installs are deprecated
 **support is scheduled for removal in pip 25.0 in the new year** (at the time of writing).
 
 ```console {.command hl_lines=[5]}
-pip install -e temp/pip-test-package
+$ pip install -e temp/pip-test-package
 Obtaining file:///home/ichard26/dev/oss/pip/temp/pip-test-package
   Preparing metadata (setup.py) ... done
 Installing collected packages: version_pkg
@@ -81,7 +81,7 @@ Imagine you had a requirement file that recursively included itself:
 If you ran `pip install -r requirements.txt`, you'd get a nasty crash as pip kept
 following the loop until it reached the recursion limit:
 
-```console
+```text
 ERROR: Exception:
 Traceback (most recent call last):
 [trimmed...]
@@ -109,7 +109,7 @@ requirement files in a chain and forget what you've already included. Now, pip w
 this loop and raise a proper error.
 
 ```console {.command }
-pip install -r test.txt
+$ pip install -r test.txt
 ERROR: /home/ichard26/dev/oss/pip/test.txt recursively references itself in test.txt
 ```
 
@@ -129,7 +129,7 @@ Unfortunately, similar to the issue above, pip would just crash and leave the us
 horrible traceback in these cases.
 
 ```console { .command }
-pip install celery
+$ pip install celery
 Requirement already satisfied: celery in ./venv/lib/python3.12/site-packages (4.4.7)
 ERROR: Exception:
 [trimmed...]
@@ -152,7 +152,7 @@ To address this, a new diagnostic error has been added when encountering a broke
 pre-installed package.
 
 ```console { .command }
-pip install celery
+$ pip install celery
 Requirement already satisfied: celery in ./venv/lib/python3.12/site-packages (4.4.7)
 error: invalid-installed-package
 

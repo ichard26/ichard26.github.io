@@ -50,26 +50,30 @@ Here's the current list of current deprecations with the release in which they a
 scheduled for removal. As always, any given removal may be **pushed to a future release as
 needed**.
 
-Non-bare project name in egg fragment *To be removed in pip 25.3*
-: [See the pip 25.0 post for more details.][old-deprecations] This got pushed to pip 25.3
+{{% pip/deprecation title="Non-bare project name in egg fragment" version="25.3" %}}
+  [See the pip 25.0 post for more details.][old-deprecations] This got pushed to pip 25.3
   as the support for the Direct URL syntax for installing editable VCS projects did not
   land in this release, sadly.
+{{% /pip/deprecation %}}
 
-Legacy setup.py editable installs *To be removed in pip 25.3*
-: Please read [the deprecation issue for more details and advice][#11457]. This was
+{{% pip/deprecation title="Legacy setup.py editable installs" version="25.3" %}}
+  Please read [the deprecation issue for more details and advice][#11457]. This was
   scheduled for removal in 25.0 and then 25.1, but it got pushed back (again) to coincide
   with the deprecation of `setup.py bdist_wheel` installs.
+{{% /pip/deprecation %}}
 
-Legacy setup.py `bdist_wheel` installs *To be removed in pip 25.3*
-: Please read [the deprecation issue for more details and advice][bdist_wheel], however,
+{{% pip/deprecation title="Legacy setup.py `bdist_wheel` installs" version="25.3" %}}
+  Please read [the deprecation issue for more details and advice][bdist_wheel], however,
   the summary is that pip will stop running `setup.py bdist_wheel` directly to build a
   wheel for installation. This is a compatibility fallback for old environments that do
   not support the modern PEP 517 interface.
+{{% /pip/deprecation %}}
 
-Non-standard wheel filenames *To be removed in pip 25.3*
-: This is a continuation of the old deprecation as the original deprecation did not catch
+{{% pip/deprecation title="Non-standard wheel filenames" version="25.3" %}}
+  This is a continuation of the old deprecation as the original deprecation did not catch
   all non-standard wheel filenames.
   [See the pip 25.0 post for more details.][old-deprecations]
+{{% /pip/deprecation %}}
 
 ## Sneak peek: in-process build dependencies
 
@@ -80,7 +84,7 @@ If you've ever installed a project from source, you've likely noticed that pip t
 while to build the project.
 
 ```console { .command }
-time pip install ./dev/oss/pip
+$ time pip install ./dev/oss/pip
 Processing /home/ichard26/dev/oss/pip
   Installing build dependencies ... done
   Getting requirements to build wheel ... done
@@ -104,7 +108,7 @@ and force pip to use the _legacy_ setuptools-specific build mechanism, the insta
 noticeably faster.
 
 ```console { .command }
-time pip install ./dev/oss/pip --no-use-pep517
+$ time pip install ./dev/oss/pip --no-use-pep517
 [...]
 
 real   0m1.919s
@@ -154,7 +158,7 @@ when the feature is generally available for testing. The good news is that it is
 **demonstrating performance improvements**.
 
 ```console { .command }
-time pip install . --use-feature=inprocess-build-deps
+$ time pip install . --use-feature=inprocess-build-deps
 [...]
 
 real   0m2.672s
