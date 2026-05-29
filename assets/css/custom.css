@@ -90,10 +90,16 @@ html {
 
 /* pip deprecation shortcode */
 div.pip-deprecation {
-  border-left: 5px solid color-mix(in srgb, var(--hx-color-slate-900), transparent 50%);
+  --pip-deprecation-color: var(--hx-color-slate-900);
+  border-left: 5px solid color-mix(in srgb, var(--pip-deprecation-color), transparent 50%);
   margin: 1em 0;
   padding: 0.75em 1em;
-  background-color: color-mix(in srgb, var(--hx-color-slate-900), transparent 97%);
+  background-color: color-mix(in srgb, var(--pip-deprecation-color), transparent 97%);
+}
+
+.dark div.pip-deprecation {
+  --pip-deprecation-color: var(--hx-color-slate-100);
+  border-left: 5px solid color-mix(in srgb, var(--hx-color-slate-100), transparent 80%);
 }
 
 @media (width >= 800px) {
@@ -109,7 +115,7 @@ div.pip-deprecation {
     top: -2px;
     margin: auto 2ch;
     height: 2px;
-    background-color: color-mix(in srgb, var(--hx-color-slate-900), transparent 80%);
+    background-color: color-mix(in srgb, var(--pip-deprecation-color), transparent 80%);
    }
   .pip-deprecation .date {
     display: flex;
@@ -137,6 +143,7 @@ div.pip-deprecation {
   font-weight: bold;
   text-decoration: underline;
   text-decoration-style: dashed;
+  margin-bottom: 1rem;
 }
 
 /* Blog descriptions */
@@ -155,4 +162,8 @@ div.sichard-description {
 
 .footnotes li > p {
   margin-left: var(--hx-spacing);
+}
+
+.content video {
+  margin-top: calc(var(--hx-spacing) * 6);
 }
