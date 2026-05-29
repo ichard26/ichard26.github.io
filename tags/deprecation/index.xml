@@ -1,1 +1,440 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Deprecation on Richard Si</title><link>https://ichard26.github.io/tags/deprecation/</link><description>Recent content in Deprecation on Richard Si</description><generator>Hugo -- 0.140.2</generator><language>en-ca</language><copyright>2022-present, Richard Si</copyright><lastBuildDate>Thu, 29 Aug 2024 00:00:00 -0400</lastBuildDate><atom:link href="https://ichard26.github.io/tags/deprecation/index.xml" rel="self" type="application/rss+xml"/><item><title>What's new in pip 24.2 — or why legacy editable installs are deprecated</title><link>https://ichard26.github.io/blog/2024/08/whats-new-in-pip-24.2/</link><pubDate>Mon, 26 Aug 2024 00:00:00 -0400</pubDate><guid>https://ichard26.github.io/blog/2024/08/whats-new-in-pip-24.2/</guid><description>In version 24.2, pip learns to use system certificates by default, receives a handful of optimizations, and deprecates legacy (setup.py develop) editable installations.</description></item></channel></rss>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Richard Si – Deprecation</title><link>https://ichard26.github.io/tags/deprecation/</link><description>Recent content in Deprecation on Richard Si</description><generator>Hugo -- gohugo.io</generator><language>en-ca</language><lastBuildDate>Mon, 26 Aug 2024 00:00:00 -0400</lastBuildDate><atom:link href="https://ichard26.github.io/tags/deprecation/index.xml" rel="self" type="application/rss+xml"/><item><title>What's new in pip 24.2 — or why legacy editable installs are deprecated</title><link>https://ichard26.github.io/blog/2024/08/whats-new-in-pip-24.2/</link><pubDate>Mon, 26 Aug 2024 00:00:00 -0400</pubDate><guid>https://ichard26.github.io/blog/2024/08/whats-new-in-pip-24.2/</guid><description>
+&lt;p&gt;On July 28, 2024, the pip team released &lt;a href="https://discuss.python.org/t/announcement-pip-24-2-release/59402"target="_blank" rel="noopener"&gt;pip 24.2&lt;/a&gt;. As a recent addition to the pip core
+team, I&amp;rsquo;ll walk you through the noteworthy or interesting changes from pip 24.2. Let&amp;rsquo;s go!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h4&gt;PSA, PSA, PSA 📣&lt;span class="hx:absolute hx:-mt-20" id="psa-psa-psa-"&gt;&lt;/span&gt;
+&lt;a href="#psa-psa-psa-" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;If you&amp;rsquo;re using setuptools, do not have a &lt;code&gt;pyproject.toml&lt;/code&gt;, and use pip&amp;rsquo;s &lt;code&gt;-e&lt;/code&gt; flag, you
+may be impacted by the &lt;a href="https://github.com/pypa/pip/issues/11457"target="_blank" rel="noopener"&gt;deprecation of legacy editable installs&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;If you&amp;rsquo;re an user of setuptools and came to this post after seeing the legacy editable
+install deprecation warning&lt;/strong&gt;,
+&lt;a href="https://github.com/pypa/pip/issues/11457"target="_blank" rel="noopener"&gt;you should first read the deprecation issue for solutions, &lt;strong&gt;not here&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;You can come back and read this after for more historical context on the deprecation,
+however! It&amp;rsquo;s a good read, I promise.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Here&amp;rsquo;s a &lt;a href="https://pip.pypa.io/en/stable/news/#v24-2"target="_blank" rel="noopener"&gt;link to the 24.2 changelog&lt;/a&gt; if you&amp;rsquo;d like the full list of changes.&lt;/p&gt;
+&lt;h2&gt;Legacy editable installs are deprecated&lt;span class="hx:absolute hx:-mt-20" id="legacy-editable-installs-are-deprecated"&gt;&lt;/span&gt;
+&lt;a href="#legacy-editable-installs-are-deprecated" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;TL;DR, &lt;strong&gt;don&amp;rsquo;t panic&lt;/strong&gt;. The &lt;code&gt;-e&lt;/code&gt; option is &lt;em&gt;not&lt;/em&gt; deprecated, but the way it works under
+the hood will change, potentially necessitating changes to how your project is packaged.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Over the last decade, there has been a major transition towards &lt;strong&gt;standardized
+mechanisms&lt;/strong&gt; for packaging Python projects:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="https://peps.python.org/pep-0517/"target="_blank" rel="noopener"&gt;PEP 517&lt;/a&gt;&lt;/strong&gt;: introduced an interface where frontends (e.g. the pip installer) can
+interact with a build backend (e.g. Poetry&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;), including asking it to build a
+wheel for later installation&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="https://peps.python.org/pep-0518/"target="_blank" rel="noopener"&gt;PEP 518&lt;/a&gt;&lt;/strong&gt;: introduced &lt;code&gt;pyproject.toml&lt;/code&gt; and defined a standard format for declaring
+build-time dependencies using this file&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="https://peps.python.org/pep-0621/"target="_blank" rel="noopener"&gt;PEP 621&lt;/a&gt;&lt;/strong&gt;: defined a standard format for declaring project metadata in
+&lt;code&gt;pyproject.toml&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="https://peps.python.org/pep-0660/"target="_blank" rel="noopener"&gt;PEP 660&lt;/a&gt;&lt;/strong&gt;: augmented the PEP 517 interface to define a way to ask a build backend to
+prepare an editable install&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;These PEPs are what enable the use of alternative backends like &lt;a href="https://python-poetry.org/"target="_blank" rel="noopener"&gt;Poetry&lt;/a&gt;, &lt;a href="https://hatch.pypa.io/latest/"target="_blank" rel="noopener"&gt;Hatch&lt;/a&gt;, and
+&lt;a href="https://scikit-build-core.readthedocs.io/"target="_blank" rel="noopener"&gt;scikit-build-core&lt;/a&gt; &lt;em&gt;without needing to add specific support for each backend&lt;/em&gt; in every
+frontend (e.g. pip, tox, uv). Instead of running &lt;code&gt;setup.py bdist_wheel&lt;/code&gt; to ask setuptools
+to build a wheel for installation, pip can simply call the &lt;code&gt;build_wheel&lt;/code&gt;
+hook&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt; from PEP 517 which all backends are guaranteed to have.&lt;/p&gt;
+&lt;p&gt;As each standard matured, &lt;strong&gt;pip has progressively deprecated and removed support for
+legacy&lt;/strong&gt; (and often setuptools-specific) &lt;strong&gt;mechanisms&lt;/strong&gt; to reduce technical debt and
+ensure that pip can continue to evolve.&lt;/p&gt;
+&lt;p&gt;Editable installs—the thing you get from &lt;code&gt;pip install -e &amp;lt;path&amp;gt;&lt;/code&gt;—used to be a setuptools
+only feature, requiring pip to call the project&amp;rsquo;s &lt;code&gt;setup.py&lt;/code&gt; with the &lt;code&gt;develop&lt;/code&gt;
+sub-command. However, this stopped being the case under &lt;a href="https://peps.python.org/pep-0660/"target="_blank" rel="noopener"&gt;PEP 660&lt;/a&gt;. As long as your
+project&amp;rsquo;s backend supports PEP 660, &lt;code&gt;pip install -e&lt;/code&gt; will continue to work. No setuptools
+required. (Although modern setuptools works fine as well.)&lt;/p&gt;
+&lt;h3&gt;OK, so what now?&lt;span class="hx:absolute hx:-mt-20" id="ok-so-what-now"&gt;&lt;/span&gt;
+&lt;a href="#ok-so-what-now" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;This release,
+&lt;a href="https://github.com/pypa/pip/issues/11457"target="_blank" rel="noopener"&gt;pip has deprecated support for the &lt;code&gt;setup.py develop&lt;/code&gt; fallback&lt;/a&gt;
+which is used when a project lacks support for modern editable installs. &lt;strong&gt;It will be
+removed in pip 25.0 (Q1 2025)&lt;/strong&gt; after which projects MUST support PEP 660 to perform an
+editable install. Affected projects will see this deprecation warning:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;pip install -e temp/pip-test-package
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;Obtaining file:///home/ichard26/dev/oss/pip/temp/pip-test-package
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt; Preparing metadata (setup.py) ... done
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;Installing collected packages: version_pkg
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line hl"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt; DEPRECATION: Legacy editable install of version_pkg==0.1 from file:///home/ichard26/dev/oss/pip/temp/pip-test-package (setup.py develop) is deprecated. pip 25.0 will enforce this behaviour change. A possible replacement is to add a pyproject.toml or enable --use-pep517, and use setuptools &amp;gt;= 64. If the resulting installation is not behaving as expected, try using --config-settings editable_mode=compat. Please consult the setuptools documentation for more information. Discussion can be found at https://github.com/pypa/pip/issues/11457
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt; Running setup.py develop for version_pkg
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;Successfully installed version_pkg-0.1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;In practice, this usually means one of two things:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;code&gt;pyproject.toml&lt;/code&gt; file doesn&amp;rsquo;t exist at all, thus pip will opt-out of the PEP 517
+interface, running &lt;code&gt;setup.py&lt;/code&gt; as required&lt;/li&gt;
+&lt;li&gt;The declared setuptools version (in the &lt;code&gt;[build-system].requires&lt;/code&gt; field) is too old and
+doesn&amp;rsquo;t support PEP 660, i.e. anything older than &lt;a href="https://setuptools.pypa.io/en/latest/history.html#v64-0-0"target="_blank" rel="noopener"&gt;setuptools 64.0.0&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For affected projects, the best solution is likely to &lt;strong&gt;use a modern version of setuptools
+and declare this via &lt;code&gt;pyproject.toml&lt;/code&gt;&lt;/strong&gt;. You can place your project metadata in this file
+as well, but it&amp;rsquo;s &lt;em&gt;not&lt;/em&gt; required to stop the legacy editable deprecation warnings.&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-toml" data-lang="toml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# pyproject.toml&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;build-system&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;requires&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;setuptools &amp;gt;= 64&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;build-backend&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;setuptools.build_meta&amp;#34;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Tip&lt;/strong&gt;: if you have other dependencies needed to run &lt;code&gt;setup.py&lt;/code&gt; or otherwise build your
+package, you should add them to the &lt;code&gt;[&amp;quot;setuptools &amp;gt;= 64&amp;quot;]&lt;/code&gt; list. This field is
+equivalent to setuptools&amp;rsquo; &lt;code&gt;setup_requires&lt;/code&gt; parameter.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Alternatively, projects can pass the &lt;code&gt;--enable-pep517&lt;/code&gt; flag to force pip to use the PEP
+517 interface, including the editable install extensions from PEP 660. If no backend is
+declared, pip will assume that the project uses setuptools and ensure it&amp;rsquo;s available in
+the isolated build environment.&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; As long as setuptools 64+ still supports your
+Python version, a modern editable install will be performed. Once the legacy mechanism is
+removed, &lt;code&gt;--use-pep517&lt;/code&gt; will have no effect and will essentially be enabled by default.&lt;/p&gt;
+&lt;p&gt;Finally, if you don&amp;rsquo;t like either of those solutions, you can always throw away setuptools
+and switch to a different backend entirely. I&amp;rsquo;ve mentioned a few earlier, but there are
+even more options to choose from if you&amp;rsquo;re willing to do some research and play around.
+I&amp;rsquo;d start with with the
+&lt;a href="https://packaging.python.org/en/latest/guides/tool-recommendations/#build-backends"target="_blank" rel="noopener"&gt;Python Packaging User Guide&amp;rsquo;s list of the commonly used backends&lt;/a&gt; if you want
+to replace setuptools.&lt;/p&gt;
+&lt;p&gt;If you stick with setuptools, one potential snag is that setuptools has introduced a new
+kind of editable installs while rolling out PEP 660 by default:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;If a package uses the &amp;ldquo;src&amp;rdquo; layout or otherwise places the source code in a separate
+top-level directory, setuptools will create a static &lt;code&gt;.pth&lt;/code&gt; file to extend the Python
+import path with that directory&lt;/li&gt;
+&lt;li&gt;If a package uses the &amp;ldquo;flat&amp;rdquo; layout, setuptools will install a custom import hook which
+intercepts imports and &amp;ldquo;redirects&amp;rdquo; them to the original modules (so auxiliary top-level
+files like &lt;code&gt;noxfile.py&lt;/code&gt; or &lt;code&gt;setup.py&lt;/code&gt; or a &lt;code&gt;tests&lt;/code&gt; package aren&amp;rsquo;t importable)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;If the &lt;a href="https://setuptools.pypa.io/en/latest/userguide/development_mode.html#legacy-behavior"target="_blank" rel="noopener"&gt;legacy behaviour is desired&lt;/a&gt;, one must pass
+&lt;code&gt;--config-settings editable_mode=compat&lt;/code&gt;. There is also one more method:
+&lt;a href="https://setuptools.pypa.io/en/latest/userguide/development_mode.html#strict-editable-installs"target="_blank" rel="noopener"&gt;strict editable installs&lt;/a&gt;. They behave closer to a normal installation, but are
+implemented in an entirely different way from &lt;code&gt;setup.py&lt;/code&gt; or the default method described
+above.&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;(&lt;strong&gt;Update&lt;/strong&gt;: a setuptools maintainer reached out to strict editable installs are not
+enabled by default. It turns out that the situation behind potential breakage is a bit
+more nuanced. Sorry!)&lt;/em&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Warning&lt;/strong&gt;: Static analysis tools including mypy, pyright, and pylint may not function
+properly when setuptools uses an import hook to implement an editable install.
+&lt;a href="https://github.com/pypa/setuptools/issues/3518"target="_blank" rel="noopener"&gt;This is a known issue&lt;/a&gt;. The recommended workaround is to pass
+&lt;code&gt;--config-settings editable_mode=compat&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;For more details using setuptools with &lt;code&gt;pyproject.toml&lt;/code&gt;, you should read their
+documentation:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;⭐ &lt;a href="https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html"target="_blank" rel="noopener"&gt;User guide to using &lt;code&gt;pyproject.toml&lt;/code&gt;&lt;/a&gt; ⭐&lt;/li&gt;
+&lt;li&gt;⭐ &lt;a href="https://setuptools.pypa.io/en/latest/userguide/development_mode.html"target="_blank" rel="noopener"&gt;setuptools&amp;rsquo; editable install docs&lt;/a&gt; ⭐&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://setuptools.pypa.io/en/latest/build_meta.html"target="_blank" rel="noopener"&gt;setuptools&amp;rsquo; build system docs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;If you&amp;rsquo;d like to learn more, especially about the history of why and how these standards
+came to exist, &lt;strong&gt;I strongly recommend
+&lt;a href="https://blog.ganssle.io/articles/2021/10/setup-py-deprecated.html"target="_blank" rel="noopener"&gt;reading Paul Ganssle&amp;rsquo;s excellent &amp;ldquo;Why you shouldn&amp;rsquo;t invoke setup.py directly&amp;rdquo; article&lt;/a&gt;&lt;/strong&gt;.
+It&amp;rsquo;s &lt;em&gt;long&lt;/em&gt;, but packs way more information than I could ever &lt;em&gt;hope&lt;/em&gt; to cover.&lt;/p&gt;
+&lt;h2&gt;System HTTPS certificates by default(*)&lt;span class="hx:absolute hx:-mt-20" id="system-https-certificates-by-default"&gt;&lt;/span&gt;
+&lt;a href="#system-https-certificates-by-default" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;If you&amp;rsquo;ve ever used pip in a corporate environment, there is a good chance that you&amp;rsquo;ve
+encountered a network or SSL verification error because the remote index server (PyPI or a
+private index) returned a HTTPS certificate that couldn&amp;rsquo;t be verified.&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;pip install toto
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;Looking in indexes: https://repos.company/api/pypi/python_pypi/simple
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by &amp;#39;SSLError(SSLError(0, &amp;#39;unknown error (_ssl.c:3630)&amp;#39;),)&amp;#39;: /api/pypi/python_pypi/simple/toto/
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by &amp;#39;SSLError(SSLError(0, &amp;#39;unknown error (_ssl.c:3630)&amp;#39;),)&amp;#39;: /api/pypi/python_pypi/simple/toto/
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by &amp;#39;SSLError(SSLError(0, &amp;#39;unknown error (_ssl.c:3630)&amp;#39;),)&amp;#39;: /api/pypi/python_pypi/simple/toto/
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by &amp;#39;SSLError(SSLError(0, &amp;#39;unknown error (_ssl.c:3630)&amp;#39;),)&amp;#39;: /api/pypi/python_pypi/simple/toto/
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by &amp;#39;SSLError(SSLError(0, &amp;#39;unknown error (_ssl.c:3630)&amp;#39;),)&amp;#39;: /api/pypi/python_pypi/simple/toto/
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line hl"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;Could not fetch URL https://repos.company/api/pypi/python_pypi/simple/toto/: There was a problem confirming the ssl certificate: HTTPSConnectionPool(host= &amp;#39;repos.company&amp;#39;, port=443): Max retries exceeded with url: /api/pypi/python_pypi/simple/toto/ (Caused by SSLError(SSLError(0, &amp;#39;unknown error (_ssl.c:3630)&amp;#39;),)) - skipping
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;ERROR: Could not find a version that satisfies the requirement toto (from versions: none)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;ERROR: No matching distribution found for toto
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;The problem is that while your system may be configured with the required certificate
+authorities, &lt;em&gt;pip had no ability to use those system CAs&lt;/em&gt;. This resulted in a confusing
+user experience, because while your browser was likely able to access the index server,
+pip &lt;a href="https://github.com/pypa/pip/issues/12560"target="_blank" rel="noopener"&gt;blew up&lt;/a&gt; with a non-obvious &lt;a href="https://github.com/pypa/pip/issues/10777"target="_blank" rel="noopener"&gt;error&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;To be able to verify HTTPS certificates, since the early days, pip has shipped with the
+&lt;a href="https://pypi.org/project/certifi/"target="_blank" rel="noopener"&gt;certifi&lt;/a&gt; CA bundle, which is simply a Python repackaging of the Mozilla CA bundle. To get
+pip to verify HTTPS certificates not trusted by certifi, you had to pass your own bundle
+via the &lt;code&gt;--cert&lt;/code&gt; option which is clunky.&lt;/p&gt;
+&lt;p&gt;In pip 22.2, pip gained the ability to use &lt;a href="https://pypi.org/project/truststore/"target="_blank" rel="noopener"&gt;truststore&lt;/a&gt; for HTTPS certificate validation,
+enabling pip to use the system certificate store instead of solely relying on certifi. The
+integration was experimental; users had to have truststore already installed and opt-in
+via &lt;code&gt;--use-feature=truststore&lt;/code&gt;, but it was a step forward.&lt;sup id="fnref:5"&gt;&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref"&gt;5&lt;/a&gt;&lt;/sup&gt; The plan was to enable
+truststore by default once the feature matured.&lt;/p&gt;
+&lt;p&gt;Two years later, in this pip release, &lt;strong&gt;truststore is now enabled by default&lt;/strong&gt;.&lt;sup id="fnref:6"&gt;&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref"&gt;6&lt;/a&gt;&lt;/sup&gt;
+Thus, assuming your system is configured properly with the required CAs, pip should simply
+&amp;ldquo;just work&amp;rdquo; even in many corporate environments. 🎉&lt;/p&gt;
+&lt;p&gt;There is one major problem though—you saw that asterisk, right? &lt;strong&gt;Truststore only works on
+Python 3.10 or higher&lt;/strong&gt;. pip will continue to exclusively use its certifi bundle on Python
+3.9 or 3.8. Additionally,
+&lt;a href="https://github.com/pypa/pip/issues/12892"target="_blank" rel="noopener"&gt;any Python implementation that does not implement the &lt;code&gt;ssl&lt;/code&gt; module APIs needed by truststore&lt;/a&gt;
+will not be able to use the system trust store either. In these situations, you will need
+to continue using &lt;code&gt;--cert&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Major thanks goes to &lt;a href="https://sethmlarson.dev/"target="_blank" rel="noopener"&gt;@sethmlarson&lt;/a&gt; for co-authoring truststore and writing patches
+improving and fixing pip&amp;rsquo;s truststore integration!&lt;/p&gt;
+&lt;h2&gt;Performance optimizations, duh!&lt;span class="hx:absolute hx:-mt-20" id="performance-optimizations-duh"&gt;&lt;/span&gt;
+&lt;a href="#performance-optimizations-duh" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;In this release, several optimizations of the environment inspection, file download,
+dependency resolution, and installation logic landed. While individually they are minor
+optimizations, together they provide a noticeable performance uplift in a variety of
+workloads!&lt;/p&gt;
+&lt;h3&gt;Faster discovery of installed packages&lt;span class="hx:absolute hx:-mt-20" id="faster-discovery-of-installed-packages"&gt;&lt;/span&gt;
+&lt;a href="#faster-discovery-of-installed-packages" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;First of all, on Python 3.11 or higher, pip is significantly faster to discover installed
+packages (especially if there are a lot of &amp;rsquo;em). This not only makes &lt;code&gt;pip list&lt;/code&gt; faster,
+but also makes pip generally faster as it has to figure out what packages are already
+installed &lt;a href="https://github.com/pypa/pip/pull/12656#issuecomment-2097040577"target="_blank" rel="noopener"&gt;quite frequently throughout its operation&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;These are the before and after runtimes of &lt;code&gt;pip list&lt;/code&gt; in my pip development environment
+which has 75 packages installed:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# before: pip list (24.1)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line hl"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;real 0m0.227s&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;user 0m0.192s&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;sys 0m0.035s&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# after: pip list (24.2)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line hl"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;real 0m0.207s&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;user 0m0.170s&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;sys 0m0.036s&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;On slower systems, the performance improvement will be greater.&lt;sup id="fnref:7"&gt;&lt;a href="#fn:7" class="footnote-ref" role="doc-noteref"&gt;7&lt;/a&gt;&lt;/sup&gt; This
+uplift was achieved by optimizing pip&amp;rsquo;s &lt;code&gt;importlib&lt;/code&gt; based metadata backend to read
+package&lt;sup id="fnref:8"&gt;&lt;a href="#fn:8" class="footnote-ref" role="doc-noteref"&gt;8&lt;/a&gt;&lt;/sup&gt; names and versions from the installed metadata directory
+names.&lt;sup id="fnref:9"&gt;&lt;a href="#fn:9" class="footnote-ref" role="doc-noteref"&gt;9&lt;/a&gt;&lt;/sup&gt; Previously, pip would read the name and version from the
+&lt;a href="https://packaging.python.org/en/latest/specifications/recording-installed-packages/#the-metadata-file"target="_blank" rel="noopener"&gt;&lt;code&gt;METADATA&lt;/code&gt; file&lt;/a&gt;, which is slow as it involves an extra file read and invoking an email
+header parser.&lt;/p&gt;
+&lt;h3&gt;Other optimizations&lt;span class="hx:absolute hx:-mt-20" id="other-optimizations"&gt;&lt;/span&gt;
+&lt;a href="#other-optimizations" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;dl&gt;
+&lt;dt&gt;Faster downloads &lt;em&gt;&lt;a href="https://github.com/pypa/pip/pull/12810"target="_blank" rel="noopener"&gt;PR #12810&lt;/a&gt;&lt;/em&gt; &lt;em&gt;@morotti&lt;/em&gt;&lt;/dt&gt;
+&lt;dd&gt;Source distributions and wheels are downloaded in 256 KiB chunks instead of 10 KiB
+chunks, which significantly reduces overhead and enables faster download speeds. A
+sizable &lt;em&gt;chunk&lt;/em&gt; (🥁) of the performance improvement comes from reducing the number of
+updates of the download progress bar.&lt;/dd&gt;
+&lt;dt&gt;Faster dependency resolution &lt;em&gt;&lt;a href="https://github.com/pypa/pip/pull/12663"target="_blank" rel="noopener"&gt;PR #12663&lt;/a&gt;&lt;/em&gt; &lt;em&gt;@notatallshaw&lt;/em&gt;&lt;/dt&gt;
+&lt;dd&gt;&amp;hellip; of highly complex or pathological dependency trees. As pip&amp;rsquo;s dependency resolver
+explores a dependency tree, it has to parse requirements (e.g. &lt;code&gt;pip==24.2&lt;/code&gt;) into a
+format it understands. In complex trees, the same requirements are often encountered
+many, &lt;em&gt;many&lt;/em&gt; times. There was &lt;em&gt;some&lt;/em&gt; caching in-place to minimize redundant work, but
+now requirements are consistently cached.&lt;/dd&gt;
+&lt;dt&gt;Faster installation &lt;em&gt;&lt;a href="https://github.com/pypa/pip/pull/12803"target="_blank" rel="noopener"&gt;PR #12803&lt;/a&gt;&lt;/em&gt; &lt;em&gt;@morotti&lt;/em&gt;&lt;/dt&gt;
+&lt;dd&gt;Wheels, &lt;a href="https://packaging.python.org/en/latest/specifications/binary-distribution-format/"target="_blank" rel="noopener"&gt;which are really zip archives&lt;/a&gt;, are extracted using a larger block size (either
+1MiB or the file size if it&amp;rsquo;s smaller than a MiB). Also, the zip decompressor is no
+longer invoked while copying empty files, eliminating pointless CPU cycles for files
+like &lt;code&gt;__init__.py&lt;/code&gt;.&lt;/dd&gt;
+&lt;dt&gt;Faster reinstalls &lt;em&gt;&lt;a href="https://github.com/pypa/pip/pull/12755"target="_blank" rel="noopener"&gt;PR #12755&lt;/a&gt;&lt;/em&gt; &lt;em&gt;yours truly!&lt;/em&gt;&lt;/dt&gt;
+&lt;dd&gt;The full list of platform compatibility tags is now only generated once and reused
+across all look-ups of the wheel cache, speeding up cached reinstalls.&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;h2&gt;&lt;code&gt;pip check&lt;/code&gt; just got a bit stricter&lt;span class="hx:absolute hx:-mt-20" id="pip-check-just-got-a-bit-stricter"&gt;&lt;/span&gt;
+&lt;a href="#pip-check-just-got-a-bit-stricter" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The &lt;code&gt;check&lt;/code&gt; pip command now verifies whether installed packages are declared to support
+the current platform, issuing a warning if a package is incompatible.&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;pip check
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;catboost 1.1.1 is not supported on this platform
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;ninja 1.11.1.1 is not supported on this platform
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;xgboost 1.6.1 is not supported on this platform
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;frozendict 2.3.8 is not supported on this platform
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Under the hood, for every package, pip reads the &lt;code&gt;WHEEL&lt;/code&gt; metadata file that&amp;rsquo;s installed
+alongside the package, and checks whether at least one of the compatibility tags is
+supported on the platform.&lt;/p&gt;
+&lt;p&gt;For example, this is the &lt;code&gt;WHEEL&lt;/code&gt; file from pip 24.2&amp;rsquo;s wheel:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# pip-24.2.dist-info/WHEEL&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;Wheel-Version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;1.0&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;Generator&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;setuptools (71.1.0)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;Root-Is-Purelib&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;Tag&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;py3-none-any&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;py3-none-any&lt;/code&gt; is a platform compatibility tag. What&amp;rsquo;s a compatibility tag?
+&lt;a href="https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/"target="_blank" rel="noopener"&gt;They&amp;rsquo;re essentially markers for what systems a package supports.&lt;/a&gt; You can
+think of them like languages. They include information on the architecture, Python ABI,
+and Python version. Every system has a set of compatibility tags it supports. If a package
+and the system it&amp;rsquo;s being installed to share a common tag—or with the analogy, &lt;em&gt;speak a
+shared language&lt;/em&gt;—the package is considered compatible.&lt;/p&gt;
+&lt;p&gt;In this case, &lt;code&gt;py3-none-any&lt;/code&gt; is code for &amp;ldquo;any Python 3 version&amp;rdquo;, &amp;ldquo;any Python ABI&amp;rdquo;, and
+&amp;ldquo;any architecture.&amp;rdquo; This is supported by any modern Python installation, thus this wheel
+would be almost always eligible for installation (although it may be rejected for other
+reasons, like &lt;code&gt;requires-python&lt;/code&gt; restrictions).&lt;/p&gt;
+&lt;p&gt;Now, &lt;code&gt;pip install&lt;/code&gt; already uses compatibility tags to ensure it only installs compatible
+packages. This extra check in &lt;code&gt;pip check&lt;/code&gt; is designed to surface packages that were
+&lt;strong&gt;compatible at the time of installation, but are no longer supported due to a system
+upgrade&lt;/strong&gt;. This is possible, especially as
+&lt;a href="https://github.com/pypa/pip/issues/11054"target="_blank" rel="noopener"&gt;Apple transitions from the &lt;code&gt;x86-64&lt;/code&gt; architecture (Intel) to &lt;code&gt;arm64&lt;/code&gt; (Apple Silicon)&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;(Un)fortunately, this has had the side-effect of
+&lt;a href="https://github.com/pypa/pip/issues/12884"target="_blank" rel="noopener"&gt;revealing numerous packages with inaccurate or outright malformed metadata, leading to false positives&lt;/a&gt;.
+This is annoying, but regarded as an intentional side-effect as the pip project has been
+moving towards enforcing standards compliance so pip follows the standards instead of de
+facto writing them.&lt;sup id="fnref:10"&gt;&lt;a href="#fn:10" class="footnote-ref" role="doc-noteref"&gt;10&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;This was &lt;a href="https://github.com/pypa/pip/pull/11088"target="_blank" rel="noopener"&gt;kindly contributed by @q0w&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;Oh yeah, &lt;code&gt;--require-virtualenv&lt;/code&gt; is a thing&lt;span class="hx:absolute hx:-mt-20" id="oh-yeah---require-virtualenv-is-a-thing"&gt;&lt;/span&gt;
+&lt;a href="#oh-yeah---require-virtualenv-is-a-thing" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;You can configure pip to only function when running in an activated virtual environment
+via the &lt;code&gt;--require-virtualenv&lt;/code&gt; flag. You can set this via a system-side or user-side
+configuration file; and it&amp;rsquo;s great for ensuring you don&amp;rsquo;t scribble all over your system or
+user Python environment.&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;pip install package-that-shouldnt-be-installed-system-wide
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;ERROR: Could not find an activated virtualenv (required).
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Anyway, it&amp;rsquo;s &lt;em&gt;supposed&lt;/em&gt; to only apply to commands &lt;strong&gt;that modify the environment&lt;/strong&gt;, like
+&lt;code&gt;pip install&lt;/code&gt; or &lt;code&gt;pip uninstall&lt;/code&gt;. Read-only commands, such as &lt;code&gt;pip list&lt;/code&gt;, are unaffected
+by the flag and will function even if a virtual environment is not activated.&lt;/p&gt;
+&lt;p&gt;This release extends this QoL feature to &lt;code&gt;pip check&lt;/code&gt; and &lt;code&gt;pip index&lt;/code&gt;. You can now discover
+unsupported packages whenever you want. &lt;a href="https://github.com/pypa/pip/pull/12842"target="_blank" rel="noopener"&gt;Thanks @branchvincent&lt;/a&gt;!&lt;/p&gt;
+&lt;h2&gt;Summary&lt;span class="hx:absolute hx:-mt-20" id="summary"&gt;&lt;/span&gt;
+&lt;a href="#summary" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;pip 24.2 delivers considerable performance and QoL improvements. It also continues the pip
+project&amp;rsquo;s goal of following and enforcing the use of and compliance with the
+interoperatability standards that have shaped modern Python packaging.&lt;/p&gt;
+&lt;p&gt;I realize that this post is long, but this release contained some cool changes and I
+believed they deserved more attention than a brief entry in the changelog. I make no
+promises that I&amp;rsquo;ll continue this series for future pip releases, but this sure was fun to
+write!&lt;/p&gt;
+&lt;p&gt;Finally, I&amp;rsquo;d like to thank Bartosz Sokorski, Bradley Reynolds, Hugo van Kemenade, and Paul
+Moore for reviewing this post in draft form and suggesting improvements. Any mistakes are
+of course my own.&lt;/p&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;Poetry is the all encompassing user-facing tool for packaging and dependency
+management, while &lt;code&gt;poetry-core&lt;/code&gt; is its backend. The same nitpick exists for all other
+&amp;ldquo;backends&amp;rdquo; I mention.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;In reality, pip calls other hooks as well to query additional build dependencies and
+generate metadata, but this isn&amp;rsquo;t the post where I explain pip&amp;rsquo;s entire PEP 517
+implementation.&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;code&gt;--no-build-isolation&lt;/code&gt; may be needed if the project has build-time requirements beyond
+setuptools and wheel. By passing this flag, you are responsible for making sure your
+environment already has the required dependencies to build your package.&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;As of writing, the TL;DR is that strict editables are implemented as a tree of file
+links to the original source files in an auxiliary directory which is then added to
+&lt;code&gt;sys.path&lt;/code&gt;, while legacy &amp;ldquo;compat mode&amp;rdquo; editables are implemented by placing the entire
+root of your package on &lt;code&gt;sys.path&lt;/code&gt;. The new method is designed to ensure only files
+present at installation are exposed, mimicking a normal installation. It&amp;rsquo;s rather neat
+that setuptools has support for all three methods described for implementing an
+editable install in PEP 660.&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:5"&gt;
+&lt;p&gt;This &lt;a href="https://github.com/pypa/pip/issues/1680"target="_blank" rel="noopener"&gt;was recognized as a problem in 2014&lt;/a&gt;, and pip gained the ability to
+&lt;a href="https://github.com/pypa/pip/pull/1866"target="_blank" rel="noopener"&gt;use system certificates on Unix in 2015&lt;/a&gt;, but this change was later
+reverted because it turned out
+&lt;a href="https://github.com/pypa/pip/commit/c77d4ab55ed412a3b72d0b73f504e8ddec918683"target="_blank" rel="noopener"&gt;none of the major distributions had a functional OpenSSL configuration at the time&lt;/a&gt;.&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:6"&gt;
+&lt;p&gt;pip continues to use truststore in tandem with certifi. This is necessary for
+platforms that do not support truststore, but also provides a fallback if the system
+trust store is broken or otherwise inaccessible for some reason. There are currently
+no plans for pip to switch to exclusively use truststore.&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:7"&gt;
+&lt;p&gt;Also, it&amp;rsquo;s worth mentioning that 3/4 of the 200ms is taken by Python&amp;rsquo;s own startup
+overhead and importing everything &lt;code&gt;pip list&lt;/code&gt; needs.&amp;#160;&lt;a href="#fnref:7" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:8"&gt;
+&lt;p&gt;OK, so technically I should be saying &amp;ldquo;distribution&amp;rdquo; to avoid ambiguity as the term
+&amp;ldquo;package&amp;rdquo; means something different under the Python import system, but distribution
+sounds weird which is why I&amp;rsquo;m saying &amp;ldquo;package&amp;rdquo; still. I&amp;rsquo;m horribly inconsistent about
+this though.&amp;#160;&lt;a href="#fnref:8" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:9"&gt;
+&lt;p&gt;If you dig into your &lt;code&gt;site-packages&lt;/code&gt; directory, you&amp;rsquo;ll notice that there is a bunch of
+&lt;code&gt;&amp;lt;name&amp;gt;-&amp;lt;version&amp;gt;.dist-info&lt;/code&gt; directories. These contain package metadata, and there is
+one for each package installed. They are included in wheels and are copied during
+installation.&amp;#160;&lt;a href="#fnref:9" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:10"&gt;
+&lt;p&gt;Historically, as pip was the only installer in town, various bits of pip&amp;rsquo;s design or
+behaviour has been become de facto standards. Even if there is a standard, &amp;ldquo;pip
+supports X&amp;rdquo; or &amp;ldquo;pip does X&amp;rdquo; can be regularly seen in the issue trackers of other
+packaging tools. While this is expected and unavoidable, it&amp;rsquo;s unideal. We don&amp;rsquo;t want
+to be in the business of telling what everyone else should be doing, especially as pip
+is old and has quirks and design flaws that frankly shouldn&amp;rsquo;t exist, let alone be
+copied by other tools. By gradually enforcing standards compliance, the Python
+packaging ecosystem becomes more and more defined by &lt;em&gt;common specifications&lt;/em&gt;, allowing
+other packaging tools to function without reimplementing a bunch of pip bugs or
+whatever.&amp;#160;&lt;a href="#fnref:10" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item></channel></rss>
