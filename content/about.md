@@ -3,11 +3,11 @@ title: About me
 description: >
   I'm Richard, aka ichard26. I'm a software engineer and Python OSS maintainer.
   I maintain the pip package installer.
-modified: 2026-04-30
+modified: 2026-05-29
 toc: false
 ---
 
-**Hello!** I'm Richard. I typically go by `ichard26` on the internet.
+**Hello!** I'm Richard. I typically go by `ichard26` (or some variation) on the internet.
 
 I am a software engineer, who likes to write command line tooling that makes developers'
 lives easier and less frustrating. I have extensive experience in the Python open-source

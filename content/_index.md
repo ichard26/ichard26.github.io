@@ -18,7 +18,7 @@ toc: false
 
 ## Open source
 
-I currently maintain [pip], the Python package installer that is used by millions of developers
+I maintain [pip], the Python package installer that is used by millions of developers
 and is included with CPython.
 
 I also operate [Next PR Number], a tool that lets you determine the next available number for
@@ -27,8 +27,8 @@ your GitHub PR. No guessing needed!
 Finally, I blog about my open-source work... occasionally.
 
 {{< cards >}}
-  {{< card link="/about/#open-source-software-oss" title="My open-source involvement ➚" icon="archive" >}}
-  {{< card link="/blog/" title="My musings on software ➚" icon="pencil" >}}
+  {{< card link="/about/#open-source-software-oss" title="My open-source involvement" icon="archive" >}}
+  {{< card link="/blog/" title="My musings on software" icon="pencil" >}}
 {{< /cards >}}
 
 ## Internet footprint
