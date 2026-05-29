@@ -1,4 +1,4 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Richard Si – Pip</title><link>https://ichard26.github.io/tags/pip/</link><description>Recent content in Pip on Richard Si</description><generator>Hugo -- gohugo.io</generator><language>en-ca</language><lastBuildDate>Sun, 26 Apr 2026 00:00:00 -0400</lastBuildDate><atom:link href="https://ichard26.github.io/tags/pip/index.xml" rel="self" type="application/rss+xml"/><item><title>What's new in pip 26.1 - lockfiles and dependency cooldowns!</title><link>https://ichard26.github.io/blog/2026/04/whats-new-in-pip-26.1/</link><pubDate>Sun, 26 Apr 2026 00:00:00 -0400</pubDate><guid>https://ichard26.github.io/blog/2026/04/whats-new-in-pip-26.1/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Richard Si – Pip</title><link>https://sichard.ca/tags/pip/</link><description>Recent content in Pip on Richard Si</description><generator>Hugo -- gohugo.io</generator><language>en-ca</language><lastBuildDate>Sun, 26 Apr 2026 00:00:00 -0400</lastBuildDate><atom:link href="https://sichard.ca/tags/pip/index.xml" rel="self" type="application/rss+xml"/><item><title>What's new in pip 26.1 - lockfiles and dependency cooldowns!</title><link>https://sichard.ca/blog/2026/04/whats-new-in-pip-26.1/</link><pubDate>Sun, 26 Apr 2026 00:00:00 -0400</pubDate><guid>https://sichard.ca/blog/2026/04/whats-new-in-pip-26.1/</guid><description>
 &lt;p&gt;On April 26, 2026, we, the pip team, released pip 26.1.&lt;/p&gt;
 &lt;p&gt;As always, please &lt;a href="https://pip.pypa.io/en/latest/news/#v26-1"target="_blank" rel="noopener"&gt;consult the changelog&lt;/a&gt; to learn about all of the changes
 contained in this release.&lt;/p&gt;
@@ -263,7 +263,7 @@ code as minimal as feasible. We did not want to vendor a human time parsing libr
 or roll our own.&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>What's new in pip 26.0 - prerelease and upload-time filtering!</title><link>https://ichard26.github.io/blog/2026/01/whats-new-in-pip-26.0/</link><pubDate>Fri, 30 Jan 2026 00:00:00 -0500</pubDate><guid>https://ichard26.github.io/blog/2026/01/whats-new-in-pip-26.0/</guid><description>
+&lt;/div&gt;</description></item><item><title>What's new in pip 26.0 - prerelease and upload-time filtering!</title><link>https://sichard.ca/blog/2026/01/whats-new-in-pip-26.0/</link><pubDate>Fri, 30 Jan 2026 00:00:00 -0500</pubDate><guid>https://sichard.ca/blog/2026/01/whats-new-in-pip-26.0/</guid><description>
 &lt;p&gt;On January 30, 2026, we, the pip team, released pip 26.0.&lt;/p&gt;
 &lt;p&gt;As always, please &lt;a href="https://pip.pypa.io/en/latest/news/#v25-2"target="_blank" rel="noopener"&gt;consult the changelog&lt;/a&gt; to learn about all of the changes
 contained in this release.&lt;/p&gt;
@@ -456,7 +456,7 @@ script runners are unavailable or undesirable.&lt;/p&gt;
 &lt;h3&gt;Experimental: In-process build dependencies&lt;span class="hx:absolute hx:-mt-20" id="experimental-in-process-build-dependencies"&gt;&lt;/span&gt;
 &lt;a href="#experimental-in-process-build-dependencies" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;The experimental feature to install build dependencies in-process, originally slated for
 25.3, has now landed in pip 26.0. You should
-&lt;a href="https://ichard26.github.io/blog/2025/07/whats-new-in-pip-25.2/#sneak-peek-in-process-build-dependencies"&gt;read my pip 25.2 post for the rational for this change&lt;/a&gt;,
+&lt;a href="https://sichard.ca/blog/2025/07/whats-new-in-pip-25.2/#sneak-peek-in-process-build-dependencies"&gt;read my pip 25.2 post for the rational for this change&lt;/a&gt;,
 but the benefits include:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Faster build environment provisioning&lt;/li&gt;
@@ -500,7 +500,7 @@ segment or pre-release segment (&lt;code&gt;.alpha&lt;/code&gt;, &lt;code&gt;.be
 &lt;p&gt;You can use &lt;code&gt;uv run&lt;/code&gt; as well.&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>What's new in pip 25.2 ... and a sneak peek of 25.3</title><link>https://ichard26.github.io/blog/2025/07/whats-new-in-pip-25.2/</link><pubDate>Wed, 30 Jul 2025 00:00:00 -0400</pubDate><guid>https://ichard26.github.io/blog/2025/07/whats-new-in-pip-25.2/</guid><description>
+&lt;/div&gt;</description></item><item><title>What's new in pip 25.2 ... and a sneak peek of 25.3</title><link>https://sichard.ca/blog/2025/07/whats-new-in-pip-25.2/</link><pubDate>Wed, 30 Jul 2025 00:00:00 -0400</pubDate><guid>https://sichard.ca/blog/2025/07/whats-new-in-pip-25.2/</guid><description>
 &lt;p&gt;On July 30, 2025, we, the pip team &lt;a href="https://discuss.python.org/t/announcement-pip-25-2-release/100716"target="_blank" rel="noopener"&gt;released pip 25.2&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Relative to the large 25.1 release, this release is tiny. It&amp;rsquo;s honestly so small that it
 barely warrants a post, but it wouldn&amp;rsquo;t be a proper release without a post, so enjoy
@@ -530,7 +530,7 @@ redownload files as expected.&lt;/p&gt;
 &lt;code&gt;ETA 0:00:00&lt;/code&gt; is technically correct, it is not useful information 😉&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src="https://ichard26.github.io/blog/2025/07/whats-new-in-pip-25.2/elapsed-time.png" alt="screeenshot of pip download numpy with a yellow elapsed time value near the progress bar" loading="lazy" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://sichard.ca/blog/2025/07/whats-new-in-pip-25.2/elapsed-time.png" alt="screeenshot of pip download numpy with a yellow elapsed time value near the progress bar" loading="lazy" /&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;The truststore and proxy features can be used together without conflicting with each
@@ -540,7 +540,7 @@ other.&lt;/p&gt;
 &lt;p&gt;Sub-commands are included in TAB completion.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src="https://ichard26.github.io/blog/2025/07/whats-new-in-pip-25.2/sub-command-completion.png" alt="screeenshot of pip cache subcommands being offered as TAB completion options" loading="lazy" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://sichard.ca/blog/2025/07/whats-new-in-pip-25.2/sub-command-completion.png" alt="screeenshot of pip cache subcommands being offered as TAB completion options" loading="lazy" /&gt;&lt;/p&gt;
 &lt;h2&gt;Deprecations &amp;amp; upcoming removals&lt;span class="hx:absolute hx:-mt-20" id="deprecations--upcoming-removals"&gt;&lt;/span&gt;
 &lt;a href="#deprecations--upcoming-removals" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Here&amp;rsquo;s the current list of current deprecations with the release in which they are
 scheduled for removal. As always, any given removal may be &lt;strong&gt;pushed to a future release as
@@ -552,7 +552,7 @@ needed&lt;/strong&gt;.&lt;/p&gt;
 &lt;div class="date"&gt;To be removed in pip 25.3&lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="content"&gt;
-&lt;p&gt;&lt;a href="https://ichard26.github.io/blog/2025/01/whats-new-in-pip-25.0/#upcoming-removals"&gt;See the pip 25.0 post for more details.&lt;/a&gt; This got pushed to pip 25.3
+&lt;p&gt;&lt;a href="https://sichard.ca/blog/2025/01/whats-new-in-pip-25.0/#upcoming-removals"&gt;See the pip 25.0 post for more details.&lt;/a&gt; This got pushed to pip 25.3
 as the support for the Direct URL syntax for installing editable VCS projects did not
 land in this release, sadly.&lt;/p&gt;
 &lt;/div&gt;
@@ -591,7 +591,7 @@ not support the modern PEP 517 interface.&lt;/p&gt;
 &lt;div class="content"&gt;
 &lt;p&gt;This is a continuation of the old deprecation as the original deprecation did not catch
 all non-standard wheel filenames.
-&lt;a href="https://ichard26.github.io/blog/2025/01/whats-new-in-pip-25.0/#upcoming-removals"&gt;See the pip 25.0 post for more details.&lt;/a&gt;&lt;/p&gt;
+&lt;a href="https://sichard.ca/blog/2025/01/whats-new-in-pip-25.0/#upcoming-removals"&gt;See the pip 25.0 post for more details.&lt;/a&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;h2&gt;Sneak peek: in-process build dependencies&lt;span class="hx:absolute hx:-mt-20" id="sneak-peek-in-process-build-dependencies"&gt;&lt;/span&gt;
@@ -741,7 +741,7 @@ process also needs to configure the network stack (which can be quite slow on so
 systems), load configuration, and shut down properly.&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>What's new in pip 25.1 - Dependency groups!</title><link>https://ichard26.github.io/blog/2025/04/whats-new-in-pip-25.1/</link><pubDate>Fri, 25 Apr 2025 00:00:00 -0400</pubDate><guid>https://ichard26.github.io/blog/2025/04/whats-new-in-pip-25.1/</guid><description>
+&lt;/div&gt;</description></item><item><title>What's new in pip 25.1 - Dependency groups!</title><link>https://sichard.ca/blog/2025/04/whats-new-in-pip-25.1/</link><pubDate>Fri, 25 Apr 2025 00:00:00 -0400</pubDate><guid>https://sichard.ca/blog/2025/04/whats-new-in-pip-25.1/</guid><description>
 &lt;p&gt;On April 26, 2025, we, the pip team released pip 25.1.&lt;/p&gt;
 &lt;p&gt;Compared to previous releases, this release is a large one. The &lt;a href="https://pip.pypa.io/en/latest/news/#v25-1"target="_blank" rel="noopener"&gt;changelog&lt;/a&gt; is quite long.
 Among the changes, there are numerous new features, including an install progress bar and
@@ -873,7 +873,7 @@ option.&lt;/p&gt;
 left off. If the remote server does not support download resumption, pip will fall back to
 restarting the download. If the download is still incomplete after pip has run out of
 retries, a diagnostic error will be raised.&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://ichard26.github.io/blog/2025/04/whats-new-in-pip-25.1/incomplete-download-error.png" alt="screeenshot of pip diagnostic incomplete-download error" loading="lazy" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://sichard.ca/blog/2025/04/whats-new-in-pip-25.1/incomplete-download-error.png" alt="screeenshot of pip diagnostic incomplete-download error" loading="lazy" /&gt;&lt;/p&gt;
 &lt;p&gt;It has been a long-standing complaint that pip is unreliable on poor/flaky connections.
 &lt;a href="https://github.com/pypa/pip/issues/4796"target="_blank" rel="noopener"&gt;Any downloads of a sufficiently large package would fail midway through&lt;/a&gt;,
 forcing the user to retry the entire pip command, only for it to fail again. For users on
@@ -1045,7 +1045,7 @@ As always, any given removal may be &lt;strong&gt;pushed to a future release as 
 &lt;div class="date"&gt;To be removed in pip 25.2&lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="content"&gt;
-&lt;p&gt;&lt;a href="https://ichard26.github.io/blog/2025/01/whats-new-in-pip-25.0/#upcoming-removals"&gt;See the pip 25.0 post for more details.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://sichard.ca/blog/2025/01/whats-new-in-pip-25.0/#upcoming-removals"&gt;See the pip 25.0 post for more details.&lt;/a&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="pip-deprecation"&gt;
@@ -1082,7 +1082,7 @@ not support the modern PEP 517 interface.&lt;/p&gt;
 &lt;div class="content"&gt;
 &lt;p&gt;This is a continuation of the old deprecation as the original deprecation did not catch
 all non-standard wheel filenames.
-&lt;a href="https://ichard26.github.io/blog/2025/01/whats-new-in-pip-25.0/#upcoming-removals"&gt;See the pip 25.0 post for more details.&lt;/a&gt;&lt;/p&gt;
+&lt;a href="https://sichard.ca/blog/2025/01/whats-new-in-pip-25.0/#upcoming-removals"&gt;See the pip 25.0 post for more details.&lt;/a&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;h2&gt;Acknowledgements&lt;span class="hx:absolute hx:-mt-20" id="acknowledgements"&gt;&lt;/span&gt;
@@ -1116,7 +1116,7 @@ incompatible with the newer versions. Pre-emptive upper-bounds will not help
 dependency resolution and &lt;a href="https://iscinumpy.dev/post/bound-version-constraints/"target="_blank" rel="noopener"&gt;are generally considered harmful&lt;/a&gt;.&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>Speeding up pip's Windows CI by setting TEMP to the D: drive</title><link>https://ichard26.github.io/blog/2025/03/faster-pip-ci-on-windows-d-drive/</link><pubDate>Mon, 10 Mar 2025 00:00:00 -0400</pubDate><guid>https://ichard26.github.io/blog/2025/03/faster-pip-ci-on-windows-d-drive/</guid><description>
+&lt;/div&gt;</description></item><item><title>Speeding up pip's Windows CI by setting TEMP to the D: drive</title><link>https://sichard.ca/blog/2025/03/faster-pip-ci-on-windows-d-drive/</link><pubDate>Mon, 10 Mar 2025 00:00:00 -0400</pubDate><guid>https://sichard.ca/blog/2025/03/faster-pip-ci-on-windows-d-drive/</guid><description>
 &lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-green-200 hx:bg-green-100 hx:text-green-900 hx:dark:border-green-200/30 hx:dark:bg-green-900/30 hx:dark:text-green-200"&gt;
 &lt;p class="hx:flex hx:items-center hx:font-medium"&gt;&lt;svg height=16px class="hx:inline-block hx:align-middle hx:mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/&gt;&lt;/svg&gt;TL;DR&lt;/p&gt;
 &lt;div class="hx:w-full hx:min-w-0 hx:leading-7"&gt;
@@ -1275,7 +1275,7 @@ by up to 30%&lt;/strong&gt;. 🎉&lt;/p&gt;
 &lt;/table&gt;
 &lt;p&gt;Or in graph form (&lt;strong&gt;note&lt;/strong&gt;: the data shown here is slightly more recent than the
 statistics).&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://ichard26.github.io/blog/2025/03/faster-pip-ci-on-windows-d-drive/windows-ci-times.png" alt="image" loading="lazy" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://sichard.ca/blog/2025/03/faster-pip-ci-on-windows-d-drive/windows-ci-times.png" alt="image" loading="lazy" /&gt;&lt;/p&gt;
 &lt;h2&gt;What about ReFS or Dev Drives?&lt;span class="hx:absolute hx:-mt-20" id="what-about-refs-or-dev-drives"&gt;&lt;/span&gt;
 &lt;a href="#what-about-refs-or-dev-drives" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;When I was investigating ways to improve file I/O performance on Windows, I&amp;rsquo;d discovered
 &lt;strong&gt;&lt;a href="https://blogs.windows.com/windowsdeveloper/2023/06/01/dev-drive-performance-security-and-control-for-developers/"target="_blank" rel="noopener"&gt;Dev Drives&lt;/a&gt;&lt;/strong&gt;. Now, I am no Windows expert. I stopped using the OS on a daily basis
@@ -1329,7 +1329,7 @@ feel like double checking this.&amp;#160;&lt;a href="#fnref:3" class="footnote-b
 ReFS was supported.&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>What's new in pip 25.0</title><link>https://ichard26.github.io/blog/2025/01/whats-new-in-pip-25.0/</link><pubDate>Fri, 31 Jan 2025 00:00:00 -0500</pubDate><guid>https://ichard26.github.io/blog/2025/01/whats-new-in-pip-25.0/</guid><description>
+&lt;/div&gt;</description></item><item><title>What's new in pip 25.0</title><link>https://sichard.ca/blog/2025/01/whats-new-in-pip-25.0/</link><pubDate>Fri, 31 Jan 2025 00:00:00 -0500</pubDate><guid>https://sichard.ca/blog/2025/01/whats-new-in-pip-25.0/</guid><description>
 &lt;p&gt;On January 26, 2025, &lt;a href="https://discuss.python.org/t/announcement-pip-25-0-release/78392"target="_blank" rel="noopener"&gt;the pip team released pip 25.0&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Before delving into the key changes, I&amp;rsquo;d like to mention that the pip project has two new
 maintainers: &lt;a href="https://github.com/notatallshaw"target="_blank" rel="noopener"&gt;Damian Shaw&lt;/a&gt; and Richard Si (that&amp;rsquo;s me!). I want to thank the pip core team
@@ -1544,7 +1544,7 @@ valid approach, but PEP 517 allows pip to ask a backend for only metadata.&amp;#
 &lt;p&gt;Maybe not always, but definitely for a long time.&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>What's new in pip 24.3</title><link>https://ichard26.github.io/blog/2024/11/whats-new-in-pip-24.3/</link><pubDate>Thu, 14 Nov 2024 00:00:00 -0500</pubDate><guid>https://ichard26.github.io/blog/2024/11/whats-new-in-pip-24.3/</guid><description>
+&lt;/div&gt;</description></item><item><title>What's new in pip 24.3</title><link>https://sichard.ca/blog/2024/11/whats-new-in-pip-24.3/</link><pubDate>Thu, 14 Nov 2024 00:00:00 -0500</pubDate><guid>https://sichard.ca/blog/2024/11/whats-new-in-pip-24.3/</guid><description>
 &lt;p&gt;On October 27, 2024, &lt;a href="https://discuss.python.org/t/announcement-pip-24-3-release/69350"target="_blank" rel="noopener"&gt;the pip team released pip 24.3&lt;/a&gt;. This release was a significantly
 smaller release with only a handful of minor fixes and improvements.&lt;/p&gt;
 &lt;p&gt;This write-up also includes the hotfixes included in pip 24.3.1 released on the same day.&lt;/p&gt;
@@ -1608,7 +1608,7 @@ this isn&amp;rsquo;t necessary&lt;/li&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;For more advice, please &lt;a href="https://github.com/pypa/pip/issues/11457"target="_blank" rel="noopener"&gt;see the issue tracking this deprecation&lt;/a&gt; and
-&lt;a href="https://github.com/pypa/pip/issues/11457#issuecomment-2439645125"target="_blank" rel="noopener"&gt;this comment&lt;/a&gt;.&lt;/strong&gt; You can also read my &lt;a href="https://ichard26.github.io/blog/2024/08/whats-new-in-pip-24.2/"&gt;write-up on pip 24.2&lt;/a&gt; which discusses the context
+&lt;a href="https://github.com/pypa/pip/issues/11457#issuecomment-2439645125"target="_blank" rel="noopener"&gt;this comment&lt;/a&gt;.&lt;/strong&gt; You can also read my &lt;a href="https://sichard.ca/blog/2024/08/whats-new-in-pip-24.2/"&gt;write-up on pip 24.2&lt;/a&gt; which discusses the context
 behind the deprecation.&lt;/p&gt;
 &lt;h2&gt;QoL improvements&lt;span class="hx:absolute hx:-mt-20" id="qol-improvements"&gt;&lt;/span&gt;
 &lt;a href="#qol-improvements" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;Recursive requirement files are now detected&lt;span class="hx:absolute hx:-mt-20" id="recursive-requirement-files-are-now-detected"&gt;&lt;/span&gt;
@@ -1787,7 +1787,7 @@ data-copied-label="Copied!"
 &lt;li&gt;&lt;code&gt;pip&lt;/code&gt; is the package name&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;24.3.1&lt;/code&gt; is the version&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;py3-none-any&lt;/code&gt; is the compatibility tag.
-&lt;a href="https://ichard26.github.io/blog/2024/08/whats-new-in-pip-24.2/#pip-check-just-got-a-bit-stricter"&gt;I went over compatibility tags in my previous pip write-up&lt;/a&gt;, but
+&lt;a href="https://sichard.ca/blog/2024/08/whats-new-in-pip-24.2/#pip-check-just-got-a-bit-stricter"&gt;I went over compatibility tags in my previous pip write-up&lt;/a&gt;, but
 essentially, &lt;code&gt;py3-none-any&lt;/code&gt; is code for this package supports “any Python 3 version”,
 “any Python ABI”, and “any architecture.”&lt;/li&gt;
 &lt;/ul&gt;
@@ -1838,7 +1838,7 @@ fortunately for us, &lt;code&gt;1.2.0-1&lt;/code&gt; normalizes to &lt;code&gt;1
 filename.&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>What's new in pip 24.2 — or why legacy editable installs are deprecated</title><link>https://ichard26.github.io/blog/2024/08/whats-new-in-pip-24.2/</link><pubDate>Mon, 26 Aug 2024 00:00:00 -0400</pubDate><guid>https://ichard26.github.io/blog/2024/08/whats-new-in-pip-24.2/</guid><description>
+&lt;/div&gt;</description></item><item><title>What's new in pip 24.2 — or why legacy editable installs are deprecated</title><link>https://sichard.ca/blog/2024/08/whats-new-in-pip-24.2/</link><pubDate>Mon, 26 Aug 2024 00:00:00 -0400</pubDate><guid>https://sichard.ca/blog/2024/08/whats-new-in-pip-24.2/</guid><description>
 &lt;p&gt;On July 28, 2024, the pip team released &lt;a href="https://discuss.python.org/t/announcement-pip-24-2-release/59402"target="_blank" rel="noopener"&gt;pip 24.2&lt;/a&gt;. As a recent addition to the pip core
 team, I&amp;rsquo;ll walk you through the noteworthy or interesting changes from pip 24.2. Let&amp;rsquo;s go!&lt;/p&gt;
 &lt;blockquote&gt;

@@ -1,4 +1,4 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Richard Si – Black</title><link>https://ichard26.github.io/tags/black/</link><description>Recent content in Black on Richard Si</description><generator>Hugo -- gohugo.io</generator><language>en-ca</language><lastBuildDate>Tue, 31 Jan 2023 00:00:00 -0500</lastBuildDate><atom:link href="https://ichard26.github.io/tags/black/index.xml" rel="self" type="application/rss+xml"/><item><title>What's new in Black 23.1.0</title><link>https://ichard26.github.io/blog/2023/01/black-23.1.0/</link><pubDate>Tue, 31 Jan 2023 00:00:00 -0500</pubDate><guid>https://ichard26.github.io/blog/2023/01/black-23.1.0/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Richard Si – Black</title><link>https://sichard.ca/tags/black/</link><description>Recent content in Black on Richard Si</description><generator>Hugo -- gohugo.io</generator><language>en-ca</language><lastBuildDate>Tue, 31 Jan 2023 00:00:00 -0500</lastBuildDate><atom:link href="https://sichard.ca/tags/black/index.xml" rel="self" type="application/rss+xml"/><item><title>What's new in Black 23.1.0</title><link>https://sichard.ca/blog/2023/01/black-23.1.0/</link><pubDate>Tue, 31 Jan 2023 00:00:00 -0500</pubDate><guid>https://sichard.ca/blog/2023/01/black-23.1.0/</guid><description>
 &lt;p&gt;Today we released &lt;a href="https://github.com/psf/black/releases/tag/23.1.0"target="_blank" rel="noopener"&gt;Black 23.1.0&lt;/a&gt; 🎉.&lt;/p&gt;
 &lt;p&gt;While Black does not follow SemVar, it is indeed a major release as it ships with the
 &lt;strong&gt;2023 stable style&lt;/strong&gt;. Many changes made to the &lt;strong&gt;preview&lt;/strong&gt; style over the past year have
@@ -23,7 +23,7 @@ for 23.1.0, please refer to the link above.&lt;/p&gt;
 &lt;a href="#code-style" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;The 2023 stable style&lt;span class="hx:absolute hx:-mt-20" id="the-2023-stable-style"&gt;&lt;/span&gt;
 &lt;a href="#the-2023-stable-style" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;We didn&amp;rsquo;t make any major changes to the 2023 stable style draft since 23.1a1.&lt;/p&gt;
 &lt;p&gt;So for the major parts of the new stable style,
-&lt;a href="https://ichard26.github.io/blog/2022/12/black-23.1a1/"&gt;&lt;strong&gt;please refer to the 23.1a1 post&lt;/strong&gt;&lt;/a&gt;. Everything under the
+&lt;a href="https://sichard.ca/blog/2022/12/black-23.1a1/"&gt;&lt;strong&gt;please refer to the 23.1a1 post&lt;/strong&gt;&lt;/a&gt;. Everything under the
 &amp;ldquo;promoted changes&amp;rdquo; header were promoted &lt;em&gt;officially&lt;/em&gt; in 23.1.0. The TL;DR is:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Improved empty line handling (mostly removing unnecessary ones)&lt;/li&gt;
@@ -314,7 +314,7 @@ anymore&lt;/strong&gt; as long as they define their project metadata
 cutting 23.1.0 and make sure the 2023 stable style wouldn&amp;rsquo;t be a failure. We got some
 helpful feedback, but I realize we could&amp;rsquo;ve done more.&lt;/p&gt;
 &lt;p&gt;If you have any feedback for this release or suggestions for next time, &lt;strong&gt;please let us
-know!&lt;/strong&gt; Feel free to open an issue, &lt;a href="https://ichard26.github.io/about/#contact-information"&gt;email me&lt;/a&gt;, &lt;a href="https://discord.gg/RtVdv86PrH"target="_blank" rel="noopener"&gt;message us on Discord&lt;/a&gt;, whatever.&lt;/p&gt;
+know!&lt;/strong&gt; Feel free to open an issue, &lt;a href="https://sichard.ca/about/#contact-information"&gt;email me&lt;/a&gt;, &lt;a href="https://discord.gg/RtVdv86PrH"target="_blank" rel="noopener"&gt;message us on Discord&lt;/a&gt;, whatever.&lt;/p&gt;
 &lt;p&gt;Anyway, thanks for reading this. On behalf of the maintainer team, I hope you enjoy the
 new release!&lt;/p&gt;
 &lt;div class="footnotes" role="doc-endnotes"&gt;
@@ -325,7 +325,7 @@ new release!&lt;/p&gt;
 but GvR and co. might have snuck it into 3.9 :P&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>Black 23.1a1 - please help us test the 2023 stable style!</title><link>https://ichard26.github.io/blog/2022/12/black-23.1a1/</link><pubDate>Sun, 18 Dec 2022 00:00:00 -0500</pubDate><guid>https://ichard26.github.io/blog/2022/12/black-23.1a1/</guid><description>
+&lt;/div&gt;</description></item><item><title>Black 23.1a1 - please help us test the 2023 stable style!</title><link>https://sichard.ca/blog/2022/12/black-23.1a1/</link><pubDate>Sun, 18 Dec 2022 00:00:00 -0500</pubDate><guid>https://sichard.ca/blog/2022/12/black-23.1a1/</guid><description>
 &lt;p&gt;As the post summary says, earlier today &lt;a href="https://github.com/psf/black/releases/tag/23.1a1"target="_blank" rel="noopener"&gt;we released Black 23.1a1&lt;/a&gt;. You might
 be wondering why we released an alpha&amp;hellip; it&amp;rsquo;s because the upcoming Black 23.1.0 release
 will see many &lt;strong&gt;preview&lt;/strong&gt; code style changes promoted to the &lt;strong&gt;stable&lt;/strong&gt; style.&lt;/p&gt;
@@ -1110,7 +1110,7 @@ promoted to stable for 2024.&lt;/p&gt;
 get into it right now.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>What's new in Black 22.10.0</title><link>https://ichard26.github.io/blog/2022/10/black-22.10.0/</link><pubDate>Fri, 14 Oct 2022 00:00:00 -0400</pubDate><guid>https://ichard26.github.io/blog/2022/10/black-22.10.0/</guid><description>
+&lt;/div&gt;</description></item><item><title>What's new in Black 22.10.0</title><link>https://sichard.ca/blog/2022/10/black-22.10.0/</link><pubDate>Fri, 14 Oct 2022 00:00:00 -0400</pubDate><guid>https://sichard.ca/blog/2022/10/black-22.10.0/</guid><description>
 &lt;p&gt;On October 6th, 2022, &lt;a href="https://github.com/psf/black/releases/tag/22.10.0"target="_blank" rel="noopener"&gt;we released Black 22.10.0&lt;/a&gt;. It&amp;rsquo;s a smaller release
 by the size of the changelog, but hey that means I don&amp;rsquo;t have to write as much!&lt;/p&gt;
 &lt;p&gt;This is meant to be an accompanying blog post for 22.10.0. I won&amp;rsquo;t discuss every change,
@@ -1418,7 +1418,7 @@ after even more internal discussion,
 &lt;p&gt;Łukasz couldn&amp;rsquo;t live without his f-strings :)&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>Compiling Black with mypyc, Pt. 3 - Deployment</title><link>https://ichard26.github.io/blog/2022/05/compiling-black-with-mypyc-part-3/</link><pubDate>Tue, 31 May 2022 16:27:00 -0400</pubDate><guid>https://ichard26.github.io/blog/2022/05/compiling-black-with-mypyc-part-3/</guid><description>
+&lt;/div&gt;</description></item><item><title>Compiling Black with mypyc, Pt. 3 - Deployment</title><link>https://sichard.ca/blog/2022/05/compiling-black-with-mypyc-part-3/</link><pubDate>Tue, 31 May 2022 16:27:00 -0400</pubDate><guid>https://sichard.ca/blog/2022/05/compiling-black-with-mypyc-part-3/</guid><description>
 &lt;p&gt;This is part of the &amp;ldquo;&lt;em&gt;Compiling Black with mypyc&lt;/em&gt;&amp;rdquo; series.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="../compiling-black-with-mypyc-part-1/"&gt;Pt. 1 - Initial Steps&lt;/a&gt;&lt;/li&gt;
@@ -1568,7 +1568,7 @@ way, but they turned out alright ❀&lt;/p&gt;
 &lt;p&gt;Congrats on reaching the end of this multi-part blog series!&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;By the way, &lt;a href="https://glyph.twistedmatrix.com/2022/04/you-should-compile-your-python-and-heres-why.html"target="_blank" rel="noopener"&gt;Glyph has also written an excellent piece on mypyc&lt;/a&gt; where he tries to
 convince you to start using mypyc. You should totally read it.&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;If you would like to chat with me, &lt;a href="https://ichard26.github.io/about/#contact-information"target="_blank" rel="noopener"&gt;my contact details are here&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;If you would like to chat with me, &lt;a href="https://sichard.ca/about/#contact-information"target="_blank" rel="noopener"&gt;my contact details are here&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
 &lt;h2&gt;Acknowledgements&lt;span class="hx:absolute hx:-mt-20" id="acknowledgements"&gt;&lt;/span&gt;
 &lt;a href="#acknowledgements" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;I&amp;rsquo;d like to thank &lt;a href="https://github.com/msullivan"target="_blank" rel="noopener"&gt;@msullivan&lt;/a&gt; for his original work on integrating mypyc into Black,
 spawning this summer project and eventually this blog series :)&lt;/p&gt;
@@ -1604,7 +1604,7 @@ still 2x&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backl
 &lt;p&gt;Learning C (and Rust) is now one of my future goals thanks to this project&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>Compiling Black with mypyc, Pt. 2 - Optimization</title><link>https://ichard26.github.io/blog/2022/05/compiling-black-with-mypyc-part-2/</link><pubDate>Tue, 31 May 2022 16:26:00 -0400</pubDate><guid>https://ichard26.github.io/blog/2022/05/compiling-black-with-mypyc-part-2/</guid><description>
+&lt;/div&gt;</description></item><item><title>Compiling Black with mypyc, Pt. 2 - Optimization</title><link>https://sichard.ca/blog/2022/05/compiling-black-with-mypyc-part-2/</link><pubDate>Tue, 31 May 2022 16:26:00 -0400</pubDate><guid>https://sichard.ca/blog/2022/05/compiling-black-with-mypyc-part-2/</guid><description>
 &lt;p&gt;This is part of the &amp;ldquo;&lt;em&gt;Compiling Black with mypyc&lt;/em&gt;&amp;rdquo; series.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="../compiling-black-with-mypyc-part-1/"&gt;Pt. 1 - Initial Steps&lt;/a&gt;&lt;/li&gt;
@@ -1648,7 +1648,7 @@ profiling data into a nice SVG graph which I could then open in my web browser.&
 &lt;p&gt;Tip: please open this massive SVG in a new tab because viewing it here will probably be
 painful :)&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;&lt;img src="https://ichard26.github.io/media/cProfileGraph-black-1.svg" alt="gprof2dot graph showing where time was spent in a call tree" loading="lazy" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://sichard.ca/media/cProfileGraph-black-1.svg" alt="gprof2dot graph showing where time was spent in a call tree" loading="lazy" /&gt;&lt;/p&gt;
 &lt;p&gt;I tried using &lt;a href="https://pypi.org/project/scalene/"target="_blank" rel="noopener"&gt;Scalene&lt;/a&gt; as I&amp;rsquo;ve heard good things about it, but it didn&amp;rsquo;t work sadly. It
 wasn&amp;rsquo;t that bad as I still had &lt;a href="https://github.com/benfred/py-spy"target="_blank" rel="noopener"&gt;py-spy&lt;/a&gt;, &lt;a href="https://pypi.org/project/line-profiler/"target="_blank" rel="noopener"&gt;line_profiler&lt;/a&gt;, and good ol&amp;rsquo; cProfile. py-spy in
 particular was invaluable since it can profile (well err sample) C extensions which
@@ -1672,7 +1672,7 @@ some special cases.&lt;/p&gt;
 &lt;/ul&gt;
 &lt;p&gt;I was quite surprised how much time blib2to3 related functions were eating up. Just look
 how concentrated the hotspots really are!&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://ichard26.github.io/media/cProfileGraph-black-blib2to3-1.svg" alt="gprof2dot graph showing where time was spent parsing" loading="lazy" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://sichard.ca/media/cProfileGraph-black-blib2to3-1.svg" alt="gprof2dot graph showing where time was spent parsing" loading="lazy" /&gt;&lt;/p&gt;
 &lt;p&gt;These hotspots make this part of the codebase way easier to optimize, so I optimized
 blib2to3 first.&lt;/p&gt;
 &lt;p&gt;It&amp;rsquo;s been so long since I first looked into this, so I don&amp;rsquo;t remember what optimizations I
@@ -2203,7 +2203,7 @@ didn&amp;rsquo;t exist at the time:&lt;/p&gt;
 this project would actually improve performance, and to also quantify the gains (important
 when weighing optimizations).&lt;/p&gt;
 &lt;p&gt;The second one is less clear, I effectively wanted &lt;a href="https://github.com/hauntsaninja/mypy_primer"target="_blank" rel="noopener"&gt;mypy-primer&lt;/a&gt;, but for Black:&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://ichard26.github.io/media/mypy-primer-comment.png" alt="mypy-primer comment on python/mypy PR 12064 describing the impact of the change" loading="lazy" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://sichard.ca/media/mypy-primer-comment.png" alt="mypy-primer comment on python/mypy PR 12064 describing the impact of the change" loading="lazy" /&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;a href="https://github.com/python/mypy/pull/12064"target="_blank" rel="noopener"&gt;mypy-primer comment on mypy PR #12064&lt;/a&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -2273,7 +2273,7 @@ remains.&lt;/strong&gt; It&amp;rsquo;s shorter, believe me.&lt;/p&gt;
 remember what the error was though&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>Compiling Black with mypyc, Pt. 1 - Initial Steps</title><link>https://ichard26.github.io/blog/2022/05/compiling-black-with-mypyc-part-1/</link><pubDate>Tue, 31 May 2022 16:25:00 -0400</pubDate><guid>https://ichard26.github.io/blog/2022/05/compiling-black-with-mypyc-part-1/</guid><description>
+&lt;/div&gt;</description></item><item><title>Compiling Black with mypyc, Pt. 1 - Initial Steps</title><link>https://sichard.ca/blog/2022/05/compiling-black-with-mypyc-part-1/</link><pubDate>Tue, 31 May 2022 16:25:00 -0400</pubDate><guid>https://sichard.ca/blog/2022/05/compiling-black-with-mypyc-part-1/</guid><description>
 &lt;p&gt;&lt;a href="https://github.com/psf/black/releases/tag/22.1.0"target="_blank" rel="noopener"&gt;Release 22.1.0 of Black&lt;/a&gt; was special, not only was it the first stable
 version of Black, it was also the first release to ship with &lt;a href="https://mypyc.readthedocs.io/en/stable/introduction.html"target="_blank" rel="noopener"&gt;mypyc&lt;/a&gt; compiled wheels,
 doubling performance&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt; 🎉.&lt;/p&gt;

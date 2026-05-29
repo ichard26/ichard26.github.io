@@ -1,4 +1,4 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Richard Si – Mypyc</title><link>https://ichard26.github.io/tags/mypyc/</link><description>Recent content in Mypyc on Richard Si</description><generator>Hugo -- gohugo.io</generator><language>en-ca</language><lastBuildDate>Tue, 31 May 2022 16:27:00 -0400</lastBuildDate><atom:link href="https://ichard26.github.io/tags/mypyc/index.xml" rel="self" type="application/rss+xml"/><item><title>Compiling Black with mypyc, Pt. 3 - Deployment</title><link>https://ichard26.github.io/blog/2022/05/compiling-black-with-mypyc-part-3/</link><pubDate>Tue, 31 May 2022 16:27:00 -0400</pubDate><guid>https://ichard26.github.io/blog/2022/05/compiling-black-with-mypyc-part-3/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Richard Si – Mypyc</title><link>https://sichard.ca/tags/mypyc/</link><description>Recent content in Mypyc on Richard Si</description><generator>Hugo -- gohugo.io</generator><language>en-ca</language><lastBuildDate>Tue, 31 May 2022 16:27:00 -0400</lastBuildDate><atom:link href="https://sichard.ca/tags/mypyc/index.xml" rel="self" type="application/rss+xml"/><item><title>Compiling Black with mypyc, Pt. 3 - Deployment</title><link>https://sichard.ca/blog/2022/05/compiling-black-with-mypyc-part-3/</link><pubDate>Tue, 31 May 2022 16:27:00 -0400</pubDate><guid>https://sichard.ca/blog/2022/05/compiling-black-with-mypyc-part-3/</guid><description>
 &lt;p&gt;This is part of the &amp;ldquo;&lt;em&gt;Compiling Black with mypyc&lt;/em&gt;&amp;rdquo; series.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="../compiling-black-with-mypyc-part-1/"&gt;Pt. 1 - Initial Steps&lt;/a&gt;&lt;/li&gt;
@@ -148,7 +148,7 @@ way, but they turned out alright ❀&lt;/p&gt;
 &lt;p&gt;Congrats on reaching the end of this multi-part blog series!&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;By the way, &lt;a href="https://glyph.twistedmatrix.com/2022/04/you-should-compile-your-python-and-heres-why.html"target="_blank" rel="noopener"&gt;Glyph has also written an excellent piece on mypyc&lt;/a&gt; where he tries to
 convince you to start using mypyc. You should totally read it.&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;If you would like to chat with me, &lt;a href="https://ichard26.github.io/about/#contact-information"target="_blank" rel="noopener"&gt;my contact details are here&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;If you would like to chat with me, &lt;a href="https://sichard.ca/about/#contact-information"target="_blank" rel="noopener"&gt;my contact details are here&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
 &lt;h2&gt;Acknowledgements&lt;span class="hx:absolute hx:-mt-20" id="acknowledgements"&gt;&lt;/span&gt;
 &lt;a href="#acknowledgements" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;I&amp;rsquo;d like to thank &lt;a href="https://github.com/msullivan"target="_blank" rel="noopener"&gt;@msullivan&lt;/a&gt; for his original work on integrating mypyc into Black,
 spawning this summer project and eventually this blog series :)&lt;/p&gt;
@@ -184,7 +184,7 @@ still 2x&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backl
 &lt;p&gt;Learning C (and Rust) is now one of my future goals thanks to this project&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>Compiling Black with mypyc, Pt. 2 - Optimization</title><link>https://ichard26.github.io/blog/2022/05/compiling-black-with-mypyc-part-2/</link><pubDate>Tue, 31 May 2022 16:26:00 -0400</pubDate><guid>https://ichard26.github.io/blog/2022/05/compiling-black-with-mypyc-part-2/</guid><description>
+&lt;/div&gt;</description></item><item><title>Compiling Black with mypyc, Pt. 2 - Optimization</title><link>https://sichard.ca/blog/2022/05/compiling-black-with-mypyc-part-2/</link><pubDate>Tue, 31 May 2022 16:26:00 -0400</pubDate><guid>https://sichard.ca/blog/2022/05/compiling-black-with-mypyc-part-2/</guid><description>
 &lt;p&gt;This is part of the &amp;ldquo;&lt;em&gt;Compiling Black with mypyc&lt;/em&gt;&amp;rdquo; series.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="../compiling-black-with-mypyc-part-1/"&gt;Pt. 1 - Initial Steps&lt;/a&gt;&lt;/li&gt;
@@ -228,7 +228,7 @@ profiling data into a nice SVG graph which I could then open in my web browser.&
 &lt;p&gt;Tip: please open this massive SVG in a new tab because viewing it here will probably be
 painful :)&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;&lt;img src="https://ichard26.github.io/media/cProfileGraph-black-1.svg" alt="gprof2dot graph showing where time was spent in a call tree" loading="lazy" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://sichard.ca/media/cProfileGraph-black-1.svg" alt="gprof2dot graph showing where time was spent in a call tree" loading="lazy" /&gt;&lt;/p&gt;
 &lt;p&gt;I tried using &lt;a href="https://pypi.org/project/scalene/"target="_blank" rel="noopener"&gt;Scalene&lt;/a&gt; as I&amp;rsquo;ve heard good things about it, but it didn&amp;rsquo;t work sadly. It
 wasn&amp;rsquo;t that bad as I still had &lt;a href="https://github.com/benfred/py-spy"target="_blank" rel="noopener"&gt;py-spy&lt;/a&gt;, &lt;a href="https://pypi.org/project/line-profiler/"target="_blank" rel="noopener"&gt;line_profiler&lt;/a&gt;, and good ol&amp;rsquo; cProfile. py-spy in
 particular was invaluable since it can profile (well err sample) C extensions which
@@ -252,7 +252,7 @@ some special cases.&lt;/p&gt;
 &lt;/ul&gt;
 &lt;p&gt;I was quite surprised how much time blib2to3 related functions were eating up. Just look
 how concentrated the hotspots really are!&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://ichard26.github.io/media/cProfileGraph-black-blib2to3-1.svg" alt="gprof2dot graph showing where time was spent parsing" loading="lazy" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://sichard.ca/media/cProfileGraph-black-blib2to3-1.svg" alt="gprof2dot graph showing where time was spent parsing" loading="lazy" /&gt;&lt;/p&gt;
 &lt;p&gt;These hotspots make this part of the codebase way easier to optimize, so I optimized
 blib2to3 first.&lt;/p&gt;
 &lt;p&gt;It&amp;rsquo;s been so long since I first looked into this, so I don&amp;rsquo;t remember what optimizations I
@@ -783,7 +783,7 @@ didn&amp;rsquo;t exist at the time:&lt;/p&gt;
 this project would actually improve performance, and to also quantify the gains (important
 when weighing optimizations).&lt;/p&gt;
 &lt;p&gt;The second one is less clear, I effectively wanted &lt;a href="https://github.com/hauntsaninja/mypy_primer"target="_blank" rel="noopener"&gt;mypy-primer&lt;/a&gt;, but for Black:&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://ichard26.github.io/media/mypy-primer-comment.png" alt="mypy-primer comment on python/mypy PR 12064 describing the impact of the change" loading="lazy" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://sichard.ca/media/mypy-primer-comment.png" alt="mypy-primer comment on python/mypy PR 12064 describing the impact of the change" loading="lazy" /&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;a href="https://github.com/python/mypy/pull/12064"target="_blank" rel="noopener"&gt;mypy-primer comment on mypy PR #12064&lt;/a&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -853,7 +853,7 @@ remains.&lt;/strong&gt; It&amp;rsquo;s shorter, believe me.&lt;/p&gt;
 remember what the error was though&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>Compiling Black with mypyc, Pt. 1 - Initial Steps</title><link>https://ichard26.github.io/blog/2022/05/compiling-black-with-mypyc-part-1/</link><pubDate>Tue, 31 May 2022 16:25:00 -0400</pubDate><guid>https://ichard26.github.io/blog/2022/05/compiling-black-with-mypyc-part-1/</guid><description>
+&lt;/div&gt;</description></item><item><title>Compiling Black with mypyc, Pt. 1 - Initial Steps</title><link>https://sichard.ca/blog/2022/05/compiling-black-with-mypyc-part-1/</link><pubDate>Tue, 31 May 2022 16:25:00 -0400</pubDate><guid>https://sichard.ca/blog/2022/05/compiling-black-with-mypyc-part-1/</guid><description>
 &lt;p&gt;&lt;a href="https://github.com/psf/black/releases/tag/22.1.0"target="_blank" rel="noopener"&gt;Release 22.1.0 of Black&lt;/a&gt; was special, not only was it the first stable
 version of Black, it was also the first release to ship with &lt;a href="https://mypyc.readthedocs.io/en/stable/introduction.html"target="_blank" rel="noopener"&gt;mypyc&lt;/a&gt; compiled wheels,
 doubling performance&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt; 🎉.&lt;/p&gt;
