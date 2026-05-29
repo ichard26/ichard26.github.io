@@ -205,7 +205,7 @@ Any errors are my own, not theirs.
 [changelog]: https://black.readthedocs.io/en/stable/change_log.html
 [cibuildwheel]: https://cibuildwheel.readthedocs.io/en/stable/
 [cibuildwheel-examples]: https://cibuildwheel.readthedocs.io/en/stable/working-examples/
-[contact]: https://ichard26.github.io/about/#contact-information
+[contact]: https://sichard.ca/about/#contact-information
 [cya-python-two]: https://github.com/psf/black/pull/2740
 [diff-shades]: https://github.com/ichard26/diff-shades
 [diff-shades-comment-1]: https://github.com/psf/black/pull/2814#issuecomment-1023219426

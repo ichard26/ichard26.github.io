@@ -43,7 +43,7 @@ to the open source ecosystem. I'm proud to have contributed to the following pro
       subtitle="A development tool used to gauge the impact of code style changes in black across OSS code. Inspired by mypy-primer which was itself inspired by black-primer."
       tag="creator" tagColor="purple"
       >}}
-  {{< card link="https://ichard26.github.io/next-pr-number/" title="Next PR Number, since 2020"
+  {{< card link="https://sichard.ca/next-pr-number/" title="Next PR Number, since 2020"
       subtitle="A simple web utility to query the number the next PR would have for a public Github repository."
       tag="creator" tagColor="purple"
       >}}
@@ -97,5 +97,5 @@ in the [Python Discord][discord-python] and [PyPA][discord-pypa] servers.
 [discord-python]: https://discord.gg/python
 [mypy-primer]: https://github.com/hauntsaninja/mypy_primer
 [mypyc]: https://github.com/mypyc/mypyc
-[next-pr-number]: https://ichard26.github.io/next-pr-number/
+[next-pr-number]: https://sichard.ca/next-pr-number/
 [pip]: https://github.com/pypa/pip

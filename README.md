@@ -1,4 +1,4 @@
-# Daylily's blog -- [https://ichard26.github.io/](https://ichard26.github.io/)
+# Richard Si's blog -- <https://sichard.ca/>
 
 My personal place for writings all about FOSS and Python.
 

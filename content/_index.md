@@ -43,4 +43,4 @@ I can be found on the internet in various places:
 {{< /cards >}}
 
 [pip]: https://github.com/pypa/pip
-[Next PR Number]: https://ichard26.github.io/next-pr-number/
+[Next PR Number]: https://sichard.ca/next-pr-number/

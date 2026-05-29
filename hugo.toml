@@ -6,7 +6,7 @@ site = { language = { locale = "en-ca" }}
 defaultContentLanguage = "en-ca"
 timeZone = "America/Toronto"
 
-baseURL = 'https://ichard26.github.io/'
+baseURL = 'https://sichard.ca/'
 enableGitInfo = true
 enableRobotsTXT = true
 
@@ -80,7 +80,7 @@ url = "/privacy/"
 [[menu.main]]
 weight = 4
 name = "Next PR Number ➚"
-url = "https://ichard26.github.io/next-pr-number/"
+url = "https://sichard.ca/next-pr-number/"
 params = { type = "link", icon = "clipboard-copy" }
 
 [[menu.main]]

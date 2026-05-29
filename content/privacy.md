@@ -8,14 +8,14 @@ toc: false
 
 ## Scope
 
-All content and resources served under the `ichard26.github.io` and `floralily.dev`
-domains are subject to this privacy statement unless noted otherwise.
+All content and resources served under the `sichard.ca`, `ichard26.github.io`, and
+`floralily.dev` domains are subject to this privacy statement unless noted otherwise.
 
 **Exception**: this statement does not apply to the following URLs prefixes as they are
 served under a different GitHub repository without any data subprocessers (except for
 GitHub, Inc. the host):
 
-- <https://ichard26.github.io/ghstats/>
+- <https://sichard.ca/ghstats/>
 
 For the time being, I will not embed content from social media platform like Twitter or
 YouTube directly. Instead, I will copy the relevant text and make sure to link back to the
@@ -51,7 +51,7 @@ stored is purely used for functionality including:
 
 ### Next PR Number
 
-> https://ichard26.github.io/next-pr-number/
+> https://sichard.ca/next-pr-number/
 
 - **First-party IP and User-Agent logging**: Next PR Number uses an API that I operate.
   The API logs IP addresses and user-agents for usage monitoring and abuse prevention.
@@ -59,6 +59,9 @@ stored is purely used for functionality including:
 ## History
 
 {{< details title="Click to show" closed="true" >}}
+
+- **May 29, 2026**: I've migrated from `ichard26.github.io` to `sichard.ca`. Migration of
+   `floralily.dev` resources will occur later.
 
 - **April 29, 2026**: The VPS I use to host non-static pages/services is now provided by
   Netcup and is now located in Europe.
