@@ -41,7 +41,7 @@ logo = { path = "favicon.svg" }
 displayTags = true
 
 [params.footer]
-# displayCopyright = true
+displayCopyright = true
 
 [params.schema]
 publisherType = "Person"
