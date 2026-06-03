@@ -15,7 +15,7 @@ deliverables:&lt;/p&gt;
 &lt;li&gt;Use real virtual environments to isolate build subprocesses&lt;/li&gt;
 &lt;li&gt;Removing the crusty old legacy resolver (finally!)&lt;/li&gt;
 &lt;li&gt;Improved error reporting and UX&lt;/li&gt;
-&lt;li&gt;Creating a proposal for configuring index priority&lt;/li&gt;
+&lt;li&gt;Creating a proposal for configuring index priority for pip&lt;/li&gt;
 &lt;li&gt;General pip development and maintenance&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;However, I retain significant freedom and flexibility to use the paid time to work on
@@ -134,8 +134,8 @@ data-copied-label="Copied!"
 &lt;/button&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;h3&gt;Create a proposal for index priority&lt;span class="hx:absolute hx:-mt-20" id="create-a-proposal-for-index-priority"&gt;&lt;/span&gt;
-&lt;a href="#create-a-proposal-for-index-priority" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;TL;DR expected outcomes:&lt;/strong&gt;&lt;/p&gt;
+&lt;h3&gt;Create a proposal for index priority for pip&lt;span class="hx:absolute hx:-mt-20" id="create-a-proposal-for-index-priority-for-pip"&gt;&lt;/span&gt;
+&lt;a href="#create-a-proposal-for-index-priority-for-pip" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;TL;DR expected outcomes:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Summarize the needs that an index priority feature needs to cover&lt;/li&gt;
 &lt;li&gt;Research prior art&lt;/li&gt;
