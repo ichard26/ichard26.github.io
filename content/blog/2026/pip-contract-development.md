@@ -29,7 +29,7 @@ deliverables:
 - Use real virtual environments to isolate build subprocesses
 - Removing the crusty old legacy resolver (finally!)
 - Improved error reporting and UX
-- Creating a proposal for configuring index priority
+- Creating a proposal for configuring index priority for pip
 - General pip development and maintenance
 
 However, I retain significant freedom and flexibility to use the paid time to work on
@@ -43,6 +43,18 @@ Among other things, it lists in detail what I am expected to work on during thes
 
 If you're interested in the finer details, you should read the proposal, but for convenience,
 I have copied and summarized the key deliverables.
+
+> [!warning] Planning can only go so far
+> It's not a guarantee that I will follow these expectations or those listed in the proposal to a T.
+> As Paul Moore said to me while discussing project management, "no plan survives contact with the enemy."
+> Unexpected things are going to happen and that may mean I end up working on something different.
+>
+> For example, if pip experiences a severe CVE in the next few months (hopefully not 🤞), then I
+> would spend time addressing that, possibly more time than a strict reading of the plan
+> would allow for.
+>
+> The pip team fully recognises this reality, and we've agreed that I retain the flexibility to
+> adjust plans as needed as long it's documented and I get permission.
 
 ### Use real virtual environments for build isolation
 
@@ -116,7 +128,7 @@ $ pip install  black-25.1.0-cp313-cp313-win_amd64.whl
 ERROR: black-25.1.0-cp313-cp313-win_amd64.whl is not a supported wheel on this platform.
 ```
 
-### Create a proposal for index priority
+### Create a proposal for index priority for pip
 
 **TL;DR expected outcomes:**
 
