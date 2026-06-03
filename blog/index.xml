@@ -251,8 +251,8 @@ packaging standards, tools, and implementations. As per the PEP, one of the key 
 for the PC is to &amp;ldquo;facilitate tactical and fundraising support from the PSF, to increase
 capacity and &lt;strong&gt;funding available to packaging tools&lt;/strong&gt;.&amp;rdquo;&lt;/p&gt;
 &lt;p&gt;Once the inaugural Packaging Council has been elected and begins operations later this year,
-I strongly encourage the council to establish a clear process for packaging projects and
-contributors to apply for Packaging Council funding.&lt;/p&gt;
+&lt;strong&gt;I strongly encourage the council to establish a clear process for packaging projects and
+contributors to apply for Packaging Council funding&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;It should not be the case that the PyPA has no procedure for approving and disbursing its
 funds for packaging work, &lt;a href="https://discuss.python.org/t/withdrawn-amending-pypa-governance-to-permit-for-use-of-pypa-funds/106653/"target="_blank" rel="noopener"&gt;as I would find out and try to fix&lt;/a&gt; while planning
 this proposal.&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; I should not have to wait months to hear back on administrative details that
