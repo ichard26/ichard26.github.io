@@ -26,6 +26,19 @@ whatever would be most beneficial to pip. In particular, 32 hours have been allo
 Among other things, it lists in detail what I am expected to work on during these three months.&lt;/p&gt;
 &lt;p&gt;If you&amp;rsquo;re interested in the finer details, you should read the proposal, but for convenience,
 I have copied and summarized the key deliverables.&lt;/p&gt;
+&lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-amber-200 hx:bg-amber-100 hx:text-amber-900 hx:dark:border-amber-200/30 hx:dark:bg-amber-900/30 hx:dark:text-amber-200"&gt;
+&lt;p class="hx:flex hx:items-center hx:font-medium"&gt;&lt;svg height=16px class="hx:inline-block hx:align-middle hx:mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/&gt;&lt;/svg&gt;Planning can only go so far&lt;/p&gt;
+&lt;div class="hx:w-full hx:min-w-0 hx:leading-7"&gt;
+&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;&lt;p&gt;It&amp;rsquo;s not a guarantee that I will follow these expectations or those listed in the proposal to a T.
+As Paul Moore said to me while discussing project management, &amp;ldquo;no plan survives contact with the enemy.&amp;rdquo;
+Unexpected things are going to happen and that may mean I end up working on something different.&lt;/p&gt;
+&lt;p&gt;For example, if pip experiences a severe CVE in the next few months (hopefully not 🤞), then I
+would to spend time addressing that, possibly more time than a strict reading of the plan
+would allow for.&lt;/p&gt;
+&lt;p&gt;The pip team fully recognises this reality, and we&amp;rsquo;ve agreed that I retain the flexibility to
+adjust plans as needed as long it&amp;rsquo;s documented and I get permission.&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
 &lt;h3&gt;Use real virtual environments for build isolation&lt;span class="hx:absolute hx:-mt-20" id="use-real-virtual-environments-for-build-isolation"&gt;&lt;/span&gt;
 &lt;a href="#use-real-virtual-environments-for-build-isolation" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;TL;DR expected outcomes:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
