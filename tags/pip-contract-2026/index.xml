@@ -1,0 +1,305 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Richard Si – Pip-Contract-2026</title><link>https://sichard.ca/tags/pip-contract-2026/</link><description>Recent content in Pip-Contract-2026 on Richard Si</description><generator>Hugo -- gohugo.io</generator><language>en-ca</language><lastBuildDate>Mon, 01 Jun 2026 00:00:00 -0400</lastBuildDate><atom:link href="https://sichard.ca/tags/pip-contract-2026/index.xml" rel="self" type="application/rss+xml"/><item><title>I'm working on pip part-time for three months</title><link>https://sichard.ca/blog/2026/06/pip-contract-development/</link><pubDate>Mon, 01 Jun 2026 00:00:00 -0400</pubDate><guid>https://sichard.ca/blog/2026/06/pip-contract-development/</guid><description>
+&lt;p&gt;This is the most exciting news I get to announce so far in my open-source tenure! If you
+follow the Python packaging ecosystem closely, you may have seen &lt;a href="https://discuss.python.org/t/withdrawn-amending-pypa-governance-to-permit-for-use-of-pypa-funds/106653/3"target="_blank" rel="noopener"&gt;hints&lt;/a&gt; to this proposal.
+It&amp;rsquo;s finally real, having received the greenlight from the Packaging-WG in the past few
+days.&lt;/p&gt;
+&lt;h2&gt;Hang on, what&amp;rsquo;s happening?&lt;span class="hx:absolute hx:-mt-20" id="hang-on-whats-happening"&gt;&lt;/span&gt;
+&lt;a href="#hang-on-whats-happening" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;I will be working on pip part-time for 10 weeks from June 15 to August 21, 2026.
+The Python Software Foundation, through the &lt;a href="https://wiki.python.org/psf/PackagingWG"target="_blank" rel="noopener"&gt;Packaging-WG&lt;/a&gt;, has granted us with 4000 USD
+for 120 hours of work.&lt;/p&gt;
+&lt;p&gt;Admittedly, 120 hours is not a lot of time, but it&amp;rsquo;s still miles better than relying purely
+on volunteer contributions.&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt; This role is modelled as a mix of a traditional project
+contractor and the &lt;a href="https://lukasz.langa.pl/a072a74b-19d7-41ff-a294-e6b1319fdb6e/"target="_blank" rel="noopener"&gt;CPython Developer in Residence&lt;/a&gt; (DIR) program. I do have a list of key
+deliverables:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Use real virtual environments to isolate build subprocesses&lt;/li&gt;
+&lt;li&gt;Removing the crusty old legacy resolver (finally!)&lt;/li&gt;
+&lt;li&gt;Improved error reporting and UX&lt;/li&gt;
+&lt;li&gt;Creating a proposal for configuring index priority&lt;/li&gt;
+&lt;li&gt;General pip development and maintenance&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;However, I retain significant freedom and flexibility to use the paid time to work on
+whatever would be most beneficial to pip. In particular, 32 hours have been allocated to
+&amp;ldquo;general pip development maintenance&amp;rdquo;.&lt;/p&gt;
+&lt;h2&gt;What work will I be doing?&lt;span class="hx:absolute hx:-mt-20" id="what-work-will-i-be-doing"&gt;&lt;/span&gt;
+&lt;a href="#what-work-will-i-be-doing" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The &lt;a href="https://docs.google.com/document/d/1-0InfRaXGnT9aTUuNNVqAxgR5fneB75ODScPTA_0kJg/edit?usp=sharing"target="_blank" rel="noopener"&gt;formal proposal that we sent to the Packaging-WG and PSF is available publicly&lt;/a&gt;.
+Among other things, it lists in detail what I am expected to work on during these three months.&lt;/p&gt;
+&lt;p&gt;If you&amp;rsquo;re interested in the finer details, you should read the proposal, but for convenience,
+I have copied and summarized the key deliverables.&lt;/p&gt;
+&lt;h3&gt;Use real virtual environments for build isolation&lt;span class="hx:absolute hx:-mt-20" id="use-real-virtual-environments-for-build-isolation"&gt;&lt;/span&gt;
+&lt;a href="#use-real-virtual-environments-for-build-isolation" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;TL;DR expected outcomes:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Add a &lt;code&gt;--use-feature venv-isolation&lt;/code&gt; flag in pip 26.2&lt;/li&gt;
+&lt;li&gt;Use real virtual environments by default in pip 27.0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;To isolate build subprocesses from the environment pip is invoked in, pip uses a custom
+&lt;code&gt;sitecustomize.py&lt;/code&gt; and &lt;code&gt;PYTHONPATH&lt;/code&gt; environment variable tricks. This has worked
+surprisingly well, but over the years, the faux virtual environments are proving to be
+&lt;a href="https://github.com/pypa/pip/issues/13222"target="_blank" rel="noopener"&gt;quite&lt;/a&gt; &lt;a href="https://github.com/pypa/pip/issues/11812"target="_blank" rel="noopener"&gt;troublesome&lt;/a&gt; at &lt;a href="https://github.com/pypa/pip/issues/7778"target="_blank" rel="noopener"&gt;times&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s time that pip uses &lt;code&gt;venv&lt;/code&gt;. Notably, uv has been using real virtual environments for
+their build subprocesses which is good evidence that this should be feasible.&lt;/p&gt;
+&lt;p&gt;This feature will only be supported with in-process build dependencies. Timing-wise, the
+subprocess installer will be deprecated and slated for future removal at a similar time.
+It&amp;rsquo;d be ideal to ship these two major QoL improvements sequentially.&lt;/p&gt;
+&lt;h3&gt;Remove the legacy resolver&lt;span class="hx:absolute hx:-mt-20" id="remove-the-legacy-resolver"&gt;&lt;/span&gt;
+&lt;a href="#remove-the-legacy-resolver" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;TL;DR expected outcomes:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I gain familiarity with the 2020 resolver&lt;/li&gt;
+&lt;li&gt;Perform outreach and communicate the impending legacy resolver removal&lt;/li&gt;
+&lt;li&gt;File fixes and tweaks to aid in the transition, as per user feedback&lt;/li&gt;
+&lt;li&gt;Schedule the legacy resolver removal for pip 27.0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This is the largest unresolved deprecation. A substantial portion of tech debt is related
+to the legacy resolver. Pradyun Gedam has filed fixes for the bugs and feature gaps that
+prevent us from outright removing it. However, there is considerable communication work
+needed to ensure a smooth transition.&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s worth noting that I&amp;rsquo;m wholly unfamiliar with pip&amp;rsquo;s resolver, thus a secondary goal
+here is to gain familiarity in the dependency resolution logic. This is important for
+long-term sustainability since there is only one maintainer actively working on dependency
+resolution.&lt;/p&gt;
+&lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-purple-200 hx:bg-purple-100 hx:text-purple-900 hx:dark:border-purple-200/30 hx:dark:bg-purple-900/30 hx:dark:text-purple-200"&gt;
+&lt;p class="hx:flex hx:items-center hx:font-medium"&gt;&lt;svg height=16px class="hx:inline-block hx:align-middle hx:mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/&gt;&lt;/svg&gt;Important&lt;/p&gt;
+&lt;div class="hx:w-full hx:min-w-0 hx:leading-7"&gt;
+&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;&lt;p&gt;Removing support for &lt;code&gt;--use-deprecated=legacy-resolver&lt;/code&gt; is out of scope. As &lt;a href="https://github.com/pypa/pip/issues/10946#issuecomment-4195828617"target="_blank" rel="noopener"&gt;per current
+discussions&lt;/a&gt;, the earliest support can be removed is in pip 26.3 in October.
+The transitional/pre-removal work represents the bulk of the effort though, so this is not a
+major concern.&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3&gt;Improve error reporting and UX&lt;span class="hx:absolute hx:-mt-20" id="improve-error-reporting-and-ux"&gt;&lt;/span&gt;
+&lt;a href="#improve-error-reporting-and-ux" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;pip errors are often hard to scrutinise and offer little help. Furthermore, they can be
+intimidating to new users. Things don&amp;rsquo;t have to stay this way, we can:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Reign in the &lt;a href="https://github.com/pypa/pip/issues/5380#issuecomment-2157611325"target="_blank" rel="noopener"&gt;warning spam when a HTTP request times out&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Explain why no matching distributions were found in most common scenarios&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/pypa/pip/issues/10793"target="_blank" rel="noopener"&gt;Explain why a given wheel is incompatible with the platform&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Provide advice on &lt;a href="https://github.com/pypa/pip/issues/3642"target="_blank" rel="noopener"&gt;network&lt;/a&gt;/&lt;a href="https://github.com/pypa/pip/issues/8473"target="_blank" rel="noopener"&gt;TLS errors&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Fail fast on invalid option combinations&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In particular, I&amp;rsquo;m looking forward towards improving the following (rather unhelpful) warnings
+and errors:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;pre&gt;&lt;code&gt;WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by &amp;#39;ReadTimeoutError(&amp;#34;HTTPSConnectionPool(host=&amp;#39;files.pythonhosted.org&amp;#39;, port=443): Read timed out. (read timeout=15)&amp;#34;)&amp;#39;: /path/to/some-package-1.0.0-py3-none-any.whl.metadata&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; pip install black
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;ERROR: No matching distribution found for black
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; pip install black-25.1.0-cp313-cp313-win_amd64.whl
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;ERROR: black-25.1.0-cp313-cp313-win_amd64.whl is not a supported wheel on this platform.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3&gt;Create a proposal for index priority&lt;span class="hx:absolute hx:-mt-20" id="create-a-proposal-for-index-priority"&gt;&lt;/span&gt;
+&lt;a href="#create-a-proposal-for-index-priority" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;TL;DR expected outcomes:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Summarize the needs that an index priority feature needs to cover&lt;/li&gt;
+&lt;li&gt;Research prior art&lt;/li&gt;
+&lt;li&gt;Come up with experimental designs and conduct user research&lt;/li&gt;
+&lt;li&gt;Draft an agreed upon proposal to bring index priority to pip&lt;/li&gt;
+&lt;li&gt;Develop an implementation, if time permits&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Index URL priority has been a thorny missing pip feature since 2018. There are
+many issues on the pip issue tracker related to index priority. This feature has been
+discussed at length. To echo Paul Moore&amp;rsquo;s words, &lt;a href="https://github.com/pypa/pip/issues/8606#issuecomment-1370303166"target="_blank" rel="noopener"&gt;it&amp;rsquo;s time for someone to sit down,
+design, and propose an implementation with care&lt;/a&gt;. The good news is
+that there is prior art available.&lt;/p&gt;
+&lt;p&gt;PEP 708 was the first attempt at solving the larger &amp;ldquo;dependency confusion&amp;rdquo; issue. It was
+conditionally accepted 2.5 years ago, but it was &lt;a href="https://discuss.python.org/t/proposal-withdraw-reject-pep-708-extending-the-repository-api-to-mitigate-dependency-confusion-attacks-due-to-lack-of-adoption/106800"target="_blank" rel="noopener"&gt;recently rejected due to lack of progress
+on its implementation&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Since then, &lt;a href="https://docs.astral.sh/uv/concepts/indexes/"target="_blank" rel="noopener"&gt;uv has added its own index configuration feature&lt;/a&gt; to seemingly good success.
+It would likely be worthwhile to take inspiration from uv&amp;rsquo;s implementation.&lt;/p&gt;
+&lt;p&gt;The goal under this contract is to design an agreed upon proposal to bring index URL
+priority to pip.&lt;/p&gt;
+&lt;p&gt;In the spirit of &amp;ldquo;practicality beats purity,&amp;rdquo; proposing a smaller but viable path forward
+will be preferred over proposing a large, but unwieldy change. If there is sufficient time
+after an agreed upon design is available, I will start implementation.&lt;/p&gt;
+&lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-purple-200 hx:bg-purple-100 hx:text-purple-900 hx:dark:border-purple-200/30 hx:dark:bg-purple-900/30 hx:dark:text-purple-200"&gt;
+&lt;p class="hx:flex hx:items-center hx:font-medium"&gt;&lt;svg height=16px class="hx:inline-block hx:align-middle hx:mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/&gt;&lt;/svg&gt;Important&lt;/p&gt;
+&lt;div class="hx:w-full hx:min-w-0 hx:leading-7"&gt;
+&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;&lt;p&gt;Standardizing index priority is explicitly out of scope. Trying to push through a PEP
+is not something I want to take on. Plus, it&amp;rsquo;d be exceptionally difficult to achieve in
+three months.&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3&gt;General development and maintenance&lt;span class="hx:absolute hx:-mt-20" id="general-development-and-maintenance"&gt;&lt;/span&gt;
+&lt;a href="#general-development-and-maintenance" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;While there are no exact deliverables by design, here is a subset of my perennial to-do list:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Managing the pip 26.2 (July 2026) release.&lt;/strong&gt; In particular, authoring and cutting any
+post-release hotfixes as needed. Also writing a release blog post which will include
+details on work achieved during the June-July period.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="https://github.com/pypa/pip/issues/6052"target="_blank" rel="noopener"&gt;&lt;strong&gt;Improving installation scheme handling&lt;/strong&gt;&lt;/a&gt;. The goal would be
+to ensure there is a consistent working scheme in any pip invocation. Adopting a working
+scheme would lay the groundwork for adding upgrade and uninstallation support to the
+&lt;code&gt;--target&lt;/code&gt; flag, &lt;a href="https://github.com/pypa/pip/issues/11366"target="_blank" rel="noopener"&gt;which has been a consistent pain point&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;General optimization work.&lt;/strong&gt; Optimizing pip properly would be its own project, but
+there are some low-hanging fruit available. Any work on this would consist of &amp;ldquo;Richard
+looks a random profile of a pip run and looks out for anything abnormally slow&amp;rdquo;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;It would also be beneficial to create a document outlining the main ways pip can be
+optimized, their benefits and costs, and their difficulty. This would serve as a
+foundation for a potential future project on improving pip performance.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Catching up on PR review&lt;/strong&gt;. In particular, supporting other maintainers&amp;rsquo; PRs so their
+efforts don&amp;rsquo;t stall, including the very important &lt;code&gt;pylock.toml&lt;/code&gt; feature work.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;What exactly I work on is subject to change.&lt;/p&gt;
+&lt;h2&gt;What about progress updates?&lt;span class="hx:absolute hx:-mt-20" id="what-about-progress-updates"&gt;&lt;/span&gt;
+&lt;a href="#what-about-progress-updates" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;As documented in the proposal, &amp;ldquo;weekly updates are to be posted and logged in a publicly
+accessible location.&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;I haven&amp;rsquo;t yet decided what exactly these regular updates will look like&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;,
+but I will commit to sharing updates via a &lt;a href="https://github.com/pypa/pip/issues/14025"target="_blank" rel="noopener"&gt;public issue on the pip tracker&lt;/a&gt;.
+It may just consist of links to my personal blog, but I do want to make it easy to find
+updates.&lt;/p&gt;
+&lt;h2&gt;Why seek funding?&lt;span class="hx:absolute hx:-mt-20" id="why-seek-funding"&gt;&lt;/span&gt;
+&lt;a href="#why-seek-funding" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;It is often difficult for open-source projects to sustain themselves purely on volunteers.
+Maintainer burnout is a &lt;a href="https://www.fordfoundation.org/learning/library/research-reports/roads-and-bridges-the-unseen-labor-behind-our-digital-infrastructure/"target="_blank" rel="noopener"&gt;real&lt;/a&gt; and &lt;a href="https://www.sonarsource.com/open-source-maintainer-survey-2023.pdf"target="_blank" rel="noopener"&gt;growing crisis&lt;/a&gt;.
+In a sense, the pip project is lucky since it has 3-5 active core maintainers, &lt;em&gt;but&lt;/em&gt;,
+we&amp;rsquo;re also a &lt;em&gt;very&lt;/em&gt; busy group of people. While our collective volunteer efforts are enough to keep
+the lights on, pip&amp;rsquo;s pace of feature development has been highly constrained by limited maintainer
+availability.&lt;/p&gt;
+&lt;p&gt;As shown by the rapid growth of &lt;a href="https://github.com/astral-sh/uv"target="_blank" rel="noopener"&gt;Astral&amp;rsquo;s uv&lt;/a&gt;, there is an undeniable benefit to having
+dedicated engineering hours for project development.&lt;/p&gt;
+&lt;p&gt;pip has undergone paid development before. The new pip resolver
+was a grant-funded project managed by the Packaging-WG, primarily occurring in 2020.
+The project was a success, with pip 20.3 gaining a new dependency resolver that was more
+reliable, predictable, and user-friendly. pip still uses it to this very day! None
+of this would&amp;rsquo;ve been possible without the funding that hired three individuals for
+full-time work.&lt;/p&gt;
+&lt;p&gt;I respect and appreciate the Astral team for building a high-quality, feature-rich and unified
+toolchain for Python packaging. They absolutely deserve the success they&amp;rsquo;ve had with uv, and yet,
+this doesn&amp;rsquo;t mean pip is a dead project. There are still a place for pip. It&amp;rsquo;s shipped in every
+CPython build, referenced in thousands of tutorials and guides, and it&amp;rsquo;s an community owned
+and maintained alternative, which is important when foundational developer software is
+being &lt;a href="https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone"target="_blank" rel="noopener"&gt;increasingly&lt;/a&gt; &lt;a href="https://vercel.com/blog/investing-in-the-python-ecosystem"target="_blank" rel="noopener"&gt;bought&lt;/a&gt; and &lt;a href="https://openai.com/index/openai-to-acquire-astral/"target="_blank" rel="noopener"&gt;controlled by private companies&lt;/a&gt;.&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;Admittedly, while sponsoring 2.5 months of part-time development is &lt;em&gt;not&lt;/em&gt; going to fix the
+long-term maintainer availability shortfall pip is experiencing, this is an excellent opportunity
+to make significant headway on new features, pay down technical debt, and put pip on better
+footing to implement further improvements after the contract period.&lt;/p&gt;
+&lt;h2&gt;Looking beyond pip and this summer&lt;span class="hx:absolute hx:-mt-20" id="looking-beyond-pip-and-this-summer"&gt;&lt;/span&gt;
+&lt;a href="#looking-beyond-pip-and-this-summer" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;One of my aspirational goals with this work is to trailblaze further paid development
+in the Python packaging ecosystem which is already occurring at considerable levels:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Starting in 2017, we began applying for grants to support PyPI development work. This endeavor
+was largely led by Sumana Harihareswara [&amp;hellip;] It&amp;rsquo;s also been wildly successful [&amp;hellip;] more than
+$750K has been directed at PyPI development specifically, and nearly $2M has been directed
+at Python packaging projects in general (including PyPI) [as of 2021].&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&amp;ndash; Dustin Ingram, in &lt;a href="https://dustingram.com/articles/2021/04/14/powering-the-python-package-index-in-2021/"target="_blank" rel="noopener"&gt;&amp;ldquo;What does it take to power the Python Package Index?&amp;rdquo;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;However, what&amp;rsquo;s been less common is funding &lt;em&gt;general&lt;/em&gt; maintenance and development of Python
+packaging tools and infrastructure. It takes a lot of work to apply for major project grants.
+For one, you have to usually find an external organisation to fund it since the PSF cannot
+provide hundreds of thousands of dollars. Of course, they can be worth the effort since if
+approved, they provide the massive sums that enable major new features (e.g., adding organisation
+accounts to PyPI).&lt;/p&gt;
+&lt;p&gt;The thing is that not every project can or should apply for these major grants. Some maintainers
+won&amp;rsquo;t have the capacity for large-scale grants. Some other projects may be largely feature complete
+and don&amp;rsquo;t have any new features that need major funding. Sometimes, just having paid time
+to work on bugfixes and documentation is what&amp;rsquo;s most needed.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;d like to see smaller grants that enable small-scale development and
+maintenance, similar to this grant. It should be easier to seek funding for work that&amp;rsquo;s difficult
+to complete solely by volunteer contributions, but also doesn&amp;rsquo;t require hiring an expensive
+team of developers (e.g., the pip resolver grant).&lt;/p&gt;
+&lt;p&gt;These smaller grants need not be restricted to the development or maintenance of code. There
+are many PEPs being proposed and considered in the packaging space. While we try our best
+by seeking community consensus, there have been &lt;a href="https://discuss.python.org/t/pep-722-723-decision/36763/3"target="_blank" rel="noopener"&gt;PEPs where conducting user research
+would&amp;rsquo;ve been helpful&lt;/a&gt;. User research is one example of non-code valuable
+work that&amp;rsquo;s usually only practical with funding.&lt;/p&gt;
+&lt;p&gt;Python packaging governance is in the midst of an overhaul. The PyPA, Python Steering Council,
+and PSF Board have recently approved &lt;a href="https://peps.python.org/pep-0772/"target="_blank" rel="noopener"&gt;PEP 772&lt;/a&gt; which replaces the standing delegations process
+with a formal Packaging Council (PC). This council will have broad delegated authority over
+packaging standards, tools, and implementations. As per the PEP, one of the key expectations
+for the PC is to &amp;ldquo;facilitate tactical and fundraising support from the PSF, to increase
+capacity and &lt;strong&gt;funding available to packaging tools&lt;/strong&gt;.&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Once the inaugural Packaging Council has been elected and begins operations later this year,
+I strongly encourage the council to establish a clear process for packaging projects and
+contributors to apply for Packaging Council funding.&lt;/p&gt;
+&lt;p&gt;It should not be the case that the PyPA has no procedure for approving and disbursing its
+funds for packaging work, &lt;a href="https://discuss.python.org/t/withdrawn-amending-pypa-governance-to-permit-for-use-of-pypa-funds/106653/"target="_blank" rel="noopener"&gt;as I would find out and try to fix&lt;/a&gt; while planning
+this proposal.&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; I should not have to wait months to hear back on administrative details that
+could&amp;rsquo;ve been easily documented in public.&lt;sup id="fnref:5"&gt;&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref"&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;Overall, I hope that this pip grant serves as motivation and an helpful example for future
+grants of similar scope and type.&lt;/p&gt;
+&lt;p&gt;What will happen with pip after my contract ends in mid-August? I don&amp;rsquo;t know yet. I&amp;rsquo;d love
+to see further paid development, but it&amp;rsquo;s impossible for me (or the rest of the pip team)
+to plan out that far in the future.&lt;/p&gt;
+&lt;h2&gt;Acknowledgments&lt;span class="hx:absolute hx:-mt-20" id="acknowledgments"&gt;&lt;/span&gt;
+&lt;a href="#acknowledgments" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;I want to express my greatest gratitude to the Packaging-WG and PSF for providing the
+funding to make this work possible.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;d like to also shout out Alyssa Coghlan, Dustin Ingram, Jannis Leidel, and the fine
+folks at PSF Accounting for helping me navigate the administrative realities when it comes to
+seeking a formal grant.&lt;/p&gt;
+&lt;p&gt;Finally, thank you to my fellow co-maintainers for entrusting me with the privilege to
+work on pip for money. It&amp;rsquo;s not often that one can turn their open-source work into
+a paid gig, even a temporary one!&lt;/p&gt;
+&lt;p&gt;In the words of Łukasz Langa, the inaugural CPython DIR and my first collaborator in
+open-source, &lt;a href="https://lukasz.langa.pl/a072a74b-19d7-41ff-a294-e6b1319fdb6e/#why-me"target="_blank" rel="noopener"&gt;I&amp;rsquo;ll do my best not to disappoint&lt;/a&gt;.&lt;/p&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;I have limited personal availability. Also, increasing the proposal amount much more
+than we got would&amp;rsquo;ve presented additional challenges for approval. It&amp;rsquo;s easier to start small,
+prove that pip can make good use of paid development, and then plan for bigger things later.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;While regular updates are important, I also don&amp;rsquo;t want to spend too much time writing
+updates. It&amp;rsquo;s a balancing act in terms of update detail vs time spent writing updates.&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;I trust the Astral team to do the right thing, but one cannot ignore the
+obvious pressure and challenges that they face being owned by a private company that
+is desperate to grow revenue and reduce operating costs whenever possible.&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;I would eventually decide to apply for Packaging-WG funding on the advice of Alyssa Coghlan
+as seeking an (interim) amendment to PyPA governmance was likely to be challenging and a slow
+enough process such that the window of opportunity for this work would&amp;rsquo;ve passed.&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:5"&gt;
+&lt;p&gt;While this was frustrating, I do not wish to place blame on anyone for the delay.
+Anything that involves money is often complicated, and I fully understand that doing things fully
+by the books is of paramount importance. I just hope that &amp;ldquo;doing things by the books&amp;rdquo; is made
+as straightforward as possible.&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item></channel></rss>
