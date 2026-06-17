@@ -9,7 +9,7 @@ toc: false
 
 **Hello!** I'm Richard. I typically go by `ichard26` (or some variation) on the internet.
 
-I am a software engineer, who likes to write command line tooling that makes developers'
+I am a software engineer, who likes to write tooling that makes developers'
 lives easier and less frustrating. I have extensive experience in the Python open-source
 software ecosystem, in particular by stewarding foundational tooling that enables
 software to be built effectively.
