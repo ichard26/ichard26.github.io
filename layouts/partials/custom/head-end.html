@@ -3,7 +3,13 @@
 {{- /*     Can be overwritten by partial with the same name in the global layouts. */ -}}
 
 {{- if hugo.IsProduction | or (eq .Site.Params.env "production") }}
-<script defer data-domain="sichard.ca" src="https://webstats.internal.floralily.dev/js/script.js"></script>
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://webstats.tritag.floralily.dev/js/pa-cirgIuiyMAV7BQ9UfRaRV.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+
 {{- end }}
 
 <meta name="google-site-verification" content="4PNzC3Db8jI_wn9D8lPdAh4B0skrLZHNbQBgVF1XtAo"/>
