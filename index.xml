@@ -2,7 +2,7 @@
 &lt;p&gt;On July 29, 2026, I&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt; released pip 26.2.&lt;/p&gt;
 &lt;p&gt;Compared to a typical pip release, this release is &lt;em&gt;huge&lt;/em&gt; with many changes.
 &lt;a href="https://sichard.ca/blog/2026/06/pip-contract-development/"&gt;This was largely made possible by the paid time I&amp;rsquo;ve had
-to work on pip&lt;/a&gt; and agentic LLM assistance. My contract
+to work on pip&lt;/a&gt; (and agentic LLM assistance). My contract
 expires in late August, however, so expect future releases to be less blockbuster.&lt;/p&gt;
 &lt;p&gt;As always, please &lt;a href="https://pip.pypa.io/en/latest/news/"target="_blank" rel="noopener"&gt;consult the changelog&lt;/a&gt; to learn about all of the changes
 contained in this release.&lt;/p&gt;
