@@ -16,7 +16,7 @@ On July 29, 2026, I[^1] released pip 26.2.
 
 Compared to a typical pip release, this release is _huge_ with many changes.
 [This was largely made possible by the paid time I've had
-to work on pip](/blog/2026/06/pip-contract-development/) and agentic LLM assistance. My contract
+to work on pip](/blog/2026/06/pip-contract-development/) (and agentic LLM assistance). My contract
 expires in late August, however, so expect future releases to be less blockbuster.
 
 As always, please [consult the changelog][changelog] to learn about all of the changes
@@ -52,8 +52,11 @@ speed = ["orjson"]
 `myawesomeproject` itself. If you want the `speed` extra, too, `pip install .[speed] --only-deps`
 will do the trick.
 
+You may be asking "what if a dependency is also user-requested?" ... well, `pip install . rich --only-deps`
+will exclude `myawesomeproject` and `rich` but install everything else.
+
 > [!tip]
-> `pip install . --only-deps` is equivalent to `uv pip install -r pyproject.toml`.
+> `pip install . --only-deps` is equivalent to `uv pip install -r pyproject.toml`.[^well actually]
 
 `--only-deps` is primarily expected to be used for **development workflows where it's desirable
 to install the project dependencies _without_ installing the project itself**. For example,
@@ -203,9 +206,9 @@ Thank you to Damian Shaw for contributing this feature.
 
 ### Don't cache local directory requirements with a dash
 
-Local directory requirements are not supposed to be cached, so `pip install .`
-and similar commands always reinstall the local project. Except, pip had
-two related bugs where:
+Local directory requirements are not supposed to be cached persistently, so
+`pip install .` and similar commands always reinstall the local project. Except,
+pip had two related bugs where:
 
 - If a local project's directory name contained a dash, like `my-library`,
   then pip would cache the built wheel
@@ -292,9 +295,12 @@ issues with the `importlib.metadata` backend, please know that those have long s
 
 [^1]: I was the release manager this time around :\)
 
+[^well actually]: (see next footnote -- it's not possible to always determine dependencies statically
+  from `pyproject.toml`.)
+
 [^direct pyproject read]: Fun fact, the `project.dependencies` field can be declared dynamic in
   `pyproject.toml` and until metadata version 2.2, there was no way to reliably read the dependencies
-  of a source distribution statically.
+  of a source distribution statically. Also, don't forget about projects that don't use `pyproject.toml`!
 
 [^venv pain]: I wrote this feature, and let me tell you, _oh boy_, was it a pain! There was
   edge case after edge case and a whole lot of "ugh, why is X so much harder in older versions of Python".
