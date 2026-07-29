@@ -38,10 +38,12 @@ data-copied-label="Copied!"
 &lt;p&gt;&lt;code&gt;pip install . --only-deps&lt;/code&gt; will only install &lt;code&gt;click&lt;/code&gt;, &lt;code&gt;rich&lt;/code&gt;, and their dependencies, but &lt;em&gt;not&lt;/em&gt;
 &lt;code&gt;myawesomeproject&lt;/code&gt; itself. If you want the &lt;code&gt;speed&lt;/code&gt; extra, too, &lt;code&gt;pip install .[speed] --only-deps&lt;/code&gt;
 will do the trick.&lt;/p&gt;
+&lt;p&gt;You may be asking &amp;ldquo;what if a dependency is also user-requested?&amp;rdquo; &amp;hellip; well, &lt;code&gt;pip install . rich --only-deps&lt;/code&gt;
+will exclude &lt;code&gt;myawesomeproject&lt;/code&gt; and &lt;code&gt;rich&lt;/code&gt; but install everything else.&lt;/p&gt;
 &lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-green-200 hx:bg-green-100 hx:text-green-900 hx:dark:border-green-200/30 hx:dark:bg-green-900/30 hx:dark:text-green-200"&gt;
 &lt;p class="hx:flex hx:items-center hx:font-medium"&gt;&lt;svg height=16px class="hx:inline-block hx:align-middle hx:mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/&gt;&lt;/svg&gt;Tip&lt;/p&gt;
 &lt;div class="hx:w-full hx:min-w-0 hx:leading-7"&gt;
-&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;&lt;p&gt;&lt;code&gt;pip install . --only-deps&lt;/code&gt; is equivalent to &lt;code&gt;uv pip install -r pyproject.toml&lt;/code&gt;.&lt;/p&gt;&lt;/div&gt;
+&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;&lt;p&gt;&lt;code&gt;pip install . --only-deps&lt;/code&gt; is equivalent to &lt;code&gt;uv pip install -r pyproject.toml&lt;/code&gt;.&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;--only-deps&lt;/code&gt; is primarily expected to be used for &lt;strong&gt;development workflows where it&amp;rsquo;s desirable
@@ -63,7 +65,7 @@ what counts as an user-supplied requirement when these options are used.&lt;/p&g
 &lt;/div&gt;
 &lt;p&gt;It&amp;rsquo;s worth noting that for local directories and source distributions, pip will still call the
 build backend to query dependency metadata. It is possible to optimize pip&amp;rsquo;s dependency resolver
-to read dependency metadata from &lt;code&gt;pyproject.toml&lt;/code&gt; directly where possible&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;,
+to read dependency metadata from &lt;code&gt;pyproject.toml&lt;/code&gt; directly where possible&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;,
 but this will be considered (and implemented) in the future.&lt;/p&gt;
 &lt;p&gt;Thank you to Sebastian Höffner for experimenting with and contributing the &lt;code&gt;--only-deps&lt;/code&gt;
 feature, &lt;a href="https://github.com/pypa/pip/issues/11440"target="_blank" rel="noopener"&gt;arguably our most upvoted feature request&lt;/a&gt;.&lt;/p&gt;
@@ -122,8 +124,8 @@ and &lt;code&gt;uv&lt;/code&gt; use standard virtual environments.&lt;/p&gt;
 &lt;li&gt;And the 3.15 leaky isolation bug mentioned earlier 🙃&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;The good news is that pip 26.2 ships with an experimental feature to use &lt;code&gt;venv&lt;/code&gt; to create
-virtual environments for build isolation, available via &lt;code&gt;--use-feature=venv-isolation&lt;/code&gt;.&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;venv-isolation&lt;/code&gt; should work on all platforms pip officially supports.&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; If you&amp;rsquo;ve
+virtual environments for build isolation, available via &lt;code&gt;--use-feature=venv-isolation&lt;/code&gt;.&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;venv-isolation&lt;/code&gt; should work on all platforms pip officially supports.&lt;sup id="fnref:5"&gt;&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref"&gt;5&lt;/a&gt;&lt;/sup&gt; If you&amp;rsquo;ve
 been affected by a build isolation bug, &lt;strong&gt;please try the feature and let us know if you run into
 any issues&lt;/strong&gt;. I&amp;rsquo;d like to make it the default in a future release once it stabilizes out in the wild.&lt;/p&gt;
 &lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-amber-200 hx:bg-amber-100 hx:text-amber-900 hx:dark:border-amber-200/30 hx:dark:bg-amber-900/30 hx:dark:text-amber-200"&gt;
@@ -209,9 +211,9 @@ dependencies, use &lt;code&gt;--build-constraint&lt;/code&gt; or &lt;code&gt;PIP
 &lt;p&gt;Thank you to Damian Shaw for contributing this feature.&lt;/p&gt;
 &lt;h2&gt;Notable bugfixes&lt;span class="hx:absolute hx:-mt-20" id="notable-bugfixes"&gt;&lt;/span&gt;
 &lt;a href="#notable-bugfixes" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;Don&amp;rsquo;t cache local directory requirements with a dash&lt;span class="hx:absolute hx:-mt-20" id="dont-cache-local-directory-requirements-with-a-dash"&gt;&lt;/span&gt;
-&lt;a href="#dont-cache-local-directory-requirements-with-a-dash" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Local directory requirements are not supposed to be cached, so &lt;code&gt;pip install .&lt;/code&gt;
-and similar commands always reinstall the local project. Except, pip had
-two related bugs where:&lt;/p&gt;
+&lt;a href="#dont-cache-local-directory-requirements-with-a-dash" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Local directory requirements are not supposed to be cached persistently, so
+&lt;code&gt;pip install .&lt;/code&gt; and similar commands always reinstall the local project. Except,
+pip had two related bugs where:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;If a local project&amp;rsquo;s directory name contained a dash, like &lt;code&gt;my-library&lt;/code&gt;,
 then pip would cache the built wheel&lt;/li&gt;
@@ -294,20 +296,23 @@ issues with the &lt;code&gt;importlib.metadata&lt;/code&gt; backend, please know
 &lt;p&gt;I was the release manager this time around :)&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:2"&gt;
-&lt;p&gt;Fun fact, the &lt;code&gt;project.dependencies&lt;/code&gt; field can be declared dynamic in
-&lt;code&gt;pyproject.toml&lt;/code&gt; and until metadata version 2.2, there was no way to reliably read the dependencies
-of a source distribution statically.&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;(see next footnote &amp;ndash; it&amp;rsquo;s not possible to always determine dependencies statically)&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:3"&gt;
-&lt;p&gt;I wrote this feature, and let me tell you, &lt;em&gt;oh boy&lt;/em&gt;, was it a pain! There was
-edge case after edge case and a whole lot of &amp;ldquo;ugh, why is X so much harder in older versions of Python&amp;rdquo;.
-See &lt;a href="https://github.com/pypa/pip/pull/14070"target="_blank" rel="noopener"&gt;https://github.com/pypa/pip/pull/14070&lt;/a&gt; for the gory details.&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Fun fact, the &lt;code&gt;project.dependencies&lt;/code&gt; field can be declared dynamic in
+&lt;code&gt;pyproject.toml&lt;/code&gt; and until metadata version 2.2, there was no way to reliably read the dependencies
+of a source distribution statically. Also, what about projects that don&amp;rsquo;t use &lt;code&gt;pyproject.toml&lt;/code&gt;?&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:4"&gt;
+&lt;p&gt;I wrote this feature, and let me tell you, &lt;em&gt;oh boy&lt;/em&gt;, was it a pain! There was
+edge case after edge case and a whole lot of &amp;ldquo;ugh, why is X so much harder in older versions of Python&amp;rdquo;.
+See &lt;a href="https://github.com/pypa/pip/pull/14070"target="_blank" rel="noopener"&gt;https://github.com/pypa/pip/pull/14070&lt;/a&gt; for the gory details.&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:5"&gt;
 &lt;p&gt;Sadly, some distributions of Python don&amp;rsquo;t ship with &lt;code&gt;venv&lt;/code&gt; out of the box or
 do not support &lt;code&gt;venv&lt;/code&gt; at all, including Android, iOS, and probably a handful of (niche?)
 Linux distributions. Please note that Debian and its derivatives do ship a &lt;code&gt;venv&lt;/code&gt; that pip
-can use (their version doesn&amp;rsquo;t have &lt;code&gt;ensurepip&lt;/code&gt;, but pip doesn&amp;rsquo;t need that).&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+can use (their version doesn&amp;rsquo;t have &lt;code&gt;ensurepip&lt;/code&gt;, but pip doesn&amp;rsquo;t need that).&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;</description></item><item><title>What's new in pip 26.1 - lockfiles and dependency cooldowns!</title><link>https://sichard.ca/blog/2026/04/whats-new-in-pip-26.1/</link><pubDate>Sun, 26 Apr 2026 00:00:00 -0400</pubDate><guid>https://sichard.ca/blog/2026/04/whats-new-in-pip-26.1/</guid><description>
