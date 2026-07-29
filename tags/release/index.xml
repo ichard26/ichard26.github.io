@@ -1,4 +1,316 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Richard Si – Release</title><link>https://sichard.ca/tags/release/</link><description>Recent content in Release on Richard Si</description><generator>Hugo -- gohugo.io</generator><language>en-ca</language><lastBuildDate>Sun, 26 Apr 2026 00:00:00 -0400</lastBuildDate><atom:link href="https://sichard.ca/tags/release/index.xml" rel="self" type="application/rss+xml"/><item><title>What's new in pip 26.1 - lockfiles and dependency cooldowns!</title><link>https://sichard.ca/blog/2026/04/whats-new-in-pip-26.1/</link><pubDate>Sun, 26 Apr 2026 00:00:00 -0400</pubDate><guid>https://sichard.ca/blog/2026/04/whats-new-in-pip-26.1/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Richard Si – Release</title><link>https://sichard.ca/tags/release/</link><description>Recent content in Release on Richard Si</description><generator>Hugo -- gohugo.io</generator><language>en-ca</language><lastBuildDate>Wed, 29 Jul 2026 00:00:00 -0400</lastBuildDate><atom:link href="https://sichard.ca/tags/release/index.xml" rel="self" type="application/rss+xml"/><item><title>What's new in pip 26.2 - only-deps and venv isolation!</title><link>https://sichard.ca/blog/2026/07/whats-new-in-pip-26.2/</link><pubDate>Wed, 29 Jul 2026 00:00:00 -0400</pubDate><guid>https://sichard.ca/blog/2026/07/whats-new-in-pip-26.2/</guid><description>
+&lt;p&gt;On July 29, 2026, I&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt; released pip 26.2.&lt;/p&gt;
+&lt;p&gt;Compared to a typical pip release, this release is &lt;em&gt;huge&lt;/em&gt; with many changes.
+&lt;a href="https://sichard.ca/blog/2026/06/pip-contract-development/"&gt;This was largely made possible by the paid time I&amp;rsquo;ve had
+to work on pip&lt;/a&gt; and agentic LLM assistance. My contract
+expires in late August, however, so expect future releases to be less blockbuster.&lt;/p&gt;
+&lt;p&gt;As always, please &lt;a href="https://pip.pypa.io/en/latest/news/"target="_blank" rel="noopener"&gt;consult the changelog&lt;/a&gt; to learn about all of the changes
+contained in this release.&lt;/p&gt;
+&lt;h2&gt;New features ✨&lt;span class="hx:absolute hx:-mt-20" id="new-features-"&gt;&lt;/span&gt;
+&lt;a href="#new-features-" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;Support for Python 3.15&lt;span class="hx:absolute hx:-mt-20" id="support-for-python-315"&gt;&lt;/span&gt;
+&lt;a href="#support-for-python-315" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;While pip was largely already compatible with the Python 3.15 development
+releases, pip 26.2 ships with a fix to build isolation, which was completely ineffective
+on 3.15. Also addressed are various CPython deprecation warnings.&lt;/p&gt;
+&lt;h3&gt;Selecting only dependencies&lt;span class="hx:absolute hx:-mt-20" id="selecting-only-dependencies"&gt;&lt;/span&gt;
+&lt;a href="#selecting-only-dependencies" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;You can now install only the dependencies of the requirements you provide with the
+new &lt;code&gt;--only-deps&lt;/code&gt; flag. This is a global flag like its &lt;code&gt;--no-deps&lt;/code&gt; counterpart.&lt;/p&gt;
+&lt;p&gt;If you&amp;rsquo;re confused, let&amp;rsquo;s go through an example where we&amp;rsquo;re working in a local Python project
+with this &lt;code&gt;pyproject.toml&lt;/code&gt; file.&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div class="hextra-code-filename not-prose" dir="auto"&gt;pyproject.toml&lt;/div&gt;&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-toml" data-lang="toml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;project&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;name&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;myawesomeproject&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;version&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;1.0&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;dependencies&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;click&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;rich&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;project&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;optional-dependencies&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;speed&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;orjson&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;pip install . --only-deps&lt;/code&gt; will only install &lt;code&gt;click&lt;/code&gt;, &lt;code&gt;rich&lt;/code&gt;, and their dependencies, but &lt;em&gt;not&lt;/em&gt;
+&lt;code&gt;myawesomeproject&lt;/code&gt; itself. If you want the &lt;code&gt;speed&lt;/code&gt; extra, too, &lt;code&gt;pip install .[speed] --only-deps&lt;/code&gt;
+will do the trick.&lt;/p&gt;
+&lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-green-200 hx:bg-green-100 hx:text-green-900 hx:dark:border-green-200/30 hx:dark:bg-green-900/30 hx:dark:text-green-200"&gt;
+&lt;p class="hx:flex hx:items-center hx:font-medium"&gt;&lt;svg height=16px class="hx:inline-block hx:align-middle hx:mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/&gt;&lt;/svg&gt;Tip&lt;/p&gt;
+&lt;div class="hx:w-full hx:min-w-0 hx:leading-7"&gt;
+&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;&lt;p&gt;&lt;code&gt;pip install . --only-deps&lt;/code&gt; is equivalent to &lt;code&gt;uv pip install -r pyproject.toml&lt;/code&gt;.&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;--only-deps&lt;/code&gt; is primarily expected to be used for &lt;strong&gt;development workflows where it&amp;rsquo;s desirable
+to install the project dependencies &lt;em&gt;without&lt;/em&gt; installing the project itself&lt;/strong&gt;. For example,
+container build caching is much more efficient when dependencies are installed separately
+and before installing the project itself.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;--only-deps&lt;/code&gt; may be used with &lt;code&gt;pip download&lt;/code&gt; and &lt;code&gt;pip wheel&lt;/code&gt;. It also works with named, VCS,
+and Direct URL requirements, though those are not the main use case.&lt;/p&gt;
+&lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-amber-200 hx:bg-amber-100 hx:text-amber-900 hx:dark:border-amber-200/30 hx:dark:bg-amber-900/30 hx:dark:text-amber-200"&gt;
+&lt;p class="hx:flex hx:items-center hx:font-medium"&gt;&lt;svg height=16px class="hx:inline-block hx:align-middle hx:mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/&gt;&lt;/svg&gt;Warning&lt;/p&gt;
+&lt;div class="hx:w-full hx:min-w-0 hx:leading-7"&gt;
+&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;&lt;p&gt;&lt;code&gt;--only-deps&lt;/code&gt; may NOT be combined with &lt;code&gt;--no-deps&lt;/code&gt;, &lt;code&gt;-r&lt;/code&gt;, &lt;code&gt;--group&lt;/code&gt;, and
+&lt;code&gt;--requirements-from-script&lt;/code&gt;. &lt;a href="https://pip.pypa.io/en/latest/user_guide/#installing-only-dependencies"target="_blank" rel="noopener"&gt;The rationale why can be found in the pip user
+guide&lt;/a&gt;, but the TL;DR is that it&amp;rsquo;s not immediately clear
+what counts as an user-supplied requirement when these options are used.&lt;/p&gt;
+&lt;p&gt;If you do have a compelling use-case, let us know and we&amp;rsquo;ll consider it.&lt;/p&gt;
+&lt;p&gt;Finally, &lt;code&gt;--only-deps&lt;/code&gt; cannot be used with the legacy resolver.&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;It&amp;rsquo;s worth noting that for local directories and source distributions, pip will still call the
+build backend to query dependency metadata. It is possible to optimize pip&amp;rsquo;s dependency resolver
+to read dependency metadata from &lt;code&gt;pyproject.toml&lt;/code&gt; directly where possible&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;,
+but this will be considered (and implemented) in the future.&lt;/p&gt;
+&lt;p&gt;Thank you to Sebastian Höffner for experimenting with and contributing the &lt;code&gt;--only-deps&lt;/code&gt;
+feature, &lt;a href="https://github.com/pypa/pip/issues/11440"target="_blank" rel="noopener"&gt;arguably our most upvoted feature request&lt;/a&gt;.&lt;/p&gt;
+&lt;h3&gt;&lt;code&gt;--no-require-hashes&lt;/code&gt; for mixed requirement scenarios&lt;span class="hx:absolute hx:-mt-20" id="--no-require-hashes-for-mixed-requirement-scenarios"&gt;&lt;/span&gt;
+&lt;a href="#--no-require-hashes-for-mixed-requirement-scenarios" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;For security and largely historical reasons, pip will automatically enable
+&lt;code&gt;--require-hashes&lt;/code&gt; if hashes are provided for any requirement. This has the effect
+that using hash-locked requirements is an all or nothing proposition.&lt;/p&gt;
+&lt;p&gt;This means that a requirements file with hashes cannot be used with a local directory
+or VCS requirement (which don&amp;rsquo;t have a single file that can be hashed).&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; pip install . -r deploy-requirements.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;ERROR: Can&amp;#39;t verify hashes for these file:// requirements because they point to directories:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt; file:///home/ichard26/dev/oss/pip
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; pip install -e . -r deploy-requirements.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; pip install -e &lt;span class="s2"&gt;&amp;#34;project @ git+https://corp/project.git&amp;#34;&lt;/span&gt; -r deploy-requirements.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;ERROR: The editable requirement project from &amp;lt;location&amp;gt; cannot be installed when requiring hashes, because there is no single file to hash.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;To support these use cases, &lt;code&gt;--no-require-hashes&lt;/code&gt; can be used to stop pip from automatically
+enforcing that all requirements have hashes. For requirements that do have hashes, they will
+continue to be enforced, as expected.&lt;/p&gt;
+&lt;p&gt;Thank you to Stéphane Bidoul for adding this flag.&lt;/p&gt;
+&lt;h3&gt;Experimental: &lt;code&gt;venv&lt;/code&gt; based build isolation&lt;span class="hx:absolute hx:-mt-20" id="experimental-venv-based-build-isolation"&gt;&lt;/span&gt;
+&lt;a href="#experimental-venv-based-build-isolation" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;To isolate build subprocesses from the environment pip is invoked in, pip uses a
+custom &lt;code&gt;sitecustomize.py&lt;/code&gt; file and &lt;code&gt;PYTHONPATH&lt;/code&gt; environment variable tricks. This has worked
+surprisingly well, but there are many rough edges, especially since pip is unique here as &lt;code&gt;build&lt;/code&gt;
+and &lt;code&gt;uv&lt;/code&gt; use standard virtual environments.&lt;/p&gt;
+&lt;p&gt;Taking a few examples from the pip issue tracker:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/pypa/pip/issues/13222"target="_blank" rel="noopener"&gt;Isolated build env breaks console scripts installed in other venv (e.g., &lt;code&gt;cmake&lt;/code&gt;, &lt;code&gt;ninja&lt;/code&gt;)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/pypa/pip/issues/12419"target="_blank" rel="noopener"&gt;PEP 517 build adds include directory from the original not-isolated environment&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/pypa/pip/issues/12976"target="_blank" rel="noopener"&gt;&lt;code&gt;sysconfig.get_path&lt;/code&gt; points to venv path when in build-isolation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;And the 3.15 leaky isolation bug mentioned earlier 🙃&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The good news is that pip 26.2 ships with an experimental feature to use &lt;code&gt;venv&lt;/code&gt; to create
+virtual environments for build isolation, available via &lt;code&gt;--use-feature=venv-isolation&lt;/code&gt;.&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;venv-isolation&lt;/code&gt; should work on all platforms pip officially supports.&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; If you&amp;rsquo;ve
+been affected by a build isolation bug, &lt;strong&gt;please try the feature and let us know if you run into
+any issues&lt;/strong&gt;. I&amp;rsquo;d like to make it the default in a future release once it stabilizes out in the wild.&lt;/p&gt;
+&lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-amber-200 hx:bg-amber-100 hx:text-amber-900 hx:dark:border-amber-200/30 hx:dark:bg-amber-900/30 hx:dark:text-amber-200"&gt;
+&lt;p class="hx:flex hx:items-center hx:font-medium"&gt;&lt;svg height=16px class="hx:inline-block hx:align-middle hx:mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/&gt;&lt;/svg&gt;Warning&lt;/p&gt;
+&lt;div class="hx:w-full hx:min-w-0 hx:leading-7"&gt;
+&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;&lt;p&gt;Combining &lt;code&gt;--use-feature=venv-isolation&lt;/code&gt; with &lt;code&gt;--use-feature=inprocess-build-deps&lt;/code&gt; is sadly
+not fully supported yet. While it will work in the vast majority of scenarios, there are
+edge cases around dependency overriding that will need to be fixed separately.&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3&gt;Faster repeated resolves by caching index simple responses&lt;span class="hx:absolute hx:-mt-20" id="faster-repeated-resolves-by-caching-index-simple-responses"&gt;&lt;/span&gt;
+&lt;a href="#faster-repeated-resolves-by-caching-index-simple-responses" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;pip previously would always &lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Conditional_requests"target="_blank" rel="noopener"&gt;revalidate&lt;/a&gt; all simple responses—the HTML pages that list all
+the distributions available for a specific project (e.g., &lt;a href="https://pypi.org/simple/pip"target="_blank" rel="noopener"&gt;pip&lt;/a&gt;)
+—regardless of the &lt;code&gt;Cache-Control&lt;/code&gt; header sent back by the remote index.&lt;/p&gt;
+&lt;p&gt;This choice was made so that newly published releases to PyPI would be immediately visible
+to pip. This is important for CI/CD workflows that publish and install the new release in
+the same job, usually for testing purposes.&lt;/p&gt;
+&lt;p&gt;However, this had the major downside of forcing pip to make an HTTP request for every
+package it encounters, incurring the round-trip penalty each time. This significantly
+slows down repeated pip invocations (e.g., tox/nox workflows), especially if you&amp;rsquo;re on
+a high-latency connection.&lt;/p&gt;
+&lt;p&gt;Starting in 26.2, pip will cache simple responses as per their &lt;code&gt;Cache-Control&lt;/code&gt; header.
+For PyPI users, this means newly published packages won&amp;rsquo;t be visible until ~10 minutes
+later.&lt;/p&gt;
+&lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:flex-col hx:rounded-lg hx:border hx:py-4 hx:px-4 hx:border-gray-200 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-red-200 hx:bg-red-100 hx:text-red-900 hx:dark:border-red-200/30 hx:dark:bg-red-900/30 hx:dark:text-red-200"&gt;
+&lt;p class="hx:flex hx:items-center hx:font-medium"&gt;&lt;svg height=16px class="hx:inline-block hx:align-middle hx:mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/&gt;&lt;/svg&gt;Caution&lt;/p&gt;
+&lt;div class="hx:w-full hx:min-w-0 hx:leading-7"&gt;
+&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;&lt;p&gt;If you do need &lt;strong&gt;newly published packages to be immediately visible&lt;/strong&gt;, we&amp;rsquo;ve added an
+&lt;code&gt;--refresh-package&lt;/code&gt; option to opt into the old revalidation behaviour for packages.&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;As an example on how much faster repeated pip runs can be, here&amp;rsquo;s a pip development install
+before and after:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; &lt;span class="nb"&gt;time&lt;/span&gt; pip install -e . --group &lt;span class="nb"&gt;test&lt;/span&gt; --refresh-package&lt;span class="o"&gt;=&lt;/span&gt;:all:
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;[...]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;Executed in 5.23 secs fish external
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt; usr time 3.08 secs 0.80 millis 3.08 secs
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt; sys time 0.34 secs 1.89 millis 0.34 secs
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;And with the simple response cache still warm (in a new virtual environment):&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; &lt;span class="nb"&gt;time&lt;/span&gt; pip install -e . --group &lt;span class="nb"&gt;test&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;[...]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;Executed in 2.89 secs fish external
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt; usr time 2.55 secs 0.35 millis 2.55 secs
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt; sys time 0.29 secs 1.67 millis 0.28 secs
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;The majority of the remaining time is spent installing the collected packages.&lt;/p&gt;
+&lt;p&gt;Thank you to Sepehr Rasouli for working on this performance improvement.&lt;/p&gt;
+&lt;h3&gt;Bypass &lt;code&gt;HTTP(S)_PROXY&lt;/code&gt;, &lt;code&gt;ALL_PROXY&lt;/code&gt;, and &lt;code&gt;NO_PROXY&lt;/code&gt;&lt;span class="hx:absolute hx:-mt-20" id="bypass-https_proxy-all_proxy-and-no_proxy"&gt;&lt;/span&gt;
+&lt;a href="#bypass-https_proxy-all_proxy-and-no_proxy" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Via &lt;code&gt;requests&lt;/code&gt;, pip will read proxy configuration from the &lt;code&gt;HTTP_PROXY&lt;/code&gt;, &lt;code&gt;HTTPS_PROXY&lt;/code&gt;,
+&lt;code&gt;ALL_PROXY&lt;/code&gt;, and &lt;code&gt;NO_PROXY&lt;/code&gt; environment variables by default. This is useful, &lt;a href="https://github.com/pypa/pip/issues/5378"target="_blank" rel="noopener"&gt;but can
+be undesirable at times&lt;/a&gt;. If you need pip to ignore these envvars, you may use
+the &lt;code&gt;--no-proxy-env&lt;/code&gt; flag or set &lt;code&gt;--proxy=&amp;quot;&amp;quot;&lt;/code&gt; (which we claimed worked, but never did).&lt;/p&gt;
+&lt;p&gt;Thank you to Luis Carlos for contributing this new feature.&lt;/p&gt;
+&lt;h3&gt;Build constraints are now separate from regular constraints&lt;span class="hx:absolute hx:-mt-20" id="build-constraints-are-now-separate-from-regular-constraints"&gt;&lt;/span&gt;
+&lt;a href="#build-constraints-are-now-separate-from-regular-constraints" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Any constraints set through the &lt;code&gt;PIP_CONSTRAINT&lt;/code&gt; environment variable
+will no longer affect build dependencies. If you do need to constrain build
+dependencies, use &lt;code&gt;--build-constraint&lt;/code&gt; or &lt;code&gt;PIP_BUILD_CONSTRAINT&lt;/code&gt; instead.&lt;/p&gt;
+&lt;p&gt;Thank you to Damian Shaw for contributing this feature.&lt;/p&gt;
+&lt;h2&gt;Notable bugfixes&lt;span class="hx:absolute hx:-mt-20" id="notable-bugfixes"&gt;&lt;/span&gt;
+&lt;a href="#notable-bugfixes" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;Don&amp;rsquo;t cache local directory requirements with a dash&lt;span class="hx:absolute hx:-mt-20" id="dont-cache-local-directory-requirements-with-a-dash"&gt;&lt;/span&gt;
+&lt;a href="#dont-cache-local-directory-requirements-with-a-dash" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Local directory requirements are not supposed to be cached, so &lt;code&gt;pip install .&lt;/code&gt;
+and similar commands always reinstall the local project. Except, pip had
+two related bugs where:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;If a local project&amp;rsquo;s directory name contained a dash, like &lt;code&gt;my-library&lt;/code&gt;,
+then pip would cache the built wheel&lt;/li&gt;
+&lt;li&gt;If there is a matching cached wheel for a local project, pip would use it&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Shivam Shrey squashed both bugs in pip 26.2.&lt;/p&gt;
+&lt;h3&gt;No more progress bar spam in CI&lt;span class="hx:absolute hx:-mt-20" id="no-more-progress-bar-spam-in-ci"&gt;&lt;/span&gt;
+&lt;a href="#no-more-progress-bar-spam-in-ci" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Pip uses rich to render its progress bars and (some) status spinners. Normally
+these aren&amp;rsquo;t animated in CI, but increasingly CI workflows set &lt;code&gt;FORCE_COLOR&lt;/code&gt; to
+ensure colorized output in CI logs. This is reasonable but causes rich to
+treat the output device as an interactive terminal that can refresh, leading to
+the install progress bar to span multiple lines:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;pre&gt;&lt;code&gt;Installing collected packages: distlib, platformdirs, packaging, humanize, filelock, colorlog, attrs, argcomplete, python-discovery, dependency-groups, virtualenv, nox
+25l
+━━━━━━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/12 [humanize]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━━━━━━━ 9/12 [dependency-groups]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12/12 [nox]
+25h&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;To address this, if pip detects that it&amp;rsquo;s running in CI, rich&amp;rsquo;s interactive mode will
+be disabled.&lt;/p&gt;
+&lt;h3&gt;Prevent download location escape via URL quoting (CVE-2026-13346)&lt;span class="hx:absolute hx:-mt-20" id="prevent-download-location-escape-via-url-quoting-cve-2026-13346"&gt;&lt;/span&gt;
+&lt;a href="#prevent-download-location-escape-via-url-quoting-cve-2026-13346" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Pip uses the URL filename when determining the storage path for a file download. Unfortunately,
+pip would unquote %-escapes twice, allowing the download to be saved to an arbitrary location
+by injecting a slash. (&lt;code&gt;%252F&lt;/code&gt; decodes to &lt;code&gt;%2F&lt;/code&gt;, which then decodes to &lt;code&gt;/&lt;/code&gt;.)&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ve since removed the extraneous unquoting and adjusted the type annotations of the
+surrounding code to help prevent similar issues from reappearing.&lt;/p&gt;
+&lt;p&gt;Note that this requires a &lt;strong&gt;malicious index&lt;/strong&gt; to serve a malicious distribution download URL,
+so while we did treat this as a security issue, &lt;strong&gt;we consider the overall impact to be low&lt;/strong&gt;.
+Thanks Damian for fixing this!&lt;/p&gt;
+&lt;h2&gt;Other noteworthy changes&lt;span class="hx:absolute hx:-mt-20" id="other-noteworthy-changes"&gt;&lt;/span&gt;
+&lt;a href="#other-noteworthy-changes" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Pulling straight from the pip 26.2 changelog:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Add support for &lt;code&gt;pylock.toml&lt;/code&gt; &lt;code&gt;upload-time&lt;/code&gt; field, so &lt;code&gt;--uploaded-prior-to&lt;/code&gt; works with
+&lt;code&gt;-r pylock.toml&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Honor &lt;code&gt;--only-final&lt;/code&gt; when sourcing requirements with &lt;code&gt;-r pylock.toml&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Present more informative diagnostic errors on uncaught network errors&lt;/li&gt;
+&lt;li&gt;Ensure truststore feature remains active while initially connecting to a HTTPS proxy&lt;/li&gt;
+&lt;li&gt;Fix automatic download resumption to handle new errors raised by &lt;code&gt;urllib3&lt;/code&gt; 2.x&lt;/li&gt;
+&lt;li&gt;Various bugfixes to &lt;code&gt;pip list&lt;/code&gt;&amp;rsquo;s interaction with &lt;code&gt;--exclude&lt;/code&gt;, &lt;code&gt;--uploaded-prior-to&lt;/code&gt;,
+&lt;code&gt;--no-binary&lt;/code&gt;, &lt;code&gt;--only-binary&lt;/code&gt;, &lt;code&gt;--prefer-binary&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Add support for pulling username from keyring subprocess provider&lt;/li&gt;
+&lt;li&gt;Recover credentials embedded in a redirect &lt;code&gt;Location&lt;/code&gt; URL when handling a 401 response,
+even under &lt;code&gt;--no-input&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Current deprecations&lt;span class="hx:absolute hx:-mt-20" id="current-deprecations"&gt;&lt;/span&gt;
+&lt;a href="#current-deprecations" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;There are two main deprecations.&lt;/p&gt;
+&lt;h3&gt;The removal of the legacy dependency resolver (&lt;code&gt;--use-deprecated=legacy-resolver&lt;/code&gt;)&lt;span class="hx:absolute hx:-mt-20" id="the-removal-of-the-legacy-dependency-resolver---use-deprecatedlegacy-resolver"&gt;&lt;/span&gt;
+&lt;a href="#the-removal-of-the-legacy-dependency-resolver---use-deprecatedlegacy-resolver" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;We&amp;rsquo;re still distant from being ready to remove the legacy resolver, but &lt;a href="https://github.com/pypa/pip/issues/10946"target="_blank" rel="noopener"&gt;we&amp;rsquo;re preparing
+and like to remove it sometime in 2027&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Specific guidance for those still relying on the legacy resolver will be communicated closer
+to the removal date (which is yet to be scheduled). In the meanwhile, consider this a nudge
+to try the resolvelib resolver, especially if you&amp;rsquo;re using the legacy resolver purely for
+performance reasons. The resolvelib resolver is significantly smarter and faster since its
+initial release in 2020. Your complicated dependency tree will likely resolve without issue
+today.&lt;/p&gt;
+&lt;h3&gt;The removal of the &lt;code&gt;pkg_resources&lt;/code&gt; installation metadata backend&lt;span class="hx:absolute hx:-mt-20" id="the-removal-of-the-pkg_resources-installation-metadata-backend"&gt;&lt;/span&gt;
+&lt;a href="#the-removal-of-the-pkg_resources-installation-metadata-backend" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;If you don&amp;rsquo;t know what &lt;code&gt;pkg_resources&lt;/code&gt; is, then you don&amp;rsquo;t need to worry about this deprecation.&lt;/p&gt;
+&lt;p&gt;If you do know, then just know that &lt;a href="https://github.com/pypa/pip/issues/13317#issue-2974152491"target="_blank" rel="noopener"&gt;pip will soon stop using it entirely&lt;/a&gt; for querying
+and processing distribution metadata, including identifying installed packages. On Python 3.11
+and higher, pip already migrated to using &lt;a href="https://docs.python.org/3/library/importlib.metadata.html"target="_blank" rel="noopener"&gt;&lt;code&gt;importlib.metadata&lt;/code&gt;&lt;/a&gt;, but
+we&amp;rsquo;ve kept various opt-outs for users that can&amp;rsquo;t use &lt;code&gt;importlib.metadata&lt;/code&gt; for whatever reason.&lt;/p&gt;
+&lt;p&gt;If you&amp;rsquo;re one of the few individuals setting &lt;code&gt;_PIP_USE_IMPORTLIB_METADATA=false&lt;/code&gt; due to performance
+issues with the &lt;code&gt;importlib.metadata&lt;/code&gt; backend, please know that those have long since been addressed.&lt;/p&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;I was the release manager this time around :)&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;Fun fact, the &lt;code&gt;project.dependencies&lt;/code&gt; field can be declared dynamic in
+&lt;code&gt;pyproject.toml&lt;/code&gt; and until metadata version 2.2, there was no way to reliably read the dependencies
+of a source distribution statically.&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;I wrote this feature, and let me tell you, &lt;em&gt;oh boy&lt;/em&gt;, was it a pain! There was
+edge case after edge case and a whole lot of &amp;ldquo;ugh, why is X so much harder in older versions of Python&amp;rdquo;.
+See &lt;a href="https://github.com/pypa/pip/pull/14070"target="_blank" rel="noopener"&gt;https://github.com/pypa/pip/pull/14070&lt;/a&gt; for the gory details.&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;Sadly, some distributions of Python don&amp;rsquo;t ship with &lt;code&gt;venv&lt;/code&gt; out of the box or
+do not support &lt;code&gt;venv&lt;/code&gt; at all, including Android, iOS, and probably a handful of (niche?)
+Linux distributions. Please note that Debian and its derivatives do ship a &lt;code&gt;venv&lt;/code&gt; that pip
+can use (their version doesn&amp;rsquo;t have &lt;code&gt;ensurepip&lt;/code&gt;, but pip doesn&amp;rsquo;t need that).&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item><item><title>What's new in pip 26.1 - lockfiles and dependency cooldowns!</title><link>https://sichard.ca/blog/2026/04/whats-new-in-pip-26.1/</link><pubDate>Sun, 26 Apr 2026 00:00:00 -0400</pubDate><guid>https://sichard.ca/blog/2026/04/whats-new-in-pip-26.1/</guid><description>
 &lt;p&gt;On April 26, 2026, we, the pip team, released pip 26.1.&lt;/p&gt;
 &lt;p&gt;As always, please &lt;a href="https://pip.pypa.io/en/latest/news/#v26-1"target="_blank" rel="noopener"&gt;consult the changelog&lt;/a&gt; to learn about all of the changes
 contained in this release.&lt;/p&gt;
