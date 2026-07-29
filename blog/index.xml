@@ -296,12 +296,13 @@ issues with the &lt;code&gt;importlib.metadata&lt;/code&gt; backend, please know
 &lt;p&gt;I was the release manager this time around :)&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:2"&gt;
-&lt;p&gt;(see next footnote &amp;ndash; it&amp;rsquo;s not possible to always determine dependencies statically)&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;(see next footnote &amp;ndash; it&amp;rsquo;s not possible to always determine dependencies statically
+from &lt;code&gt;pyproject.toml&lt;/code&gt;.)&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:3"&gt;
 &lt;p&gt;Fun fact, the &lt;code&gt;project.dependencies&lt;/code&gt; field can be declared dynamic in
 &lt;code&gt;pyproject.toml&lt;/code&gt; and until metadata version 2.2, there was no way to reliably read the dependencies
-of a source distribution statically. Also, what about projects that don&amp;rsquo;t use &lt;code&gt;pyproject.toml&lt;/code&gt;?&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+of a source distribution statically. Also, don&amp;rsquo;t forget about projects that don&amp;rsquo;t use &lt;code&gt;pyproject.toml&lt;/code&gt;!&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:4"&gt;
 &lt;p&gt;I wrote this feature, and let me tell you, &lt;em&gt;oh boy&lt;/em&gt;, was it a pain! There was
