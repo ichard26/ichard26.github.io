@@ -37,7 +37,7 @@ the same set of working dependencies.
 The option accepts ISO 8601 datetime strings in several formats:
 
 - `2025-03-16` - Date in implicit local timezone
-- `2025-03-16T12:30:00` - Datetime in implict local timezone
+- `2025-03-16T12:30:00` - Datetime in implicit local timezone
 - `2025-03-16T12:30:00Z` - Datetime in UTC
 - `2025-03-16T12:30:00+05:00` - Datetime with local timezone offset
 

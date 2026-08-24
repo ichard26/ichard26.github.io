@@ -309,7 +309,7 @@ draft of this post. Any typos or glaring mistakes are my own.
     can be included in Dependency Groups in the future.
 
 [^upper-bounds]: Please don't add upper bounds **unless** you know for a fact your codebase is
-    incompatible with the newer versions. Pre-emptive upper-bounds will not help
+    incompatible with the newer versions. Preemptive upper-bounds will not help
     dependency resolution and [are generally considered harmful][upper-bounds].
 
 [#11457]: https://github.com/pypa/pip/issues/11457
