@@ -1,4 +1,232 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Richard Si – Pip</title><link>https://sichard.ca/tags/pip/</link><description>Recent content in Pip on Richard Si</description><generator>Hugo -- gohugo.io</generator><language>en-ca</language><lastBuildDate>Wed, 29 Jul 2026 00:00:00 -0400</lastBuildDate><atom:link href="https://sichard.ca/tags/pip/index.xml" rel="self" type="application/rss+xml"/><item><title>What's new in pip 26.2 - only-deps and venv isolation!</title><link>https://sichard.ca/blog/2026/07/whats-new-in-pip-26.2/</link><pubDate>Wed, 29 Jul 2026 00:00:00 -0400</pubDate><guid>https://sichard.ca/blog/2026/07/whats-new-in-pip-26.2/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Richard Si – Pip</title><link>https://sichard.ca/tags/pip/</link><description>Recent content in Pip on Richard Si</description><generator>Hugo -- gohugo.io</generator><language>en-ca</language><lastBuildDate>Mon, 24 Aug 2026 00:00:00 -0400</lastBuildDate><atom:link href="https://sichard.ca/tags/pip/index.xml" rel="self" type="application/rss+xml"/><item><title>It's been three months, what happened in pip?</title><link>https://sichard.ca/blog/2026/08/pip-contract-finish/</link><pubDate>Mon, 24 Aug 2026 00:00:00 -0400</pubDate><guid>https://sichard.ca/blog/2026/08/pip-contract-finish/</guid><description>
+&lt;p&gt;As I announced in a previous post, &lt;a href="https://sichard.ca/blog/2026/06/pip-contract-development/"&gt;the pip project secured funding to have me
+work on pip on a part-time basis from June to August this year&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The contract period is now finished, so it&amp;rsquo;s time to look at what was delivered, what work
+remains, and the reflections I have.&lt;/p&gt;
+&lt;p&gt;Beforehand, though, I&amp;rsquo;d like to express my greatest apprecation for the Python Software
+Foundation, the Packaging Workgroup, and my pip co-maintainers for their trust and this
+opportunity! It has been an opportunity like no other.&lt;/p&gt;
+&lt;h2&gt;What was delivered&lt;span class="hx:absolute hx:-mt-20" id="what-was-delivered"&gt;&lt;/span&gt;
+&lt;a href="#what-was-delivered" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;Virtual environment build isolation&lt;span class="hx:absolute hx:-mt-20" id="virtual-environment-build-isolation"&gt;&lt;/span&gt;
+&lt;a href="#virtual-environment-build-isolation" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;This was my first work item, and I&amp;rsquo;m happy to say that &lt;code&gt;--use-feature=venv-isolation&lt;/code&gt;
+was shipped in pip 26.2. The feature was &lt;a href="https://github.com/pypa/pip/pull/14070"target="_blank" rel="noopener"&gt;quite a bit more complicated&lt;/a&gt; than I was
+expecting &amp;ndash; especially since I did have a working prototype for &lt;em&gt;years&lt;/em&gt; &amp;ndash; but I&amp;rsquo;m
+so glad it exists now.&lt;/p&gt;
+&lt;p&gt;Python 3.15 broke our current build isolation mechanism, and &lt;a href="https://github.com/pypa/pip/pull/14033"target="_blank" rel="noopener"&gt;the fix we implemented&lt;/a&gt;
+has had &lt;a href="https://github.com/pypa/pip/issues/14278"target="_blank" rel="noopener"&gt;unintended consequences&lt;/a&gt;. It&amp;rsquo;s getting increasingly difficult to patch
+all of the ways our heavy-handed isolation mechanism behaves poorly, so I&amp;rsquo;m
+looking forward to replacing it with &lt;code&gt;venv-isolation&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;In particular, it feels good that &lt;code&gt;--use-feature=venv-isolation&lt;/code&gt; is a solution
+for the linked issue.&lt;/p&gt;
+&lt;h3&gt;Deprecation of legacy resolver&lt;span class="hx:absolute hx:-mt-20" id="deprecation-of-legacy-resolver"&gt;&lt;/span&gt;
+&lt;a href="#deprecation-of-legacy-resolver" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Some, albeit limited progress has been made on fully deprecating the legacy resolver.&lt;/p&gt;
+&lt;p&gt;Pradyun&amp;rsquo;s fixes for a handful of long-standing bugs of the resolvelib resolver were
+included in pip 26.2 (without issue). Furthermore, I have prepared language to use when
+we will be communicating the legacy resolver removal more broadly.&lt;/p&gt;
+&lt;p&gt;The last blocker is whether and how to support Direct URLs dependencies satisfying
+editable requirements to equivalent locations. There have been four related PRs
+(&lt;a href="https://github.com/pypa/pip/pull/13888"target="_blank" rel="noopener"&gt;#1&lt;/a&gt; &lt;a href="https://github.com/pypa/pip/pull/13904"target="_blank" rel="noopener"&gt;#2&lt;/a&gt; &lt;a href="https://github.com/pypa/pip/pull/14101"target="_blank" rel="noopener"&gt;#3&lt;/a&gt; &lt;a href="https://github.com/pypa/pip/pull/14195"target="_blank" rel="noopener"&gt;#4&lt;/a&gt;), and work is still on-going as the feature may
+possibly expand to prioritizing editable requirements over equivalent direct URL
+requirements generally and supporting editable constraints.&lt;/p&gt;
+&lt;p&gt;These features are heavily intertwined and involve nontrivial changes to the resolver,
+so I expect these to take a while.&lt;/p&gt;
+&lt;p&gt;The upside is that I did familiarize myself with pip&amp;rsquo;s resolver code (which was a
+secondary goal). I feel more ready to take on the removal of the legacy resolver whenever
+it does occur.&lt;/p&gt;
+&lt;h3&gt;Error improvements&lt;span class="hx:absolute hx:-mt-20" id="error-improvements"&gt;&lt;/span&gt;
+&lt;a href="#error-improvements" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;In June, I shipped &lt;a href="https://github.com/pypa/pip/pull/14115"target="_blank" rel="noopener"&gt;new diagnostic errors for HTTP connection errors&lt;/a&gt; that are easier
+to read and provide useful advice to the user.&lt;/p&gt;
+&lt;p&gt;Later, I took a brief detour to &lt;a href="https://github.com/pypa/pip/pull/14218"target="_blank" rel="noopener"&gt;fix an uncaught exception when the build backend failed to
+be imported&lt;/a&gt;. Afterwards, I soon filed
+&lt;a href="https://github.com/pypa/pip/pull/14242"target="_blank" rel="noopener"&gt;a draft PR to rewrite urllib3 retry warnings to be understandable&lt;/a&gt;
+after reaching a compromise with the urllib3 maintainers. Once upstream changes to urllib3
+are released, the HTTP retry warning will be concise and informative.&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;pre&gt;&lt;code&gt;$ pip install https://expired.badssl.com --retries 3 --timeout 3&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;pre&gt;&lt;code&gt;Collecting https://expired.badssl.com
+WARNING: SSL verification failed while connecting to expired.badssl.com, retrying 3 more times
+WARNING: SSL verification failed while connecting to expired.badssl.com, retrying 2 more times
+WARNING: SSL verification failed while connecting to expired.badssl.com, retrying 1 last time
+error: ssl-verification-failed
+× Failed to establish a secure connection to expired.badssl.com while fetching https://expired.badssl.com/
+╰─&amp;gt; [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1081)
+hint: You may need to use --cert or check your proxy/firewall configuration&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Near the end, I filed a
+&lt;a href="https://github.com/pypa/pip/pull/14281"target="_blank" rel="noopener"&gt;PR for improving &amp;ldquo;this wheel is incompatible with this platform&amp;rdquo; errors&lt;/a&gt;.&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;pre&gt;&lt;code&gt;$ pip install numpy-2.5.0-cp314-cp314t-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl --dry-run&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;pre&gt;&lt;code&gt;error: incompatible-wheel
+× numpy-2.5.0-cp314-cp314t-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl is incompatible
+╰─&amp;gt; Wheel architecture is unsupported: aarch64 (current: x86_64)
+hint: Run &amp;#39;pip debug -v&amp;#39; for a list of compatible tags for your system.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3&gt;Index priority (or not)&lt;span class="hx:absolute hx:-mt-20" id="index-priority-or-not"&gt;&lt;/span&gt;
+&lt;a href="#index-priority-or-not" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;I ended up removing index priority as one of my working items. &lt;a href="https://github.com/pypa/pip/issues/14025#issuecomment-5229783023"target="_blank" rel="noopener"&gt;I left a detailed explanation
+on why in one of my updates&lt;/a&gt;, but the TL;DR is that index priority is a huge
+feature &lt;em&gt;and&lt;/em&gt; minefield. I was hoping that there would be a viable way to implement a simple
+form of index priority that would be beneficial, but after further discussions, there was not.&lt;/p&gt;
+&lt;p&gt;In light of that, I decided to instead work on improving and ensuring full compatibility of
+&lt;code&gt;--use-feature=inprocess-build-deps&lt;/code&gt; with the &lt;code&gt;venv-isolation&lt;/code&gt;. &lt;a href="https://sichard.ca/blog/2025/07/whats-new-in-pip-25.2/#sneak-peek-in-process-build-dependencies"&gt;In-process build dependencies&lt;/a&gt;
+is an experimental feature that I shipped earlier in the year (before this grant work). It works
+great, and like &lt;code&gt;venv-isolation&lt;/code&gt;, will fix many long-standing issues. However, it was stuck in
+limbo since IMO it wasn&amp;rsquo;t quite ready to be enabled by default (especially after realizing it
+was mildly incompatible with &lt;code&gt;venv-isolation&lt;/code&gt;). In interest of avoiding features being stuck
+in experimental limbo forever, I decided improving &lt;code&gt;inprocess-build-deps&lt;/code&gt; was the next best
+thing to do.&lt;/p&gt;
+&lt;p&gt;I know this is disappointing since index priority is one of the features that
+many people would welcome and appreciate. I&amp;rsquo;m sorry. It&amp;rsquo;s just that it&amp;rsquo;s better to get index
+priority right over rushing.&lt;/p&gt;
+&lt;h3&gt;General maintenance&lt;span class="hx:absolute hx:-mt-20" id="general-maintenance"&gt;&lt;/span&gt;
+&lt;a href="#general-maintenance" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;I&amp;rsquo;ve made good progress here, having decided that focusing on code review was the best use
+of my time.&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt; In total, I reviewed 93 pull requests, resulting in
+&lt;a href="https://sichard.ca/blog/2026/07/whats-new-in-pip-26.2/"&gt;pip 26.2&lt;/a&gt; being a massive release with many
+features and bugfixes.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m also happy to report that the open PR backlog sits at around 90, down from 130 when I
+first started working in June.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://sichard.ca/blog/2026/08/pip-contract-finish/pip-pr-chart.png" alt="Line chart of open pip pull requests from 2020 to today" loading="lazy" /&gt;&lt;/p&gt;
+&lt;p&gt;Whenever I got bored, I closed stale or already resolved issues in pip&amp;rsquo;s issue tracker.&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://sichard.ca/blog/2026/08/pip-contract-finish/pip-issue-chart.png" alt="Line chart of open issues in pip’s issue tracker from 2020 to today" loading="lazy" /&gt;&lt;/p&gt;
+&lt;p&gt;Overall, the net change in open issues since end of May is around -92. 🎉&lt;/p&gt;
+&lt;p&gt;Our new triagers, Sepehr Rasouli and Youngkwang Yang, have done the majority of the
+leg work here, however. Without them, the drop in the past three months would&amp;rsquo;ve been far
+more muted.&lt;/p&gt;
+&lt;p&gt;Finally, on the note of new triagers, I&amp;rsquo;ve spent some time during these months
+reviewing and providing support to our newest members of the pip team. While this wasn&amp;rsquo;t
+a part of the original goals, I fully believe investing in future contributors. It&amp;rsquo;s the
+only way pip can be maintained for the long-term.&lt;/p&gt;
+&lt;h2&gt;What work remains&lt;span class="hx:absolute hx:-mt-20" id="what-work-remains"&gt;&lt;/span&gt;
+&lt;a href="#what-work-remains" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Further work on improving &lt;code&gt;inprocess-build-deps&lt;/code&gt; and compatibility between it and
+&lt;code&gt;venv-isolation&lt;/code&gt;. &lt;a href="https://github.com/pypa/pip/pull/14238"target="_blank" rel="noopener"&gt;A PR to replace our spinners is the first part.&lt;/a&gt; I have
+a work-in-progress PR to address bugs and limitations of the in-process build dependency
+installer, and I&amp;rsquo;m planning to follow up with more tests.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Fixing the last technical blocker for the deprecation of the legacy resolver and scheduling
+a removal date. This is likely to occur on a timescale of quarters, contingent on when a pip
+maintainer (probably me) has significant free time to volunteer.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Further work on improving &amp;ldquo;no distribution found&amp;rdquo; resolver errors. I did take a look here,
+even prototyping an improvement when &lt;code&gt;requires-python&lt;/code&gt; prevents a distribution from being
+found, but I quickly realized that making improvements here is highly nontrivial.&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; For now,
+I plan on shipping small incremental improvements where possible.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Reviewing and shepherding the &lt;a href="https://github.com/pypa/pip/pull/13971"target="_blank" rel="noopener"&gt;index error improvement&lt;/a&gt; and &lt;a href="https://github.com/pypa/pip/pull/14219"target="_blank" rel="noopener"&gt;invalid distribution metadata&lt;/a&gt; PRs
+that triager Sepehr Rasouli has submitted. They are nontrivial changes, but they offer a
+meaningful improvement to UX.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Addressing feedback on and landing my current open PRs :)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Reflections&lt;span class="hx:absolute hx:-mt-20" id="reflections"&gt;&lt;/span&gt;
+&lt;a href="#reflections" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;I was way overly optimistic with my assumptions on how much work I could accomplish.&lt;/strong&gt;
+In hindsight, I should&amp;rsquo;ve scaled down my expectations. Underpromise and overdeliver, really.
+For what it&amp;rsquo;s worth, this is my first real job in the software industry, so this is a
+professional lesson learned.&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;There is never enough time for PR review.&lt;/strong&gt; I spent a huge portion of my time reviewing
+PRs in the month or so before release 26.2, and yet it feels like I hardly made a dent.
+Regardless, it was extremely beneficial to have dedicated time for review because it&amp;rsquo;s often
+the most time consuming and difficult part of being a maintainer. Not only do you need the
+technical skill and codebase expertise, but doing code review right is also a social skill,
+especially when giving feedback to regular contributors.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;This was also an issue for me since I&amp;rsquo;ve been waiting for some time to have my work
+reviewed (or in some instances, not reviewed). There were intentions to have more maintainer
+time for review during this period, but through the happenstances of life, that time never
+materialized.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;OSS maintenance is a job in itself.&lt;/strong&gt; Continuing from the previous point, OSS maintenance
+is a lot of work. It&amp;rsquo;s not even the amount of work, but the type of work if you want to do
+it &amp;ldquo;properly&amp;rdquo;. There are simply parts of the work that I don&amp;rsquo;t enjoy (as much) or require lots
+of social/mental energy, of which I have in limited quantities. I&amp;rsquo;ve known this for many
+years, having maintained Black in a previous life, but I didn&amp;rsquo;t internalise just how much
+of a job it really is until I was paid for this work.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;In particular, we&amp;rsquo;ve had very limited maintainer time available for review for ages now. I
+was by far the most active reviewer in the these few past months.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;Which is, fun fact, how I became a pip triager! (and thus kickstarting my journey to becoming
+a pip maintainer) The dip in open issues in early 2024 was largely my doing!&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;The complexity lies in determining with complete confidence what caused &amp;ldquo;no distributions found&amp;rdquo;
+for a specific package. pip&amp;rsquo;s package finder rejects distributions on a fail fast basis, so even if
+a distribution was rejected for &amp;ldquo;requiring an incompatible Python version,&amp;rdquo; it doesn&amp;rsquo;t mean that
+if the Python version incompatibility went away, the distribution would suddenly be a viable choice
+(it could be rejected for further reasons, but we don&amp;rsquo;t know). A distribution can be rejected for
+many reasons &amp;ndash; &lt;code&gt;requires-python&lt;/code&gt;, wheel compatibility tags, wheel vs sdist format restrictions, etc. &amp;ndash;
+making it quite difficult to pin down a single reason. The easy cases aren&amp;rsquo;t too bad to deal with,
+but the false positives in the complex cases are the last thing you want when printing specialized
+errors, lest you point the user down a rabbit down that leads to nowhere.&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;Truthfully, this is a tad embarrassing to admit, but I promised that I&amp;rsquo;d publish any reflections
+openly. In addition, it is a running joke in the software industry that time estimates are never right,
+so that does bring me some comfort.&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item><item><title>What's new in pip 26.2 - only-deps and venv isolation!</title><link>https://sichard.ca/blog/2026/07/whats-new-in-pip-26.2/</link><pubDate>Wed, 29 Jul 2026 00:00:00 -0400</pubDate><guid>https://sichard.ca/blog/2026/07/whats-new-in-pip-26.2/</guid><description>
 &lt;p&gt;On July 29, 2026, I&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt; released pip 26.2.&lt;/p&gt;
 &lt;p&gt;Compared to a typical pip release, this release is &lt;em&gt;huge&lt;/em&gt; with many changes.
 &lt;a href="https://sichard.ca/blog/2026/06/pip-contract-development/"&gt;This was largely made possible by the paid time I&amp;rsquo;ve had
@@ -918,7 +1146,7 @@ the same set of working dependencies.&lt;/p&gt;
 &lt;p&gt;The option accepts ISO 8601 datetime strings in several formats:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;2025-03-16&lt;/code&gt; - Date in implicit local timezone&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;2025-03-16T12:30:00&lt;/code&gt; - Datetime in implict local timezone&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;2025-03-16T12:30:00&lt;/code&gt; - Datetime in implicit local timezone&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;2025-03-16T12:30:00Z&lt;/code&gt; - Datetime in UTC&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;2025-03-16T12:30:00+05:00&lt;/code&gt; - Datetime with local timezone offset&lt;/li&gt;
 &lt;/ul&gt;
@@ -1747,7 +1975,7 @@ can be included in Dependency Groups in the future.&amp;#160;&lt;a href="#fnref:
 &lt;/li&gt;
 &lt;li id="fn:4"&gt;
 &lt;p&gt;Please don&amp;rsquo;t add upper bounds &lt;strong&gt;unless&lt;/strong&gt; you know for a fact your codebase is
-incompatible with the newer versions. Pre-emptive upper-bounds will not help
+incompatible with the newer versions. Preemptive upper-bounds will not help
 dependency resolution and &lt;a href="https://iscinumpy.dev/post/bound-version-constraints/"target="_blank" rel="noopener"&gt;are generally considered harmful&lt;/a&gt;.&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
